@@ -1,4 +1,4 @@
-from gestorAplicacion.humanos.trabajador import Trabajador
+from gestorAplicacion.humanos.Trabajador import Trabajador
 
 class Domiciliario(Trabajador):
     def __init__(self):
