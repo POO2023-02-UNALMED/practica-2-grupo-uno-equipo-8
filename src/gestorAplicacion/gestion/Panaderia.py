@@ -93,77 +93,82 @@ class Panaderia():
 
     def setInventario(self, value):
         self._inventario = value
+        
+    def contratarCocinero(self, nombre, habilidad, calificacion, dineroEnMano, especialidad):
+        indicado = Cocinero(nombre, habilidad, calificacion, dineroEnMano, especialidad, self)
+        return indicado
 
-def cocinar(productosParaCocinar):
-    canastaDeProductosCocinar = Canasta()
-    canastaDeProductosCocinar.setProductosEnLista(productosParaCocinar)
-    cocinero = cocineroAleatorio()
-    while True:
-        if cocinero.laborParticular(canastaDeProductosCocinar):
-            break
+    def cocinar(productosParaCocinar):
+        canastaDeProductosCocinar = Canasta()
+        canastaDeProductosCocinar.setProductosEnLista(productosParaCocinar)
+        cocinero = cocineroAleatorio()
+        while True:
+            if cocinero.laborParticular(canastaDeProductosCocinar):
+                break
 
-def agregarProductosACanasta(self,productos):
-    productosCanasta = []
-    productosFaltantes = {}
-    for producto, cantidad in productos.items():
-        cantidadExistente = self._inventario.verificarCantidadIngredientePorId(producto)
-        if cantidadExistente - cantidad < 0:
-            productosFaltantes[producto] = (cantidadExistente - cantidad) * (-2)
-    if productosFaltantes:
-        cocinar(productosFaltantes)
-    for producto, cantidad in productos.items():
-        for i in range(cantidad):
-            productosCanasta.append(self._inventario.buscarProductoPorId(producto))
-            self._inventario.restarProducto(producto, cantidad)
-    return productosCanasta
+    def agregarProductosACanasta(self,productos):
+        productosCanasta = []
+        productosFaltantes = {}
+        for producto, cantidad in productos.items():
+            cantidadExistente = self._inventario.verificarCantidadIngredientePorId(producto)
+            if cantidadExistente - cantidad < 0:
+                productosFaltantes[producto] = (cantidadExistente - cantidad) * (-2)
+        if productosFaltantes:
+            cocinar(productosFaltantes)
+        for producto, cantidad in productos.items():
+            for i in range(cantidad):
+                productosCanasta.append(self._inventario.buscarProductoPorId(producto))
+                self._inventario.restarProducto(producto, cantidad)
+        return productosCanasta
 
-def agregarIngredientesACanasta(self,ingredientes):
-    ingredientesCanasta = []
-    ingredientesFaltantes = {}
-    for ingrediente, cantidad in ingredientes.items():
-        cantidadExistente = self._inventario.verificarCantidadIngredientePorId(ingrediente)
-        if cantidadExistente - cantidad < 0:
-            ingredientesFaltantes[ingrediente] = (cantidadExistente - cantidad) * (-2)
-    if ingredientesFaltantes:
-        for ingrediente, cantidad in ingredientesFaltantes.items():
-            ingredientesFaltantes[Ingrediente.obtenerObjetoPorId(ingrediente).getNombre()] = cantidad
-        comprarIngredientes(ingredientesFaltantes)
-    for ingrediente, cantidad in ingredientes.items():
-        for i in range(cantidad):
-            ingredientesCanasta.append(self._inventario.buscarIngredientePorId(ingrediente))
-            self._inventario.restarIngrediente(ingrediente, cantidad)
-            Ingrediente.obtenerObjetoPorId(ingrediente).setVecesVendido(Ingrediente.obtenerObjetoPorId(ingrediente).getVecesVendido() + 1)
-            Ingrediente.organizarTopMasVendidos()
-    return ingredientesCanasta
-
-def agregarKitsACanasta(self, kitsEnLista):
-    kitsCanasta = []
-    ingredientesFaltantes = {}
-    for kit, cantidad in kitsEnLista.items():
-        idKit = kit
-        cantidad = cantidad
-        ingredientesKit = Producto.obtenerObjetoPorId(idKit).getIngredientes()
-        for ingrediente, cantidadIngrediente in ingredientesKit.items():
-            ingredientesKit[ingrediente] = cantidadIngrediente * cantidad
-        for ingrediente, cantidadIngrediente in ingredientesKit.items():
+    def agregarIngredientesACanasta(self,ingredientes):
+        ingredientesCanasta = []
+        ingredientesFaltantes = {}
+        for ingrediente, cantidad in ingredientes.items():
             cantidadExistente = self._inventario.verificarCantidadIngredientePorId(ingrediente)
-            if cantidadExistente - cantidadIngrediente < 0:
-                if ingrediente in ingredientesFaltantes:
-                    ingredientesFaltantes[ingrediente] += (cantidadExistente - cantidadIngrediente) * (-2)
-                else:
-                    ingredientesFaltantes[ingrediente] = (cantidadExistente - cantidadIngrediente) * (-2)
-    if ingredientesFaltantes:
-        comprarIngredientes(ingredientesFaltantes)
-    for kit, cantidad in kitsEnLista.items():
-        idKit = kit
-        cantidad = cantidad
-        for i in range(cantidad):
-            kitCanasta = []
-            for ingrediente, cantidadIngrediente in Producto.obtenerObjetoPorId(idKit).getIngredientes().items():
-                for j in range(cantidadIngrediente):
-                    kitCanasta.append(self._inventario.buscarIngredientePorId(ingrediente))
-                    Ingrediente.obtenerObjetoPorNombre(ingrediente).setVecesVendido(Ingrediente.obtenerObjetoPorNombre(ingrediente).getVecesVendido() + 1)
-                    Ingrediente.organizarTopMasVendidos()
-                    self._inventario.restarIngrediente(ingrediente, 1)
-            kitsCanasta.append(kitCanasta)
-    return kitsCanasta
+            if cantidadExistente - cantidad < 0:
+                ingredientesFaltantes[ingrediente] = (cantidadExistente - cantidad) * (-2)
+        if ingredientesFaltantes:
+            for ingrediente, cantidad in ingredientesFaltantes.items():
+                ingredientesFaltantes[Ingrediente.obtenerObjetoPorId(ingrediente).getNombre()] = cantidad
+            comprarIngredientes(ingredientesFaltantes)
+        for ingrediente, cantidad in ingredientes.items():
+            for i in range(cantidad):
+                ingredientesCanasta.append(self._inventario.buscarIngredientePorId(ingrediente))
+                self._inventario.restarIngrediente(ingrediente, cantidad)
+                Ingrediente.obtenerObjetoPorId(ingrediente).setVecesVendido(Ingrediente.obtenerObjetoPorId(ingrediente).getVecesVendido() + 1)
+                Ingrediente.organizarTopMasVendidos()
+        return ingredientesCanasta
+
+    def agregarKitsACanasta(self, kitsEnLista):
+        kitsCanasta = []
+        ingredientesFaltantes = {}
+        for kit, cantidad in kitsEnLista.items():
+            idKit = kit
+            cantidad = cantidad
+            ingredientesKit = Producto.obtenerObjetoPorId(idKit).getIngredientes()
+            for ingrediente, cantidadIngrediente in ingredientesKit.items():
+                ingredientesKit[ingrediente] = cantidadIngrediente * cantidad
+            for ingrediente, cantidadIngrediente in ingredientesKit.items():
+                cantidadExistente = self._inventario.verificarCantidadIngredientePorId(ingrediente)
+                if cantidadExistente - cantidadIngrediente < 0:
+                    if ingrediente in ingr map.items():edientesFaltantes:
+            newV     indiesFaltValueantes[ingreete] += (cantidadExistente - cantidadIngrediente) * (-2)
+              wM ese:InewV
+                        ingredientesFaltantes[ingrediente] = (cantidadExistente - cantidadIngrediente) * (-2)
+        if ingreiwMsFltantes:
+            comprarIngredientes(ingredientesFaltantes)
+        for kit, cantidad in kitsEnLista.items():
+            idKit = kit
+            cantidad = cantidad
+            for i in range(cantidad):
+                kitCanasta = []
+                for ingrediente, cantidadIngrediente in Producto.obtenerObjetoPorId(idKit).getIngredientes().items():
+                    for j in range(cantidadIngrediente):
+                        kitCanasta.append(self._inventario.buscarIngredientePorId(ingrediente))
+                        Ingrediente.obtenerObjetoPorNombre(ingrediente).setVecesVendido(Ingrediente.obtenerObjetoPorNombre(ingrediente).getVecesVendido() + 1)
+                        Ingrediente.organizarTopMasVendidos()
+                        self._inventario.restarIngrediente(ingrediente, 1)
+                kitsCanasta.append(kitCanasta)
+        return kitsCanasta
+        
