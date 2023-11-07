@@ -12,45 +12,7 @@ import random
 class Canasta:
 
     #Constructores Canasta
-    def __init__(self):
-        self._productos = []
-        self._ingredientes = []
-        self._kits = []
-        self._productosEnLista = {}
-        self._ingredientesEnLista = {}
-        self._kitsEnLista = {}
-        self._identificador = ""
-        self._itemsTotalesEnCanasta = 0
-        self._itemsTotalesEnLista = 0
-        self._costoTotalEnLista = 0
-        self._costoTrasDescuentoEnLista = 0
-        self._descuentoEnLista = 0
-        self._calificacion = 0
-        self._comentario = ""
-        self._pagada = False
-        self._estadoOrden = False
-        self.calcularElementosCanasta()
-
-    def __init__(self, productos, ingredientes, kits):
-        self._productosEnLista = {}
-        self._ingredientesEnLista = {}
-        self._kitsEnLista = {}
-        self._identificador = ""
-        self._itemsTotalesEnCanasta = 0
-        self._itemsTotalesEnLista = 0
-        self._costoTotalEnLista = 0
-        self._costoTrasDescuentoEnLista = 0
-        self._descuentoEnLista = 0
-        self._calificacion = 0
-        self._comentario = ""
-        self._pagada = False
-        self._estadoOrden = False
-        self._productos = productos
-        self._ingredientes = ingredientes
-        self._kits = kits
-        self.calcularElementosCanasta()
-
-    def __init__(self, productos, ingredientes, kits, productosEnLista, ingredientesEnLista, kitsEnLista, identificador, itemsTotalesEnCanasta, itemsTotalesEnLista, costoTotalEnLista, costoTrasDescuentoEnLista, descuentoEnLista, calificacion, comentario, pagada):
+    def __init__(self, productos = [], ingredientes = [], kits = [], productosEnLista = {}, ingredientesEnLista = {}, kitsEnLista = {}, identificador= "", itemsTotalesEnCanasta = 0, itemsTotalesEnLista = 0, costoTotalEnLista = 0.0, costoTrasDescuentoEnLista = 0.0, descuentoEnLista = 0.0, calificacion = 0.0, comentario = "", pagada = False, estadoOrden=False):
         self._productos = productos
         self._ingredientes = ingredientes
         self._kits = kits
@@ -66,44 +28,7 @@ class Canasta:
         self._calificacion = calificacion
         self._comentario = comentario
         self._pagada = pagada
-        self._estado_orden = False
-        self.calcularElementosCanasta()
-
-    def __init__(self, productosEnLista, ingredientesEnLista, kitsEnLista, itemsTotalesEnCanasta, itemsTotalesEnLista, costoTotalEnLista, costoTrasDescuentoEnLista, descuentoEnLista) :
-        self._productosEnLista = productosEnLista
-        self._ingredientesEnLista = ingredientesEnLista
-        self._kitsEnLista = kitsEnLista
-        self._itemsTotalesEnCanasta = itemsTotalesEnCanasta
-        self._itemsTotalesEnLista = itemsTotalesEnLista
-        self._costoTotalEnLista = costoTotalEnLista
-        self._costoTrasDescuentoEnLista = costoTrasDescuentoEnLista
-        self._descuentoEnLista = descuentoEnLista
-        self._productos = []
-        self._ingredientes = []
-        self._kits = []
-        self._identificador = ""
-        self._calificacion = 0
-        self._comentario = ""
-        self._pagada = False
-        self._estadoOrden = False
-
-    def __init__(self, productosEnLista, ingredientesEnLista, kitsEnLista, itemsTotalesEnCanasta, itemsTotalesEnLista, costoTotalEnLista, costoTrasDescuentoEnLista, descuentoEnLista, identificador):
-        self._productosEnLista = productosEnLista
-        self._ingredientesEnLista = ingredientesEnLista
-        self._kitsEnLista = kitsEnLista
-        self._identificador = identificador
-        self._itemsTotalesEnCanasta = itemsTotalesEnCanasta
-        self._itemsTotalesEnLista = itemsTotalesEnLista
-        self._costoTotalEnLista = costoTotalEnLista
-        self._costoTrasDescuentoEnLista = costoTrasDescuentoEnLista
-        self._descuentoEnLista = descuentoEnLista
-        self._productos = []
-        self._ingredientes = []
-        self._kits = []
-        self._calificacion = 0
-        self._comentario = ""
-        self._pagada = False
-        self._estadoOrden = False
+        self._estadoOrden = estadoOrden
 
     # Getters
     def getProductosEnLista(self):
