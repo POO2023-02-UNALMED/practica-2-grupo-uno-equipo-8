@@ -8,7 +8,6 @@ from gestorAplicacion.comida.productoCaliente import ProductoCaliente
 from gestorAplicacion.gestion.Canasta import Canasta
 from gestorAplicacion.gestion.Panaderia import Panaderia
 from gestorAplicacion.humanos.Domiciliario import Domiciliario
-from gestorAplicacion.gestion.Panaderia import Panaderia
 from gestorAplicacion.humanos.Catastrofe import Catastrofe
 
 
