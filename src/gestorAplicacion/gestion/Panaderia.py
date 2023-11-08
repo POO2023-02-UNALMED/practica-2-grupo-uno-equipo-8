@@ -93,6 +93,14 @@ class Panaderia():
 
     def setInventario(self, value):
         self._inventario = value
+
+    @classmethod
+    def getCanastaDelDia(cls):
+        return cls._canastaDelDia
+    
+    @classmethod
+    def setCanastaDelDia(cls, value):
+        cls._canastaDelDia = value
         
     def contratarCocinero(self, nombre, habilidad, calificacion, dineroEnMano, especialidad):
         indicado = Cocinero(nombre, habilidad, calificacion, dineroEnMano, especialidad, self)
