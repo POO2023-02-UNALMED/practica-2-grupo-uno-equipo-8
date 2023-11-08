@@ -180,3 +180,17 @@ class Panaderia():
                 kitsCanasta.append(kitCanasta)
         return kitsCanasta
         
+    def saldarDeudas(self):
+
+        if self._valorDeudas < self._dinero:
+
+            self._dinero = self._dinero - self._valorDeudas
+            self._valorDeudas = 0
+            self._enQuiebra = False
+            return self._enQuiebra
+        
+        else:
+
+            self._enQuiebra = True
+            self._dinero = 10000000
+            return self._enQuiebra
