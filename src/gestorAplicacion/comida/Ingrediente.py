@@ -95,6 +95,19 @@ class Ingrediente:
         return Ingrediente._topMasVendidos
     
     @staticmethod
+    def getProbabilidadConstante():
+        return Ingrediente.probabilidadConstante
+
+    @classmethod
+    def getTopMasVendidos(cls):
+        return cls._topMasVendidos
+
+    @classmethod
+    def setTopMasVendidos(cls, topMasVendidos):
+        cls._topMasVendidos = topMasVendidos
+
+    
+    @staticmethod
     def verificacionExistenciaPorNombre(nombre):
         existe = False
         for ingrediente in Ingrediente._baseDatosIngredientes:
@@ -152,6 +165,21 @@ class Ingrediente:
         if vencido:
             ingredienteId = self.getId()
             panaderia.getInventario().restarIngrediente(ingredienteId, cantidad)
-            GestionCocinar.falloCaducado()
+            #GestionCocinar.falloCaducado()
             self.setCaducado(False)
+            
+    @staticmethod
+    def organizarTopMasVendidos():
+        Ingrediente.topMasVendidos.clear()
+        for i in range(len(Ingrediente.baseDatosIngredientes)):
+            for j in range(len(Ingrediente.baseDatosIngredientes)):
+                if (Ingrediente.baseDatosIngredientes[i].getVecesVendido() >
+                    Ingrediente.baseDatosIngredientes[j].getVecesVendido()):
+                    aux = Ingrediente.baseDatosIngredientes[i]
+                    Ingrediente.baseDatosIngredientes[i] = Ingrediente.baseDatosIngredientes[j]
+                    Ingrediente.baseDatosIngredientes[j] = aux
+
+        for i in range(len(Ingrediente.baseDatosIngredientes)):
+            if i < 5:
+                Ingrediente.topMasVendidos.append(Ingrediente.baseDatosIngredientes[i])
 

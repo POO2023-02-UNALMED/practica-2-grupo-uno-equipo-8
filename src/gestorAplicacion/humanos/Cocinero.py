@@ -130,11 +130,11 @@ class Cocinero(Domiciliario):
             if cookProducto:
                 # Incrementa la habilidad del cocinero si el proceso falló.
                 chefIdeal.habilidad += 1
-                GestionCocinar.fallosCocinando(procesoCook, longitud)
+                #GestionCocinar.fallosCocinando(procesoCook, longitud)
                 chefIdeal.detenerCoccion(producto)
                 chefIdeal.repararCoccion(producto)
                 i = -1
-            GestionCocinar.barrasCocinando(procesoCook, longitud)
+            #GestionCocinar.barrasCocinando(procesoCook, longitud)
             # Establece el cocinero como ocupado.
             chefIdeal.trabajo = True
 
@@ -180,7 +180,7 @@ class Cocinero(Domiciliario):
         ingrFaltantes = self.ingredientesCocinero(listaIngredientesTotales)
 
         if not ingrFaltantes:
-            GestionCocinar.fallosCocinando()
+            #GestionCocinar.fallosCocinando()
             self.panaderia.comprarIngredientes(ingrFaltantes)
             ingrFaltantes.clear()
             return False
