@@ -8,14 +8,15 @@ from gestorAplicacion.humanos.Catastrofe import Catastrofe
 from gestorAplicacion.humanos.Trabajador import Trabajador
 from gestion import Inventario
 from gestion import Canasta
+from random import shuffle
 
 class Panaderia():
 
     _canastaDelDia = None
 
-    def __init__(self, trabajadores = None, cocineros = None, domiciliarios = None, clientes = None, dinero = 1000000, deudas = 0, quiebra = False, canastasP = None, inventario = None):
+    def __init__(self, trabajadores = None, cocineros = None, domiciliarios = None, clientes = None, dinero = 1000000, deudas = 0, quiebra = False, canastasP = None):
         
-        if trabajadores == None:
+        if trabajadores == None: 
             trabajadores = []
 
         if cocineros == None:
@@ -76,7 +77,7 @@ class Panaderia():
     def setValorDeudas(self, value):
         self._valorDeudas = value
 
-    def getEnQuiebra(self):
+    def isEnQuiebra(self):
         return self._enQuiebra
 
     def setEnQuiebra(self, value):
@@ -106,10 +107,16 @@ class Panaderia():
         indicado = Cocinero(nombre, habilidad, calificacion, dineroEnMano, especialidad, self)
         return indicado
 
-    def cocinar(productosParaCocinar):
+    def obtenerCanastaPorId(self,id):
+        for canasta in self._canastasPublicadas:
+            if canasta.getIdentificador() == id:
+                return canasta
+        return None
+
+    def cocinar(self,productosParaCocinar):
         canastaDeProductosCocinar = Canasta()
         canastaDeProductosCocinar.setProductosEnLista(productosParaCocinar)
-        cocinero = cocineroAleatorio()
+        cocinero = self.cocineroAleatorio()
         while True:
             if cocinero.laborParticular(canastaDeProductosCocinar):
                 break
@@ -122,7 +129,7 @@ class Panaderia():
             if cantidadExistente - cantidad < 0:
                 productosFaltantes[producto] = (cantidadExistente - cantidad) * (-2)
         if productosFaltantes:
-            cocinar(productosFaltantes)
+            self.cocinar(productosFaltantes)
         for producto, cantidad in productos.items():
             for i in range(cantidad):
                 productosCanasta.append(self._inventario.buscarProductoPorId(producto))
@@ -139,7 +146,7 @@ class Panaderia():
         if ingredientesFaltantes:
             for ingrediente, cantidad in ingredientesFaltantes.items():
                 ingredientesFaltantes[Ingrediente.obtenerObjetoPorId(ingrediente).getNombre()] = cantidad
-            comprarIngredientes(ingredientesFaltantes)
+            self.comprarIngredientes(ingredientesFaltantes)
         for ingrediente, cantidad in ingredientes.items():
             for i in range(cantidad):
                 ingredientesCanasta.append(self._inventario.buscarIngredientePorId(ingrediente))
@@ -165,7 +172,7 @@ class Panaderia():
                     else:
                         ingredientesFaltantes[ingrediente] = (cantidadExistente - cantidadIngrediente) * (-2)
         if ingredientesFaltantes:
-            comprarIngredientes(ingredientesFaltantes)
+            self.comprarIngredientes(ingredientesFaltantes)
         for kit, cantidad in kitsEnLista.items():
             idKit = kit
             cantidad = cantidad
@@ -180,9 +187,30 @@ class Panaderia():
                 kitsCanasta.append(kitCanasta)
         return kitsCanasta
         
+    # Métodos para la gestión de cuentas de los clientes
+
+    def inicioSesionId(self,id):
+        for cliente in self.getClientes():
+            if cliente.getId() == id:
+                return cliente
+        return None
+
+    def inicioSesionContrasena(cliente, contrasena):
+        if cliente.getContrasena() == contrasena:
+            Cliente.setSesion(cliente)
+            return "Inicio de sesión exitoso"
+        else:
+            return "Contraseña incorrecta"
+
+    def crearCuenta(self,nombre, id, contrasena):
+        cliente = Cliente(nombre, id, contrasena)
+        self._clientes.append(cliente)
+        Cliente.setSesion(cliente)
+        return "Cuenta creada con éxito"
+
     def saldarDeudas(self):
 
-        if self._valorDeudas < self._dinero:
+        if self._valorDeudas < self._dinero: 
 
             self._dinero = self._dinero - self._valorDeudas
             self._valorDeudas = 0
@@ -194,3 +222,62 @@ class Panaderia():
             self._enQuiebra = True
             self._dinero = 10000000
             return self._enQuiebra
+    
+    def conseguirPrestamo(self, valorNecesitado):
+        
+        if self._valorDeudas == 0:
+
+            self._dinero += valorNecesitado
+            self._valorDeudas = valorNecesitado
+
+        else:
+
+            self.saldarDeudas()
+
+            while self._enQuiebra == True:
+                
+                GestionConseguirIngredientes.lecturaQuiebra(self._enQuiebra) #Crear estas lecturas
+                self.saldarDeudas()
+
+            self._dinero += valorNecesitado
+            self._valorDeudas = valorNecesitado
+
+        GestionConseguirIngredientes.lecturaQuiebra(self._enQuiebra) #Crear estas lecturas
+
+    def cocineroAleatorio(self):
+        
+        listaprovicional = self._cocineros.copy()
+        listaprovicional.shuffle()
+        elegido = listaprovicional[0]
+        return elegido 
+
+    def domiciliarioAleatorio(self):
+        
+        listaprovicional = self._domiciliarios.copy()
+        listaprovicional.shuffle()
+        elegido = listaprovicional[0]
+        return elegido 
+    
+    def trabajadorAleatorio(self):
+
+        listaprovicional = self._trabajadores.copy()
+        listaprovicional.shuffle()
+        elegido = listaprovicional[0]
+        return elegido
+    
+    def comprarIngredientes(self, listIngredientes):
+
+        elegido = self.domiciliarioAleatorio()
+        GestionConseguirIngredientes.lecturaCompra(elegido.isRobado()) #Recordar hacer este lector
+
+        x = elegido.conseguirIngredientes(listIngredientes)
+        GestionConseguirIngredientes.lecturaRobo(x)
+
+        while(x == True):
+
+            elegido.setRobado(False)
+            GestionConseguirIngredientes.lecturaCompra(elegido.isRobado()) #Recordar hacer este lector
+            x = elegido.conseguirIngredientes(listIngredientes)
+            GestionConseguirIngredientes.lecturaRobo(x)
+
+        elegido.setRobado(True)
