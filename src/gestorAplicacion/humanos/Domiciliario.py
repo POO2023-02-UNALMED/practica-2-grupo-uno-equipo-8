@@ -56,3 +56,17 @@ class Domiciliario(Trabajador):
             x = True
             GestionDomicilioCliente.estado_domicilio(x)
             return x
+
+    def conseguirIngredientes(self, listIngredientes):
+        valorcompra = 0
+
+        Ingrediente.organizarTopMasVendidos()
+        top = Ingrediente.getTopMasVendidos()
+
+        for ingredienteNombre, cantidad in listIngredientes.items():
+
+            topp = False
+
+            for ingredientes in top:
+
+                if 

@@ -98,3 +98,47 @@ class Inventario:
                 ingredientesFaltantes[ingrediente] = (cantidadExistente - cantidad) * (-2)
         return ingredientesFaltantes
 
+    # Método para agregar un ingrediente al inventario
+    def agregarIngrediente(self,ingrediente):
+        self._invIngredientes.append(ingrediente)
+
+    def agregarProducto(self,producto):
+        self._invProductos.append(producto)
+
+    def restarIngrediente(self,ingrediente, cantidad):
+        if isinstance(ingrediente, str):
+            if self.verificarCantidadIngredientePorId(ingrediente) >= cantidad:
+                for i in range(cantidad):
+                    for ingrediente1 in self._invIngredientes:
+                        if ingrediente1.getId() == ingrediente:
+                            self._invIngredientes.remove(ingrediente1)
+                            break
+        else:
+            if self.verificarCantidadIngredientePorId(ingrediente.getId()) >= cantidad:
+                for i in range(cantidad):
+                    for ingrediente1 in self._invIngredientes:
+                        if ingrediente1.getId() == ingrediente.getId():
+                            self._invIngredientes.remove(ingrediente1)
+                            break
+
+    def restarProducto(self, producto, cantidad):
+        if isinstance(producto, str):
+            if self.verificarCantidadProductoPorId(producto) >= cantidad:
+                for i in range(cantidad):
+                    for producto1 in self._invProductos:
+                        if producto1.getId() == producto:
+                            self._invProductos.remove(producto1)
+                            producto_obtenido = Producto.obtenerObjetoPorId(producto)
+                            producto_obtenido.setVecesVendido(producto_obtenido.getVecesVendido() + 1)
+                            Producto.organizarTopMasVendidos()
+                            break
+        else:
+            if self.verificarCantidadProductoPorId(producto.getId()) >= cantidad:
+                for i in range(cantidad):
+                    for producto1 in self._invProductos:
+                        if producto1.getId() == producto.getId():
+                            self._invProductos.remove(producto1)
+                            producto_obtenido = Producto.obtenerObjetoPorId(producto.getId())
+                            producto_obtenido.setVecesVendido(producto_obtenido.getVecesVendido() + 1)
+                            Producto.organizarTopMasVendidos()
+                            break
