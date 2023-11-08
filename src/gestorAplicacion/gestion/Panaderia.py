@@ -160,11 +160,11 @@ class Panaderia():
             for ingrediente, cantidadIngrediente in ingredientesKit.items():
                 cantidadExistente = self._inventario.verificarCantidadIngredientePorId(ingrediente)
                 if cantidadExistente - cantidadIngrediente < 0:
-                    if ingrediente in ingr map.items():edientesFaltantes:
-            newV     indiesFaltValueantes[ingreete] += (cantidadExistente - cantidadIngrediente) * (-2)
-              wM ese:InewV
+                    if ingrediente in ingredientesFaltantes:
+                        ingredientesFaltantes[ingrediente] += (cantidadExistente - cantidadIngrediente) * (-2)
+                    else:
                         ingredientesFaltantes[ingrediente] = (cantidadExistente - cantidadIngrediente) * (-2)
-        if ingreiwMsFltantes:
+        if ingredientesFaltantes:
             comprarIngredientes(ingredientesFaltantes)
         for kit, cantidad in kitsEnLista.items():
             idKit = kit

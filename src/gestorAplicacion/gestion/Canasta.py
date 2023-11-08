@@ -12,7 +12,25 @@ import random
 class Canasta:
 
     #Constructores Canasta
-    def __init__(self, productos = [], ingredientes = [], kits = [], productosEnLista = {}, ingredientesEnLista = {}, kitsEnLista = {}, identificador= "", itemsTotalesEnCanasta = 0, itemsTotalesEnLista = 0, costoTotalEnLista = 0.0, costoTrasDescuentoEnLista = 0.0, descuentoEnLista = 0.0, calificacion = 0.0, comentario = "", pagada = False, estadoOrden=False):
+    def __init__(self, productos = None, ingredientes = None, kits = None, productosEnLista = None, ingredientesEnLista = None, kitsEnLista = None, identificador= "", itemsTotalesEnCanasta = 0, itemsTotalesEnLista = 0, costoTotalEnLista = 0.0, costoTrasDescuentoEnLista = 0.0, descuentoEnLista = 0.0, calificacion = 0.0, comentario = "", pagada = False, estadoOrden=False):
+        if productos == None:
+            productos = []
+
+        if ingredientes == None:
+            ingredientes = []
+
+        if kits == None:
+            kits = []
+
+        if productosEnLista == None:
+            productosEnLista = {}
+        
+        if ingredientesEnLista == None:
+            ingredientesEnLista = {}
+
+        if kitsEnLista == None:
+            kitsEnLista = {}
+
         self._productos = productos
         self._ingredientes = ingredientes
         self._kits = kits
