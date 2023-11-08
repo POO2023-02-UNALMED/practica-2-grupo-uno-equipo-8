@@ -1,11 +1,10 @@
-"""
 from gestorAplicacion.comida import Ingrediente
 from gestorAplicacion.comida import Producto
 from gestorAplicacion.comida import ProductoCaliente
 from gestorAplicacion.comida import ProductoFrio
 from gestorAplicacion.gestion import Panaderia
 from gestorAplicacion.humanos import Cliente
-"""
+
 from enum import Enum
 import random
 
