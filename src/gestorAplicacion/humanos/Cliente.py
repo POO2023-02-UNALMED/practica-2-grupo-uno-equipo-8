@@ -1,4 +1,7 @@
-from random import randint
+from gestorAplicacion.gestion import Canasta
+from gestorAplicacion.gestion import Panaderia
+from random import randint as random
+from enum import Enum
 
 class Cliente:
     _sesion = None
@@ -120,3 +123,252 @@ class Cliente:
     def setSesion(cls, sesion):
         cls._sesion = sesion
 
+    def guardarCanastaEnHistorial(self, canasta):
+        productosEnLista = {}
+        ingredientesEnLista = {}
+        kitsEnLista = {}
+
+        if canasta.getProductosEnLista() is not None:
+            productosEnLista.update(canasta.getProductosEnLista())
+        if canasta.getIngredientesEnLista() is not None:
+            ingredientesEnLista.update(canasta.getIngredientesEnLista())
+        if canasta.getKitsEnLista() is not None:
+            kitsEnLista.update(canasta.getKitsEnLista())
+
+        identificador = canasta.getIdentificador()
+        itemsTotalesEnCanasta = canasta.getItemsTotalesEnCanasta()
+        itemsTotalesEnLista = canasta.getItemsTotalesEnLista()
+        costoTotalEnLista = canasta.getCostoTotalEnLista()
+        costoTrasDescuentoEnLista = canasta.getCostoTrasDescuentoEnLista()
+        descuentoEnLista = canasta.getDescuentoEnLista()
+
+        newCanasta = Canasta(productosEnLista, ingredientesEnLista, kitsEnLista, itemsTotalesEnCanasta, itemsTotalesEnLista, costoTotalEnLista, costoTrasDescuentoEnLista, descuentoEnLista, identificador)
+        self._historialOrdenes.append(newCanasta)
+
+    def crearCanastaPorHistorial(self, id):
+        for canasta in self._historialOrdenes:
+            if canasta.getIdentificador() == id:
+                productosEnLista = {}
+                ingredientesEnLista = {}
+                kitsEnLista = {}
+
+                if canasta.getProductosEnLista() is not None:
+                    productosEnLista.update(canasta.getProductosEnLista())
+                if canasta.getIngredientesEnLista() is not None:
+                    ingredientesEnLista.update(canasta.getIngredientesEnLista())
+                if canasta.getKitsEnLista() is not None:
+                    kitsEnLista.update(canasta.getKitsEnLista())
+
+                identificador = canasta.getIdentificador()
+                itemsTotalesEnCanasta = canasta.getItemsTotalesEnCanasta()
+                itemsTotalesEnLista = canasta.getItemsTotalesEnLista()
+                costoTotalEnLista = canasta.getCostoTotalEnLista()
+                costoTrasDescuentoEnLista = canasta.getCostoTrasDescuentoEnLista()
+                descuentoEnLista = canasta.getDescuentoEnLista()
+
+                newCanasta = Canasta(productosEnLista, ingredientesEnLista, kitsEnLista, itemsTotalesEnCanasta,itemsTotalesEnLista, costoTotalEnLista, costoTrasDescuentoEnLista, descuentoEnLista, identificador)
+                self._cantidadOrdenes += 1
+                self._canastaOrden = newCanasta
+                self._canastaOrden.setIdentificador(str(self._cantidadOrdenes))
+                break
+
+        return self._canastaOrden
+    
+    def crearCanastaPublicada(self, id):
+        if self._panaderia.obtenerCanastaPorId(id) is None:
+            return None
+        else:
+            canasta = self._panaderia.obtenerCanastaPorId(id)
+            productosEnLista = {}
+            ingredientesEnLista = {}
+            kitsEnLista = {}
+
+            if canasta.getProductosEnLista() is not None:
+                productosEnLista.update(canasta.getProductosEnLista())
+            if canasta.getIngredientesEnLista() is not None:
+                ingredientesEnLista.update(canasta.getIngredientesEnLista())
+            if canasta.getKitsEnLista() is not None:
+                kitsEnLista.update(canasta.getKitsEnLista())
+
+            identificador = canasta.getIdentificador()
+            itemsTotalesEnCanasta = canasta.getItemsTotalesEnCanasta()
+            itemsTotalesEnLista = canasta.getItemsTotalesEnLista()
+            costoTotalEnLista = canasta.getCostoTotalEnLista()
+            costoTrasDescuentoEnLista = canasta.getCostoTrasDescuentoEnLista()
+            descuentoEnLista = canasta.getDescuentoEnLista()
+
+            newCanasta = Canasta(productosEnLista, ingredientesEnLista, kitsEnLista, itemsTotalesEnCanasta,itemsTotalesEnLista, costoTotalEnLista, costoTrasDescuentoEnLista, descuentoEnLista, identificador)
+            self._cantidadOrdenes += 1
+            self._canastaOrden = newCanasta
+            self._canastaOrden.setIdentificador(str(self._cantidadOrdenes))
+
+        return self._canastaOrden
+
+    def publicarCanasta(self, canasta):
+        listaVacia = []
+        listaVacia2 = []
+        listaVacia3 = []
+        canasta.setProductos(listaVacia)
+        canasta.setIngredientes(listaVacia2)
+        canasta.setKits(listaVacia3)
+        canasta.setPagada(False)
+        self._panaderia.agregarCanastasPublicadas(canasta)
+
+    def crearCanastaDelDia(self):
+        canasta = Panaderia.getCanastaDelDia()
+        productosEnLista = {}
+        ingredientesEnLista = {}
+        kitsEnLista = {}
+
+        if canasta.getProductosEnLista() is not None:
+            productosEnLista.update(canasta.getProductosEnLista())
+        if canasta.getIngredientesEnLista() is not None:
+            ingredientesEnLista.update(canasta.getIngredientesEnLista())
+        if canasta.getKitsEnLista() is not None:
+            kitsEnLista.update(canasta.getKitsEnLista())
+
+        identificador = canasta.getIdentificador()
+        itemsTotalesEnCanasta = canasta.getItemsTotalesEnCanasta()
+        itemsTotalesEnLista = canasta.getItemsTotalesEnLista()
+        costoTotalEnLista = canasta.getCostoTotalEnLista()
+        costoTrasDescuentoEnLista = canasta.getCostoTrasDescuentoEnLista()
+        descuentoEnLista = canasta.getDescuentoEnLista()
+
+        newCanasta = Canasta(productosEnLista, ingredientesEnLista, kitsEnLista, itemsTotalesEnCanasta,itemsTotalesEnLista, costoTotalEnLista, costoTrasDescuentoEnLista, descuentoEnLista, identificador)
+        self._cantidadOrdenes += 1
+        self._canastaOrden = newCanasta
+        self._canastaOrden.setIdentificador(str(self._cantidadOrdenes))
+        return self._canastaOrden
+    
+    def crearCanastaNueva(self):
+        canasta = Canasta()
+        self._canastaOrden = canasta
+        self._cantidadOrdenes += 1
+        self._canastaOrden.setIdentificador(str(self._cantidadOrdenes))
+        return self._canastaOrden
+
+    def publicarCanasta(self, canasta, calificacion=5, comentario=""):
+        listaVacia = []
+        listaVacia2 = []
+        listaVacia3 = []
+
+        identificadorActual = int(canasta.getIdentificador())
+        nuevoIdentificador = identificadorActual + random.randint(0, 1000)
+
+        canasta.setIdentificador(str(nuevoIdentificador))
+        canasta.setProductos(listaVacia)
+        canasta.setIngredientes(listaVacia2)
+        canasta.setKits(listaVacia3)
+        canasta.setPagada(False)
+        canasta.setCalificacion(calificacion)
+        canasta.setComentario(comentario)
+        self._panaderia.agregarCanastasPublicadas(canasta)
+
+    def calificarDomiciliario(self, domiciliario, calificacion):
+        calificacionVieja = domiciliario.getCalificacion()
+        calificacionNueva = (calificacionVieja + calificacion) / 2
+        domiciliario.setCalificacion(calificacionNueva)
+
+    def calificarCocina(self, cocinero, calificacion):
+        calificacionVieja = cocinero.getCalificacion()
+        calificacionNueva = (calificacionVieja + calificacion) / 2
+        cocinero.setCalificacion(calificacionNueva)
+
+        for calificarCocinero in self._panaderia.getCocineros():
+            if cocinero.isTrabajo():
+                self._panaderia.reviewCocinero(calificarCocinero)
+                cocinero.setTrabajo(False)
+
+    def notaCocineros(self):
+        calificacion = GestionCocinar.gestionCocina()
+        for cocinero in self._panaderia.getCocineros():
+            if cocinero.isTrabajo():
+                self._calificarCocina(cocinero, calificacion)
+
+    def enviarCanastasADomicilio(self, canastas):
+        self._panaderia.enviarDomicilio(canastas, self)
+        calificacion = GestionDomicilioCliente.pedirCalificacion()
+        self.calificarDomiciliario(self._domiciliario, calificacion)
+        self._panaderia.reviewDomiciliario(self._domiciliario)
+        self.notaCocineros()
+
+    def gestionDatosFaltantes(self, valorCompra):
+        x = self.verificarDireccion()
+        y = self.verificarPresupuesto(valorCompra)
+        z = self.verificarDescuentoPorTipo()
+
+        if not x and y and z:
+            return "Falta dirección"
+        elif not x and not y and z:
+            return "Falta dirección y presupuesto"
+        elif not x and y and not z:
+            return "Falta dirección y descuento"
+        elif x and not y and z:
+            return "Falta presupuesto"
+        elif x and not y and not z:
+            return "Falta presupuesto y descuento"
+        elif x and y and not z:
+            return "Falta descuento"
+        else:
+            return ""
+
+    def verificarDireccion(self):
+        return False if self._direccion is None else True
+
+    def verificarPresupuesto(self, valorCompra):
+        return False if self._presupuesto <= valorCompra else True
+
+    def verificarPresupuesto(self):
+        return False if self._presupuesto == 0 else True
+
+    def verificarDescuentoPorTipo(self):
+        return False if self._tipoDescuento is None else True
+    
+    def establecerDomicilioValido(self, direccion, ciudad):
+        try:
+            ciudad = ciudad.upper()
+            ciudad_valida = self.Direccion[ciudad]
+            self._direccion = ciudad_valida
+        except Exception as e:
+            return False
+
+        self._direccionTXT = direccion
+        return True
+
+    def establecerPresupuestoValido(self, presupuesto, valorCompra):
+        return True if presupuesto >= valorCompra else False
+
+    def establecerDescuentoPorTipoValido(self, descuento):
+        try:
+            descuento = descuento.upper()
+            tipo_descuento = self.DescuentoPorTipo[descuento]
+            self._tipoDescuento = tipo_descuento
+        except Exception as e:
+            return False
+        return True
+
+    def verificarContrasenaNueva(self, contrasena):
+        if len(contrasena) < 8:
+            self._contrasena = contrasena
+            return "La contraseña debe tener al menos 8 caracteres"
+        else:
+            return "Contraseña válida"
+
+    class Direccion(Enum):
+        MEDELLIN = "Cerca"
+        BOGOTA = "Lejos"
+        ENVIGADO = "Medio"
+        ITAGUI = "Cerca"
+
+        def get_distancia(self):
+            return self.value
+
+    class DescuentoPorTipo(Enum):
+        ESTUDIANTE = 0.1
+        PROFESOR = 0.1
+        NINGUNO = 0
+        SENIOR = 0.2
+        EMPLEADO = 0.3
+
+        def get_valor(self):
+            return self.value
