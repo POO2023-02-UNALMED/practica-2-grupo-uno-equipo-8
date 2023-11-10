@@ -148,14 +148,14 @@ class Cocinero(Domiciliario):
                 mapaAcumulativo[clave] = mapaAcumulativo.get(clave, 0) + valor
         return mapaAcumulativo
     
-    def multiplyValuesInMap(map, multiplier):
-        newMap = {}
+    def multiplicarValoresEnMapa(mapa, multiplicador):
+        nuevoMapa = {}
         
-        for ingredientId, originalValue in map.items():
-            newValue = originalValue * multiplier
-            newMap[ingredientId] = newValue
+        for ingredienteId, valorOriginal in mapa.items():
+            nuevoValor = valorOriginal * multiplicador
+            nuevoMapa[ingredienteId] = nuevoValor
 
-        return newMap
+        return nuevoMapa
 
     def laborParticular(self, canastaTrabajar):
         productos = canastaTrabajar.productosEnLista()
