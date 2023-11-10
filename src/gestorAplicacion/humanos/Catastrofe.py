@@ -5,7 +5,7 @@ class Catastrofe:
 
     def __init__(self):
         self._maldad = random.randint(1, 10)  # 1 <= maldad <= 10
-        self._dinero_robado = 0
+        self._dineroRobado = 0
         
     def getMaldad(self):
         return self._maldad
@@ -18,3 +18,17 @@ class Catastrofe:
             cocinero._fallado = False
             return True
         return False
+    
+    def robarComprador(self, rival):
+        
+        if self.getMaldad() > rival.getHabilidad():
+
+            rival.setRobado(False)
+            self._dineroRobado += rival.getDineroEnMano()
+            rival.setDineroEnMano(0)
+
+        else:
+
+            rival.setRobado(True)
+        
+        return rival

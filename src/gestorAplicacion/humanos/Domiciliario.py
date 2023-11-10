@@ -1,3 +1,4 @@
+from gestorAplicacion.humanos.Catastrofe import Catastrofe
 from gestorAplicacion.humanos.Trabajador import Trabajador
 from gestorAplicacion.comida.Ingrediente import Ingrediente
 
@@ -119,3 +120,52 @@ class Domiciliario(Trabajador):
                         valorcompra = valorcompra + ((Ingrediente.obtenerObjetoPorNombre(ingredienteNombre).getPrecioDeCompra()) * (cantidad))
             
             listIngredientes[ingredienteNombre] = cantidad #revisar esto 
+        
+        if valorcompra <= self.panaderia.getPanaderia():
+            
+            self.dineroEnMano += valorcompra  
+            dinero = self.panaderia.getPanaderia()
+            self.panaderia.setDinero((dinero-valorcompra))
+
+            if self.robado == True:
+
+                ladron = Catastrofe()
+                postRobo = ladron.robarComprador(self)
+
+                if postRobo.getRobado() == False:
+                    return True
+                
+            for ingredienteNombre, cantidad in listIngredientes.items():
+
+                for i in range (0,cantidad):
+
+                    ingrdt = Ingrediente.crearIngrediente(ingredienteNombre)
+                    self.getPanaderia().getInventario().agregarIngrediente(ingrdt)
+            
+            self.dineroEnMano -= valorcompra
+            return False
+        
+        else:
+
+            self.panaderia.conseguirPrestamo(valorcompra)
+            self.dineroEnMano += valorcompra  
+            dinero = self.panaderia.getPanaderia()
+            self.panaderia.setDinero((dinero-valorcompra))
+
+            if self.robado == True:
+
+                ladron = Catastrofe()
+                postRobo = ladron.robarComprador(self)
+
+                if postRobo.getRobado() == False:
+                    return True
+                
+            for ingredienteNombre, cantidad in listIngredientes.items():
+
+                for i in range (0,cantidad):
+
+                    ingrdt = Ingrediente.crearIngrediente(ingredienteNombre)
+                    self.getPanaderia().getInventario().agregarIngrediente(ingrdt)
+            
+            self.dineroEnMano -= valorcompra
+            return False
