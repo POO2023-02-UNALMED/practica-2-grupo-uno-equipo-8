@@ -23,7 +23,9 @@ class Cocinero(Domiciliario):
         self._horno = False
         self._panaderia = panaderia
         if self._panaderia is not None:
-            self._panaderia.get_cocineros().append(self)
+            self._panaderia.getCocineros().append(self)
+        if especialidad != "":
+            panaderia.getCocineros().append(self)
 
     def get_especialidad(self):
         return self._especialidad
