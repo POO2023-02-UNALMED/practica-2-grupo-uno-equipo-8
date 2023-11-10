@@ -4,7 +4,7 @@ from gestorAplicacion.humanos.Trabajador import Trabajador
 from gestorAplicacion.comida.Ingrediente import Ingrediente
 from gestorAplicacion.comida.Producto import Producto
 from gestorAplicacion.comida.ProductoFrio import ProductoFrio
-from gestorAplicacion.comida.productoCaliente import ProductoCaliente
+from gestorAplicacion.comida.ProductoCaliente import ProductoCaliente
 from gestorAplicacion.gestion.Canasta import Canasta
 from gestorAplicacion.gestion.Panaderia import Panaderia
 from gestorAplicacion.humanos.Domiciliario import Domiciliario
@@ -23,7 +23,9 @@ class Cocinero(Domiciliario):
         self._horno = False
         self._panaderia = panaderia
         if self._panaderia is not None:
-            self._panaderia.get_cocineros().append(self)
+            self._panaderia.getCocineros().append(self)
+        if especialidad != "":
+            panaderia.getCocineros().append(self)
 
     def get_especialidad(self):
         return self._especialidad
@@ -148,14 +150,14 @@ class Cocinero(Domiciliario):
                 mapaAcumulativo[clave] = mapaAcumulativo.get(clave, 0) + valor
         return mapaAcumulativo
     
-    def multiplyValuesInMap(map, multiplier):
-        newMap = {}
+    def multiplicarValoresEnMapa(mapa, multiplicador):
+        nuevoMapa = {}
         
-        for ingredientId, originalValue in map.items():
-            newValue = originalValue * multiplier
-            newMap[ingredientId] = newValue
+        for ingredienteId, valorOriginal in mapa.items():
+            nuevoValor = valorOriginal * multiplicador
+            nuevoMapa[ingredienteId] = nuevoValor
 
-        return newMap
+        return nuevoMapa
 
     def laborParticular(self, canastaTrabajar):
         productos = canastaTrabajar.productosEnLista()
