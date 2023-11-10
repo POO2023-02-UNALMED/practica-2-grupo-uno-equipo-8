@@ -6,8 +6,8 @@ class ProductoCaliente(Producto):
         self._horno = False
 
     
-    def horno(self):
+    def getHorno(self):
         return self._horno
 
-    def horno(self, value):
+    def setHorno(self, value):
         self._horno = value

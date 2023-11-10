@@ -7,17 +7,17 @@ class ProductoFrio(Producto):
         self._tiempoDeCongelamiento = tiempoDeCongelamiento
 
 
-    def congelador(self):
+    def getCongelador(self):
         return self._congelador
 
 
-    def congelador(self, value):
+    def setCongelador(self, value):
         self._congelador = value
 
 
-    def tiempoDeCongelamiento(self):
+    def getTiempoDeCongelamiento(self):
         return self._tiempoDeCongelamiento
 
 
-    def tiempoDeCongelamiento(self, value):
+    def setTiempoDeCongelamiento(self, value):
         self._tiempoDeCongelamiento = value
