@@ -281,3 +281,19 @@ class Panaderia():
             GestionConseguirIngredientes.lecturaRobo(x)
 
         elegido.setRobado(True)
+
+    def reviewDomiciliario(self, domiciliario):
+
+        calificacion = domiciliario.getCalificacion()     
+        if calificacion < 3:
+            domiciliario.setSalario(domiciliario.getSalario() * 0.9)
+        elif calificacion == 5:
+            domiciliario.setSalario(domiciliario.getSalario() * 1.1)
+
+    def reviewCocinero(self, cocinero):
+        
+        calificacion = cocinero.getCalificacion()     
+        if calificacion < 3:
+            cocinero.setSalario(cocinero.getSalario() * 0.9)
+        elif calificacion == 5:
+            cocinero.setSalario(cocinero.getSalario() * 1.1)
