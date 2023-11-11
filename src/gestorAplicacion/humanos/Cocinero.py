@@ -1,4 +1,5 @@
 from random import randint
+from typing import override
 
 from gestorAplicacion.humanos.Trabajador import Trabajador
 from gestorAplicacion.comida.Ingrediente import Ingrediente
@@ -159,6 +160,7 @@ class Cocinero(Domiciliario):
 
         return nuevoMapa
 
+    @override
     def laborParticular(self, canastaTrabajar):
         productos = canastaTrabajar.productosEnLista()
         listaDeMapas = []
