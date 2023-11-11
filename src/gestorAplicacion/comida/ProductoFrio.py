@@ -1,4 +1,5 @@
 from random import randint, sample
+from typing import override
 
 from gestorAplicacion.comida.Producto import Producto
 from gestorAplicacion.comida.Producto import Ingrediente
@@ -29,7 +30,13 @@ class ProductoFrio(Producto):
     @classmethod
     def crearProducto(cls, Nnombre):
         newProducto = cls.obtenerObjetoPorId(Nnombre)
-        return cls(newProducto.nombre, newProducto.id, newProducto.ingredientes, newProducto.costo, newProducto.vecesVendido, newProducto.tiempoDeCongelamiento)
+        return cls(
+            newProducto.nombre,
+            newProducto.id, 
+            newProducto.ingredientes,
+            newProducto.costo, 
+            newProducto.vecesVendido, 
+            newProducto.tiempoDeCongelamiento)
     
     @classmethod
     def crearProductoPersonalizado(cls, Nnombre, ingredientes, congelador):
@@ -38,6 +45,7 @@ class ProductoFrio(Producto):
                 Ingrediente(nombre)
         return cls(Nnombre, None, ingredientes, None, None, None, congelador)
     
+    @override
     def seleccionProcesosDeCocina(self):
         procesos = ["Gelatinificar", "Amasar", "Mezclar", "Congelar", "Licuar", "Decoracion"]
         cuantosProcesos = randint(1, 3)
