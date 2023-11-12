@@ -90,15 +90,13 @@ class VentanaInicio:
         self.canvas_imagenes.pack(expand=True, fill='both', pady=10)
 
         # Rutas de las imágenes asociadas al sistema
-        self.rutas_imagenes_desarrollador = [f"../resources/desarrollador{j}{i}.png" for i in range(1, 5) for j in range(1, 6)]
+        self.rutas_imagenes_desarrollador = [[f"../resources/desarrollador{i}{j}.png" for j in range(1, 5)] for i in range(1, 6)]
         # Lista para almacenar objetos PhotoImage
-        self.imagenes_desarrollador = [PhotoImage() for _ in range(4)]
-
+        self.imagenes_desarrollador = [[PhotoImage() for _ in range(4)] for _ in range(5)]
+        
         # Inicializar el índice actual de las imágenes del desarrollador
-        self.indice_imagenes_desarrollador = 0
+        self.indice_desarrollador = 0
         self.indice_hoja_vida = 0
-
-        # Cargar las imágenes iniciales del desarrollador
         self.cargar_imagenes_desarrollador()
 
         # Menú de cambio de hoja de vida
@@ -129,11 +127,6 @@ class VentanaInicio:
     def salir_aplicacion(self):
         self.master.destroy()
 
-    def cambiar_imagenes_desarrollador(self, event):
-        # Cambiar las imágenes del desarrollador al hacer clic
-        self.indice_imagenes_desarrollador = (self.indice_imagenes_desarrollador + 1) % len(self.rutas_imagenes_desarrollador)
-        self.cargar_imagenes_desarrollador()
-
     def cambiar_hoja_vida(self, event):
         # Cambiar la hoja de vida al hacer clic
         self.indice_hoja_vida = (self.indice_hoja_vida + 1) % len(self.menu_hoja_vida)
@@ -145,18 +138,34 @@ class VentanaInicio:
         self.indice_imagenes = (self.indice_imagenes + 1) % len(self.rutas_imagenes_sistema)
         self.cargar_imagen()
 
+    def cambiar_imagenes_desarrollador(self, event):
+        # Cambiar las imágenes del desarrollador al hacer clic
+        self.indice_desarrollador = (self.indice_desarrollador + 1) % len(self.rutas_imagenes_desarrollador)
+        self.cargar_imagenes_desarrollador()
+
     def cargar_imagenes_desarrollador(self):
         # Limpiar el canvas
         self.canvas_imagenes.delete("all")
-        # Cargar las imágenes desde las rutas
-        for i, ruta in enumerate(self.rutas_imagenes_desarrollador):
+        ancho_canvas = self.canvas_imagenes.winfo_width()
+        if ancho_canvas<0:
+            ancho_canvas=ancho_canvas*-1
+        height_canvas = self.canvas_imagenes.winfo_height()
+        if height_canvas<0:
+            height_canvas=height_canvas*-1
+        # Definir las posiciones de las imágenes en la cuadrícula
+        posiciones = [(0, 0), (height_canvas/2, 0), (0, ancho_canvas/2), (height_canvas/2, ancho_canvas/2)]
+
+        # Cargar las imágenes desde las rutas y mostrarlas en la cuadrícula
+        for i, ruta in enumerate(self.rutas_imagenes_desarrollador[self.indice_desarrollador]):
             imagen_original = Image.open(ruta)
             # Redimensionar la imagen para que llene el canvas
-            imagen_redimensionada = imagen_original.resize((100, 100), Image.ANTIALIAS)
+            imagen_redimensionada = imagen_original.resize((int(height_canvas/2), int(ancho_canvas/2)), Image.ANTIALIAS)
             # Convertir la imagen a formato compatible con Tkinter
             self.imagenes_desarrollador[i] = ImageTk.PhotoImage(imagen_redimensionada)
+            # Obtener la posición de la imagen en la cuadrícula
+            x, y = posiciones[i]
             # Mostrar la imagen en el canvas
-            self.canvas_imagenes.create_image(100 * i, 0, anchor=tk.NW, image=self.imagenes_desarrollador[i])
+            self.canvas_imagenes.create_image(x, y, anchor=tk.NW, image=self.imagenes_desarrollador[i])
 
     def cargar_imagen(self):
         ancho_canvas = self.canvas_imagen.winfo_width()
