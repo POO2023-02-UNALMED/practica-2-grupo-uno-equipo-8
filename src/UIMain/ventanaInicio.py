@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import FLAT, Menu
 from PIL import Image, ImageTk
 from tkinter import PhotoImage
+from tkinter import messagebox
 import os
 
 # Obtener el directorio del script actual
@@ -59,6 +60,7 @@ class VentanaInicio:
         self.text_hoja_vida = tk.Text(self.frame_arriba_derecha, wrap=tk.WORD, width=40, height=10)
         self.text_hoja_vida.insert(tk.END, "Hoja de vida del desarrollador 1\n\n[Detalles del desarrollador 1]")
         self.text_hoja_vida.pack(expand=True, fill='both', pady=5)
+        self.text_hoja_vida.configure(state=tk.DISABLED)
 
         # Elementos en la parte inferior izquierda
         self.button_ingreso = tk.Button(self.frame_abajo_izquierda, text="Ingresar al Sistema", command=self.ingresar_sistema, height=3, width=20, font=("Arial", 13))
@@ -68,7 +70,6 @@ class VentanaInicio:
         self.canvas_imagen = tk.Canvas(self.frame_abajo_izquierda, bg="white", width=400, height=300)
         self.canvas_imagen.pack(fill='x', expand=True, pady=10, side=tk.BOTTOM)
         # Evento al cambiar el tamaño del Canvas
-        
 
         # Rutas de las imágenes asociadas al sistema
         self.rutas_imagenes_sistema = [f"../resources/imagen{i}.png" for i in range(1, 6)]
@@ -85,19 +86,38 @@ class VentanaInicio:
         # Evento al pasar el ratón sobre el canvas_imagen
         self.canvas_imagen.bind("<Enter>", self.mostrar_siguiente_imagen)
 
-        # Canvas para mostrar las imágenes del desarrollador
-        self.canvas_imagenes = tk.Canvas(self.frame_abajo_derecha, bg="white", width=400, height=200)
-        self.canvas_imagenes.pack(expand=True, fill='both', pady=10)
+        # Nueva configuración de Frames
+        for i in range(2):
+            tk.Grid.columnconfigure(self.frame_abajo_derecha, i, weight=1)
+
+        for i in range(2):
+            tk.Grid.rowconfigure(self.frame_abajo_derecha, i, weight=1)
+
+        # Canvas
+        self.canvas_imagen1 = tk.Canvas(self.frame_abajo_derecha, bg="white")
+        self.canvas_imagen1.grid(row=0, column=0, sticky="nsew")
+
+        self.canvas_imagen2 = tk.Canvas(self.frame_abajo_derecha, bg="white")
+        self.canvas_imagen2.grid(row=0, column=1, sticky="nsew")
+
+        self.canvas_imagen3 = tk.Canvas(self.frame_abajo_derecha, bg="white")
+        self.canvas_imagen3.grid(row=1, column=0, sticky="nsew")
+
+        self.canvas_imagen4 = tk.Canvas(self.frame_abajo_derecha, bg="white")
+        self.canvas_imagen4.grid(row=1, column=1, sticky="nsew")
 
         # Rutas de las imágenes asociadas al sistema
         self.rutas_imagenes_desarrollador = [[f"../resources/desarrollador{i}{j}.png" for j in range(1, 5)] for i in range(1, 6)]
         # Lista para almacenar objetos PhotoImage
-        self.imagenes_desarrollador = [[PhotoImage() for _ in range(4)] for _ in range(5)]
+        self.imagenes_canvas = [[PhotoImage() for _ in range(4)] for _ in range(5)]
         
         # Inicializar el índice actual de las imágenes del desarrollador
         self.indice_desarrollador = 0
         self.indice_hoja_vida = 0
-        self.cargar_imagenes_desarrollador()
+        # Cargar las imágenes en los Canvas
+        self.cargar_imagenes_canvas()
+        # Evento al cambiar el tamaño de la ventana
+        self.master.bind("<Configure>", self.configurar_tamanio_canvas)
 
         # Menú de cambio de hoja de vida
         self.menu_hoja_vida = ["Hoja de vida del desarrollador 1\n\n[Detalles del desarrollador 1]", "Hoja de vida del desarrollador 2\n\n[Detalles del desarrollador 2]", "Hoja de vida del desarrollador 3\n\n[Detalles del desarrollador 3]", "Hoja de vida del desarrollador 4\n\n[Detalles del desarrollador 4]", "Hoja de vida del desarrollador 5\n\n[Detalles del desarrollador 5]"]
@@ -128,44 +148,22 @@ class VentanaInicio:
         self.master.destroy()
 
     def cambiar_hoja_vida(self, event):
+        self.text_hoja_vida.configure(state=tk.NORMAL)
         # Cambiar la hoja de vida al hacer clic
         self.indice_hoja_vida = (self.indice_hoja_vida + 1) % len(self.menu_hoja_vida)
         self.text_hoja_vida.delete("1.0", tk.END)
         self.text_hoja_vida.insert(tk.END, self.menu_hoja_vida[self.indice_hoja_vida])
 
+        # Cambiar las imágenes del desarrollador
+        self.indice_desarrollador = (self.indice_desarrollador + 1) % len(self.rutas_imagenes_desarrollador)
+        self.cargar_imagenes_canvas()
+        self.configurar_tamanio_canvas(None)
+        self.text_hoja_vida.configure(state=tk.DISABLED)
+
     def mostrar_siguiente_imagen(self, event):
         # Cambiar la imagen al pasar el ratón sobre ella
         self.indice_imagenes = (self.indice_imagenes + 1) % len(self.rutas_imagenes_sistema)
         self.cargar_imagen()
-
-    def cambiar_imagenes_desarrollador(self, event):
-        # Cambiar las imágenes del desarrollador al hacer clic
-        self.indice_desarrollador = (self.indice_desarrollador + 1) % len(self.rutas_imagenes_desarrollador)
-        self.cargar_imagenes_desarrollador()
-
-    def cargar_imagenes_desarrollador(self):
-        # Limpiar el canvas
-        self.canvas_imagenes.delete("all")
-        ancho_canvas = self.canvas_imagenes.winfo_width()
-        if ancho_canvas<0:
-            ancho_canvas=ancho_canvas*-1
-        height_canvas = self.canvas_imagenes.winfo_height()
-        if height_canvas<0:
-            height_canvas=height_canvas*-1
-        # Definir las posiciones de las imágenes en la cuadrícula
-        posiciones = [(0, 0), (height_canvas/2, 0), (0, ancho_canvas/2), (height_canvas/2, ancho_canvas/2)]
-
-        # Cargar las imágenes desde las rutas y mostrarlas en la cuadrícula
-        for i, ruta in enumerate(self.rutas_imagenes_desarrollador[self.indice_desarrollador]):
-            imagen_original = Image.open(ruta)
-            # Redimensionar la imagen para que llene el canvas
-            imagen_redimensionada = imagen_original.resize((int(height_canvas/2), int(ancho_canvas/2)), Image.ANTIALIAS)
-            # Convertir la imagen a formato compatible con Tkinter
-            self.imagenes_desarrollador[i] = ImageTk.PhotoImage(imagen_redimensionada)
-            # Obtener la posición de la imagen en la cuadrícula
-            x, y = posiciones[i]
-            # Mostrar la imagen en el canvas
-            self.canvas_imagenes.create_image(x, y, anchor=tk.NW, image=self.imagenes_desarrollador[i])
 
     def cargar_imagen(self):
         ancho_canvas = self.canvas_imagen.winfo_width()
@@ -180,9 +178,32 @@ class VentanaInicio:
         # Mostrar la imagen en el canvas
         self.canvas_imagen.create_image(0, 0, anchor=tk.NW, image=self.imagenes_sistema[self.indice_imagenes])
 
+    def cargar_imagenes_canvas(self):
+        for i, canvas in enumerate([self.canvas_imagen1, self.canvas_imagen2, self.canvas_imagen3, self.canvas_imagen4]):
+            ruta_imagen = f"../resources/desarrollador{self.indice_desarrollador+1}{i + 1}.png"
+            imagen_original = Image.open(ruta_imagen)
+            self.imagenes_canvas[i] = ImageTk.PhotoImage(imagen_original)
+            canvas.create_image(0, 0, anchor=tk.NW, image=self.imagenes_canvas[i])
+
+    def configurar_tamanio_canvas(self, event):
+        # Redimensionar las imágenes proporcionalmente al tamaño del Canvas
+        for i, canvas in enumerate([self.canvas_imagen1, self.canvas_imagen2, self.canvas_imagen3, self.canvas_imagen4]):
+            ancho_canvas = canvas.winfo_width()
+            alto_canvas = canvas.winfo_height()
+            imagen_original = Image.open(f"../resources/desarrollador{self.indice_desarrollador+1}{i + 1}.png")
+            imagen_redimensionada = imagen_original.resize((ancho_canvas, alto_canvas), Image.ANTIALIAS)
+            self.imagenes_canvas[i] = ImageTk.PhotoImage(imagen_redimensionada)
+            canvas.itemconfig(canvas.find_all()[0], image=self.imagenes_canvas[i])  # Actualizar la imagen
+
     def mostrar_descripcion(self):
-        # Aquí puedes mostrar una breve descripción del sistema en algún lugar de la ventana
-        print("Mostrando descripción del sistema")
+        descripcion = "Este proyecto es una aplicación de panadería virtual que permite realizar pedidos " \
+                    "en línea de una amplia variedad de productos frescos y deliciosos. La plataforma " \
+                    "ofrece una experiencia fácil de usar, desde la selección de productos hasta el pago " \
+                    "y la entrega a domicilio. ¡Disfruta de la comodidad de ordenar tus productos de panadería " \
+                    "favoritos desde la comodidad de tu hogar!"
+        
+        # Mostrar el pop-up con la descripción
+        messagebox.showinfo("Descripción del Sistema", descripcion)
 
 def main():
     root = tk.Tk()
