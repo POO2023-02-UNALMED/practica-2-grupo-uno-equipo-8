@@ -3,6 +3,7 @@ from tkinter import FLAT, Menu
 from PIL import Image, ImageTk
 from tkinter import PhotoImage
 from tkinter import messagebox
+from ventanaPrincipal import VentanaPrincipal
 import os
 
 # Obtener el directorio del script actual
@@ -141,8 +142,9 @@ class VentanaInicio:
         self.canvas_imagen.create_image(0, 0, anchor=tk.NW, image=self.imagenes_sistema[self.indice_imagenes])
 
     def ingresar_sistema(self):
-        # Aquí puedes manejar el evento de ingreso al sistema
-        print("Ingresando al sistema")
+        self.master.destroy()  # Cerrar la ventana actual
+        # Abrir la ventana principal
+        app = VentanaPrincipal()
 
     def salir_aplicacion(self):
         self.master.destroy()
