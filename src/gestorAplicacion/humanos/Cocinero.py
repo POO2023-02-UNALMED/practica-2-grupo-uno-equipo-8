@@ -1,5 +1,6 @@
 from random import randint
 from typing import override
+from UIMain.GestionCocinar import GestionCocinar
 
 from gestorAplicacion.humanos.Trabajador import Trabajador
 from gestorAplicacion.comida.Ingrediente import Ingrediente
@@ -111,7 +112,7 @@ class Cocinero(Domiciliario):
         # Obtiene la lista de procesos a realizar.
         procesoCook = producto.getProcesoDeCocina()
         longitud = len(procesoCook)
-
+        
         # Itera a través de los procesos de cocina.
         for i in range(longitud):
             # Encuentra al cocinero ideal para el proceso actual.
@@ -137,9 +138,9 @@ class Cocinero(Domiciliario):
                 chefIdeal.detenerCoccion(producto)
                 chefIdeal.repararCoccion(producto)
                 i = -1
-            #GestionCocinar.barrasCocinando(procesoCook, longitud)
             # Establece el cocinero como ocupado.
             chefIdeal.trabajo = True
+        GestionCocinar.barrasCocinando(procesoCook,longitud,ventana_principal)
 
         # Devuelve False si todos los procesos se completaron con éxito.
         return False
