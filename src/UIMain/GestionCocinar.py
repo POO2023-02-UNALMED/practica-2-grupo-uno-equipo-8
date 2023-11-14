@@ -4,30 +4,25 @@ from tkinter import ttk
 class GestionCocinar:
     @staticmethod
     def barrasCocinando(proceso_cook, longitud, ventana_principal):
-        # Oculta la ventana principal al inicio
-        ventana_principal.withdraw()
+        # Crea una variable de control para la barra de progreso
+        progreso_var = tk.DoubleVar()
 
-        # Crea la ventana de progreso
-        ventana = tk.Toplevel()
-        ventana.title("Proceso de Cocina")
-
-        barra_progreso = ttk.Progressbar(ventana, length=200, mode="determinate", maximum=longitud)
+        # Crea la barra de progreso y etiqueta en la ventana principal
+        barra_progreso = ttk.Progressbar(ventana_principal, variable=progreso_var, length=200, mode="determinate", maximum=longitud)
         barra_progreso.pack(pady=20)
 
-        etiqueta_proceso = tk.Label(ventana, text="")
+        etiqueta_proceso = tk.Label(ventana_principal, text="")
         etiqueta_proceso.pack(pady=5)
 
         # Función para actualizar la barra de progreso y la etiqueta
         def actualizar_progreso(valor):
             if valor < longitud:
-                barra_progreso['value'] = valor
+                progreso_var.set(valor)
                 etiqueta_proceso.config(text=proceso_cook[valor])
-                ventana.after(1000, lambda: actualizar_progreso(valor + 1))
+                ventana_principal.after(1000, lambda: actualizar_progreso(valor + 1))
             else:
-                ventana.destroy()
-                ventana_principal.deiconify()  # Mostramos la ventana principal al finalizar
+                barra_progreso.destroy()
+                etiqueta_proceso.destroy()
 
         # Inicia la actualización de la barra de progreso
         actualizar_progreso(0)
-
-        ventana.mainloop()
