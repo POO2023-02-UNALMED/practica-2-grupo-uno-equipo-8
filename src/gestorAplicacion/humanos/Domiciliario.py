@@ -1,63 +1,75 @@
-from gestorAplicacion.humanos.Catastrofe import Catastrofe
-from gestorAplicacion.humanos.Trabajador import Trabajador
+from humanos.Catastrofe import Catastrofe
 from gestorAplicacion.comida.Ingrediente import Ingrediente
+from humanos.Trabajador import Trabajador
 from gestorAplicacion.comida.ComidaDefault import ComidaDefault
 
-class Domiciliario(Trabajador,ComidaDefault):
-    def __init__(self):
-        super().__init__()
-        self.licencia = True
+class Domiciliario(Trabajador, ComidaDefault):
+    def __init__(self, nombre=None, panaderia=None, habilidad=None, calificacion=None, dineroEnMano=None, licencia=None, x=None):
+        super().__init__(nombre, habilidad, calificacion, dineroEnMano, panaderia, x)
+        self.licencia = False if licencia is None else licencia
         self.ocupado = False
         self.canasta = None
-    
-    def getLicencia(self):
+        self.empaqueFrio = False
+        self.panaderia = panaderia
+        panaderia.getDomiciliarios().append(self)
+
+    def isLicencia(self):
         return self.licencia
-    
-    def getOcupado(self):
-        return self.ocupado
-    
-    def getCanasta(self):
-        return self.canasta
-    
+
     def setLicencia(self, licencia):
         self.licencia = licencia
+
+    def isOcupado(self):
+        return self.ocupado
 
     def setOcupado(self, ocupado):
         self.ocupado = ocupado
 
+    def getCanasta(self):
+        return self.canasta
+
     def setCanasta(self, canasta):
         self.canasta = canasta
-    
-    def calcular_costo_domicilio(cliente, canasta):
-        productos = canasta.productos
-        costo = 0
-        for producto in productos:
-            costo += producto.costo
-        longitud = len(productos)
-        if longitud > 15:
-            costo += costo * 0.7
 
-        direccion = cliente.direccion
-        if direccion.distancia == "Medio":
+    def isEmpaqueFrio(self):
+        return self.empaqueFrio
+
+    def setEmpaqueFrio(self, empaqueFrio):
+        self.empaqueFrio = empaqueFrio
+
+    def getPanaderia(self):
+        return self.panaderia
+
+    def setPanaderia(self, panaderia):
+        self.panaderia = panaderia
+
+    def calcularCostoDomicilio(self, cliente, canasta):
+        productos = canasta.getProductos()
+        costo = sum(producto.getCosto() for producto in productos)
+        if len(productos) > 15:
+            costo *= 0.7
+
+        direccion = cliente.getDireccion()
+        if direccion.getDistancia() == "Medio":
             costo += 10000
-        if direccion.distancia == "Lejos":
+        if direccion.getDistancia() == "Lejos":
             costo += 20000
 
-        costo += ComidaDefault.tarifa_domicilio
-        costo *= ComidaDefault.tarifa_ganancias
+        costo += ComidaDefault.tarifaDomicilio
+        costo *= ComidaDefault.tarifaGanancias
         return costo
-    
-    def labor_particular(self, canasta):
+
+    def laborParticular(self, canasta):
         transito = Catastrofe()
-        if not transito.parada_transito(self):
+        if not transito.paradaTransito(self):
             x = False
-            GestionDomicilioCliente.estado_domicilio(x)
+            GestionDomicilioCliente.estadoDomicilio(x)
             return x
         else:
             self.canasta = None
             self.ocupado = False
             x = True
-            GestionDomicilioCliente.estado_domicilio(x)
+            GestionDomicilioCliente.estadoDomicilio(x)
             return x
 
     def conseguirIngredientes(self, listIngredientes):

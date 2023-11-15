@@ -111,8 +111,8 @@ class Panaderia():
     def setCanastaDelDia(cls, value):
         cls._canastaDelDia = value
         
-    def contratarCocinero(self, nombre, habilidad, calificacion, dineroEnMano, especialidad):
-        indicado = Cocinero(nombre, habilidad, calificacion, dineroEnMano, especialidad, self)
+    def contratarCocinero(self, nombre, especialidad, habilidad, calificacion, dineroEnMano):
+        indicado = Cocinero(nombre, especialidad, self, habilidad, calificacion, dineroEnMano)
         return indicado
 
     def obtenerCanastaPorId(self,id):
@@ -234,7 +234,7 @@ class Panaderia():
     def cocineroAleatorio(self):
         
         listaprovicional = self._cocineros.copy()
-        listaprovicional.shuffle()
+        shuffle(listaprovicional)
         elegido = listaprovicional[0]
         return elegido 
 

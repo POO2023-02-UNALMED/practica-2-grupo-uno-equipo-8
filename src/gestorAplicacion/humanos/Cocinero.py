@@ -12,8 +12,8 @@ from gestorAplicacion.humanos.Catastrofe import Catastrofe
 class Cocinero(Domiciliario):
     nombres = ["Sergio", "Jaime", "David", "Juancho", "Will", "Kevin"]
     
-    def __init__(self, nombre="", habilidad=0.0, calificacion=0.0, dineroEnMano=0.0, especialidad="", panaderia=None):
-        super().__init__(nombre, habilidad, calificacion, dineroEnMano, panaderia, True)
+    def __init__(self, nombre="",especialidad="" , panaderia=None,habilidad=0.0, calificacion=0.0, dineroEnMano=0.0):
+        super().__init__(nombre,panaderia, habilidad, calificacion, dineroEnMano, True)
         self._especialidad = especialidad
         self._fallado = False
         self._trabajo = False
@@ -22,8 +22,6 @@ class Cocinero(Domiciliario):
         self._panaderia = panaderia
         if self._panaderia is not None:
             self._panaderia.getCocineros().append(self)
-        if especialidad != "":
-            panaderia.getCocineros().append(self)
 
     def get_especialidad(self):
         return self._especialidad
@@ -75,7 +73,7 @@ class Cocinero(Domiciliario):
             if especialidad == proceso:
                 ideal = cocinero
                 return ideal
-        idealNew = self._panaderia.contratarCocinero(chefRandom, habilidad=0, calificacion=0, dineroEnMano=0, proceso=proceso)
+        idealNew = self._panaderia.contratarCocinero(chefRandom, proceso=proceso, super().habilidad, super().calificacion, 0)
         return idealNew
 
     def detenerCoccion(self, producto, cantidades):

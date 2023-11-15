@@ -11,6 +11,7 @@ class SerializationTest:
     def main(self, args):
         print("Test de funcionamiento")
         panaderia = Panaderia()
+        Cliente.setPanaderia(panaderia)
         #panaderia = Serializador.cargarPanaderia()
         print("panaderia cargada")
 
@@ -74,14 +75,33 @@ class SerializationTest:
 
         print("productos creados")
 
-        Cliente.crearCuenta("Sahely", 1123433775, "123")
-        Cliente.crearCuenta("Richard", 202, "qwerty")
+        cliente1 = Cliente()
+        cliente1.crearCuenta("Sahely", 1123433775, "123")
+        cliente1.crearCuenta("Richard", 202, "qwerty")
         Cliente.getSesion().setPresupuesto(30000)
     
+
+        print("Cliente en sesion: " + Cliente.getSesion().getNombre())
+        print("clientes creados")
+
         domiciliario1 = Domiciliario("Nico", panaderia)
         domiciliario2 = Domiciliario("Sasha", panaderia)
         domiciliario2.setHabilidad(9)
         cocinero1 = Cocinero("Samuel", "Decoracion", panaderia)
+        
+        for i in panaderia.getTrabajadores():
+            print(i.getNombre())
+
+        print("trabajadores creados")
+
+        for i in panaderia.getDomiciliarios():
+            print(i.getNombre())
+        print("domiciliarios creados")
+
+        for i in panaderia.getCocineros():
+            print(i.getNombre())
+
+        print("cocineros creados")
         
         ingredientes_cocinar = {
             "13": 2,

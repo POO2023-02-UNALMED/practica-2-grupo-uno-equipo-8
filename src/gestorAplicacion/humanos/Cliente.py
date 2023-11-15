@@ -5,6 +5,7 @@ from enum import Enum
 
 class Cliente:
     _sesion = None
+    _panaderia = None
 
     def __init__(self, nombre="", id=0, contrasena="", direccion=None, tipoDescuento=None, presupuesto=0):
         self._nombre = nombre
@@ -18,7 +19,6 @@ class Cliente:
         self._canastaEnMano = None
         self._historialOrdenes = []
         self._cantidadOrdenes = 0
-        self._panaderia = None
         self._recibos = []
         self._domiciliario = None
 
@@ -51,9 +51,6 @@ class Cliente:
 
     def setRecibos(self, recibos):
         self._recibos = recibos
-
-    def setPanaderia(self, panaderia):
-        self._panaderia = panaderia
 
     def setCanastaOrden(self, canastaOrden):
         self._canastaOrden = canastaOrden
@@ -94,9 +91,6 @@ class Cliente:
     def getCantidadOrdenes(self):
         return self._cantidadOrdenes
 
-    def getPanaderia(self):
-        return self._panaderia
-
     def setSesion(self, sesion):
         Cliente._sesion = sesion
 
@@ -122,6 +116,14 @@ class Cliente:
     @classmethod
     def setSesion(cls, sesion):
         cls._sesion = sesion
+
+    @classmethod
+    def getPanaderia(cls):
+        return cls._panaderia
+    
+    @classmethod
+    def setPanaderia(cls, panaderia):
+        cls._panaderia = panaderia
 
     def guardarCanastaEnHistorial(self, canasta):
         productosEnLista = {}
@@ -175,10 +177,10 @@ class Cliente:
         return self._canastaOrden
     
     def crearCanastaPublicada(self, id):
-        if self._panaderia.obtenerCanastaPorId(id) is None:
+        if Cliente._panaderia.obtenerCanastaPorId(id) is None:
             return None
         else:
-            canasta = self._panaderia.obtenerCanastaPorId(id)
+            canasta = Cliente._panaderia.obtenerCanastaPorId(id)
             productosEnLista = {}
             ingredientesEnLista = {}
             kitsEnLista = {}
@@ -212,7 +214,7 @@ class Cliente:
         canasta.setIngredientes(listaVacia2)
         canasta.setKits(listaVacia3)
         canasta.setPagada(False)
-        self._panaderia.agregarCanastasPublicadas(canasta)
+        Cliente._panaderia.agregarCanastasPublicadas(canasta)
 
     def crearCanastaDelDia(self):
         canasta = Panaderia.getCanastaDelDia()
@@ -262,7 +264,7 @@ class Cliente:
         canasta.setPagada(False)
         canasta.setCalificacion(calificacion)
         canasta.setComentario(comentario)
-        self._panaderia.agregarCanastasPublicadas(canasta)
+        Cliente._panaderia.agregarCanastasPublicadas(canasta)
 
     def calificarDomiciliario(self, domiciliario, calificacion):
         calificacionVieja = domiciliario.getCalificacion()
@@ -274,22 +276,22 @@ class Cliente:
         calificacionNueva = (calificacionVieja + calificacion) / 2
         cocinero.setCalificacion(calificacionNueva)
 
-        for calificarCocinero in self._panaderia.getCocineros():
+        for calificarCocinero in Cliente._panaderia.getCocineros():
             if cocinero.isTrabajo():
-                self._panaderia.reviewCocinero(calificarCocinero)
+                Cliente._panaderia.reviewCocinero(calificarCocinero)
                 cocinero.setTrabajo(False)
 
     def notaCocineros(self):
         calificacion = GestionCocinar.gestionCocina()
-        for cocinero in self._panaderia.getCocineros():
+        for cocinero in Cliente._panaderia.getCocineros():
             if cocinero.isTrabajo():
                 self._calificarCocina(cocinero, calificacion)
 
     def enviarCanastasADomicilio(self, canastas):
-        self._panaderia.enviarDomicilio(canastas, self)
+        Cliente._panaderia.enviarDomicilio(canastas, self)
         calificacion = GestionDomicilioCliente.pedirCalificacion()
         self.calificarDomiciliario(self._domiciliario, calificacion)
-        self._panaderia.reviewDomiciliario(self._domiciliario)
+        Cliente._panaderia.reviewDomiciliario(self._domiciliario)
         self.notaCocineros()
 
     def gestionDatosFaltantes(self, valorCompra):
@@ -357,7 +359,7 @@ class Cliente:
     # Métodos para la gestión de cuentas de los clientes
 
     def inicioSesionId(self,id):
-        for cliente in self._panaderia.getClientes():
+        for cliente in Cliente._panaderia.getClientes():
             if cliente.getId() == id:
                 return cliente
         return None
@@ -371,7 +373,7 @@ class Cliente:
 
     def crearCuenta(self,nombre, id, contrasena):
         cliente = Cliente(nombre, id, contrasena)
-        self._panaderia._clientes.append(cliente)
+        Cliente._panaderia._clientes.append(cliente)
         Cliente.setSesion(cliente)
         return "Cuenta creada con éxito"
 
