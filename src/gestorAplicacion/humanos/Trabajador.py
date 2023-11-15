@@ -1,4 +1,4 @@
-from ABC import ABC, abstractmethod
+from abc import ABC, abstractmethod
 import random
 
 class Trabajador(ABC):

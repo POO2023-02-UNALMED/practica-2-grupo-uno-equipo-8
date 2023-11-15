@@ -1,5 +1,4 @@
 from random import randint, sample
-from typing import override
 
 from gestorAplicacion.comida.Producto import Producto
 from gestorAplicacion.comida.Producto import Ingrediente
@@ -45,7 +44,7 @@ class ProductoFrio(Producto):
                 Ingrediente(nombre)
         return cls(Nnombre, None, ingredientes, None, None, None, congelador)
     
-    @override
+
     def seleccionProcesosDeCocina(self):
         procesos = ["Gelatinificar", "Amasar", "Mezclar", "Congelar", "Licuar", "Decoracion"]
         cuantosProcesos = randint(1, 3)

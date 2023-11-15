@@ -4,21 +4,21 @@ class ComidaDefault:
     """
 
     # Tarifa por defecto para el servicio a domicilio.
-    tarifa_domicilio = 2000
+    tarifaDomicilio = 2000
 
     # Tarifa por defecto para las ganancias.
-    tarifa_ganancias = 1.7
+    tarifaGanancias = 1.7
 
     # Tarifa por defecto para los impuestos.
-    tarifa_impuestos = 0.19
+    tarifaImpuestos = 0.19
 
-    def get_descripcion(self):
+    def getDescripcion(self):
         """
         Obtiene la descripción por defecto de la comida.
         """
         return "Ahora mismo no tenemos una descripcion para este producto, pero te invitamos a probarlo."
 
-    def get_nutrientes(self, nombre):
+    def getNutrientes(self, nombre):
         """
         Obtiene la información nutricional por porción de la comida.
         :param nombre: El nombre de la comida.

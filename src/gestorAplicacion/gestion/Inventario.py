@@ -2,8 +2,7 @@ from gestorAplicacion.comida.Producto import Producto
 
 
 class Inventario:
-    def __init__(self, panaderia):
-        self._panaderia = panaderia
+    def __init__(self):
         self._invIngredientes = []
         self._invProductos = []
         self._maxCantidad = 20

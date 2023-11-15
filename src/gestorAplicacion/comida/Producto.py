@@ -1,21 +1,29 @@
 import random
-from gestorAplicacion.comida import Ingrediente
+from comida.Ingrediente import Ingrediente
+from comida.ComidaDefault import ComidaDefault
 
-class Producto:
+class Producto(ComidaDefault):
     cantidadProductosUnicos = 0
     baseDatosProductos = []
     topMasVendidos = []
     
-    def __init__(self, nombre, id=None, ingredientes=None, costo=None, vecesVendido=None):
+    def __init__(self, nombre, ingredientes=None, id=None, vecesVendido=0, costo=None):
         self.nombre = nombre
-        self.ingredientes = ingredientes
-        self.vecesVendido = vecesVendido
+        if ingredientes is None:
+            self.ingredientes = {}
+        else:
+            self.ingredientes = ingredientes
+        if vecesVendido is None:
+            self.vecesVendido = 0
+        else:
+            self.vecesVendido = vecesVendido+1
         self.costo = self.calcularCosto()
         self.id = id if id is not None else str(Producto.cantidadProductosUnicos + Ingrediente.getCantidadIngredientesUnicos())
         self.procesosDeCocina = []
         
         if id is None:
             Producto.cantidadProductosUnicos += 1
+            Ingrediente.setCantidadProductosUnicos(Producto.cantidadProductosUnicos)
             Producto.baseDatosProductos.append(self)
             
     # Getter y Setter para el atributo 'nombre'

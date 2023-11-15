@@ -9,7 +9,7 @@ from baseDatos.Serializador import Serializador
 
 class SerializationTest:
     def main(self, args):
-        print("Test de serializacion")
+        print("Test de funcionamiento")
         panaderia = Panaderia()
         #panaderia = Serializador.cargarPanaderia()
         print("panaderia cargada")
@@ -27,6 +27,8 @@ class SerializationTest:
         Ingrediente.crearIngrediente("milo")
         Ingrediente.crearIngrediente("miga de galleta")
         
+        print("ingredientes creados")
+
         ingredientes_bunuelo = {
             "harina": 2,
             "huevos": 2,
@@ -67,8 +69,13 @@ class SerializationTest:
         Producto.crearProductoPersonalizado("torta de milo", ingredientes_torta_milo)
         Producto.crearProductoPersonalizado("cheesecake", ingredientes_cheesecake)
         
-        panaderia.crearCuenta("Sahely", 1123433775, "123")
-        panaderia.crearCuenta("Richard", 202, "qwerty")
+        for i in Producto.baseDatosProductos:
+            print(i.getNombre())
+
+        print("productos creados")
+
+        Cliente.crearCuenta("Sahely", 1123433775, "123")
+        Cliente.crearCuenta("Richard", 202, "qwerty")
         Cliente.getSesion().setPresupuesto(30000)
     
         domiciliario1 = Domiciliario("Nico", panaderia)

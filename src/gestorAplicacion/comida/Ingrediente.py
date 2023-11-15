@@ -1,7 +1,6 @@
 import random
 
-from gestorAplicacion.comida import Producto
-from ComidaDefault import ComidaDefault
+from comida.ComidaDefault import ComidaDefault
 import math
 
 
@@ -10,6 +9,7 @@ class Ingrediente(ComidaDefault):
     _cantidadIngredientesUnicos = 0
     probabilidadConstante = 1
     _topMasVendidos = []
+    _cantidadProductosUnicos=0
 
     def __init__(self, nombre, identificador=None, precioVenta=None, precioCompra=None, vecesVendido=None):
         self._nombre = nombre
@@ -18,9 +18,9 @@ class Ingrediente(ComidaDefault):
             numeroAleatorio = aleatorio.randint(300, 3000)
             self._precioDeCompra = numeroAleatorio
             self._precioDeVenta = math.ceil(numeroAleatorio * ComidaDefault.tarifaGanancias)
-            Ingrediente.cantidadIngredientesUnicos += 1
-            self._id = str(Ingrediente.cantidadIngredientesUnicos + Producto.cantidadProductosUnicos)
-            Ingrediente.baseDatosIngredientes.append(self)
+            Ingrediente._cantidadIngredientesUnicos += 1
+            self._id = str(Ingrediente._cantidadIngredientesUnicos + Ingrediente._cantidadProductosUnicos)
+            Ingrediente._baseDatosIngredientes.append(self)
             self._vecesVendido = 0
             self._caducado = False
             self._inventario = None
@@ -106,6 +106,14 @@ class Ingrediente(ComidaDefault):
     def setTopMasVendidos(cls, topMasVendidos):
         cls._topMasVendidos = topMasVendidos
 
+    @classmethod
+    def getCantidadProductosUnicos(cls):
+        return cls._cantidadProductosUnicos
+    
+    @classmethod
+    def setCantidadProductosUnicos(cls, cantidadProductosUnicos):
+        cls._cantidadProductosUnicos = cantidadProductosUnicos
+
     
     @staticmethod
     def verificacionExistenciaPorNombre(nombre):
@@ -117,7 +125,7 @@ class Ingrediente(ComidaDefault):
         return existe
     
     @staticmethod
-    def verificarExistenciaPorId(id):
+    def verificacionExistenciaPorId(id):
         existe = False
         for ingrediente in Ingrediente._baseDatosIngredientes:
             if ingrediente._id == id:
