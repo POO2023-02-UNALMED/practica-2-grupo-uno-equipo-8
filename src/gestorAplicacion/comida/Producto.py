@@ -1,5 +1,4 @@
 import random
-
 from gestorAplicacion.comida import Ingrediente
 
 class Producto:

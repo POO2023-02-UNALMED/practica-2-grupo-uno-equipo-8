@@ -1,8 +1,9 @@
 from gestorAplicacion.humanos.Catastrofe import Catastrofe
 from gestorAplicacion.humanos.Trabajador import Trabajador
 from gestorAplicacion.comida.Ingrediente import Ingrediente
+from gestorAplicacion.comida.ComidaDefault import ComidaDefault
 
-class Domiciliario(Trabajador):
+class Domiciliario(Trabajador,ComidaDefault):
     def __init__(self):
         super().__init__()
         self.licencia = True
@@ -42,8 +43,8 @@ class Domiciliario(Trabajador):
         if direccion.distancia == "Lejos":
             costo += 20000
 
-        costo += tarifa_domicilio
-        costo *= tarifa_ganancias
+        costo += ComidaDefault.tarifa_domicilio
+        costo *= ComidaDefault.tarifa_ganancias
         return costo
     
     def labor_particular(self, canasta):

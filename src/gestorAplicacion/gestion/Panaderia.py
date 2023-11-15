@@ -1,11 +1,6 @@
 from gestorAplicacion.comida.Ingrediente import Ingrediente
 from gestorAplicacion.comida.Producto import Producto
-from gestorAplicacion.comida.ProductoFrio import ProductoFrio
 from gestorAplicacion.humanos.Cocinero import Cocinero
-from gestorAplicacion.humanos.Domiciliario import Domiciliario
-from gestorAplicacion.humanos.Cliente import Cliente
-from gestorAplicacion.humanos.Catastrofe import Catastrofe
-from gestorAplicacion.humanos.Trabajador import Trabajador
 from gestion import Inventario
 from gestion import Canasta
 from random import shuffle
@@ -186,27 +181,6 @@ class Panaderia():
                         self._inventario.restarIngrediente(ingrediente, 1)
                 kitsCanasta.append(kitCanasta)
         return kitsCanasta
-        
-    # Métodos para la gestión de cuentas de los clientes
-
-    def inicioSesionId(self,id):
-        for cliente in self.getClientes():
-            if cliente.getId() == id:
-                return cliente
-        return None
-
-    def inicioSesionContrasena(cliente, contrasena):
-        if cliente.getContrasena() == contrasena:
-            Cliente.setSesion(cliente)
-            return "Inicio de sesión exitoso"
-        else:
-            return "Contraseña incorrecta"
-
-    def crearCuenta(self,nombre, id, contrasena):
-        cliente = Cliente(nombre, id, contrasena)
-        self._clientes.append(cliente)
-        Cliente.setSesion(cliente)
-        return "Cuenta creada con éxito"
 
     def saldarDeudas(self):
 

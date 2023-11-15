@@ -1,4 +1,3 @@
-from gestorAplicacion.comida.Ingrediente import Ingrediente
 from gestorAplicacion.comida.Producto import Producto
 
 

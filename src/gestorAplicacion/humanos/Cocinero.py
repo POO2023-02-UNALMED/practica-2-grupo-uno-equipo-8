@@ -2,13 +2,10 @@ from random import randint
 from typing import override
 from UIMain.GestionCocinar import GestionCocinar
 
-from gestorAplicacion.humanos.Trabajador import Trabajador
 from gestorAplicacion.comida.Ingrediente import Ingrediente
 from gestorAplicacion.comida.Producto import Producto
 from gestorAplicacion.comida.ProductoFrio import ProductoFrio
 from gestorAplicacion.comida.ProductoCaliente import ProductoCaliente
-from gestorAplicacion.gestion.Canasta import Canasta
-from gestorAplicacion.gestion.Panaderia import Panaderia
 from gestorAplicacion.humanos.Domiciliario import Domiciliario
 from gestorAplicacion.humanos.Catastrofe import Catastrofe
 

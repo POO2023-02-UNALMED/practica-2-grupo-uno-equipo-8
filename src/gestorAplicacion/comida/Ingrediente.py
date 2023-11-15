@@ -1,11 +1,11 @@
 import random
 
 from gestorAplicacion.comida import Producto
-from gestorAplicacion.gestion.Panaderia import Panaderia
+from ComidaDefault import ComidaDefault
 import math
 
 
-class Ingrediente:
+class Ingrediente(ComidaDefault):
     _baseDatosIngredientes = []
     _cantidadIngredientesUnicos = 0
     probabilidadConstante = 1

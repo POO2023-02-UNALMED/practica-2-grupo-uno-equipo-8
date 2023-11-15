@@ -353,6 +353,28 @@ class Cliente:
             return "La contraseña debe tener al menos 8 caracteres"
         else:
             return "Contraseña válida"
+        
+    # Métodos para la gestión de cuentas de los clientes
+
+    def inicioSesionId(self,id):
+        for cliente in self._panaderia.getClientes():
+            if cliente.getId() == id:
+                return cliente
+        return None
+
+    def inicioSesionContrasena(cls,cliente, contrasena):
+        if cliente.getContrasena() == contrasena:
+            cls.setSesion(cliente)
+            return "Inicio de sesión exitoso"
+        else:
+            return "Contraseña incorrecta"
+
+    def crearCuenta(self,nombre, id, contrasena):
+        cliente = Cliente(nombre, id, contrasena)
+        self._panaderia._clientes.append(cliente)
+        Cliente.setSesion(cliente)
+        return "Cuenta creada con éxito"
+
 
     class Direccion(Enum):
         MEDELLIN = "Cerca"
