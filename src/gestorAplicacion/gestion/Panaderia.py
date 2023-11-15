@@ -21,6 +21,8 @@ from random import shuffle
 class Panaderia():
 
     _canastaDelDia = None
+    
+
 
     def __init__(self, trabajadores = None, cocineros = None, domiciliarios = None, clientes = None, dinero = 1000000, deudas = 0, quiebra = False, canastasP = None):
         
@@ -111,6 +113,7 @@ class Panaderia():
     def setCanastaDelDia(cls, value):
         cls._canastaDelDia = value
         
+        
     def contratarCocinero(self, nombre, habilidad, calificacion, dineroEnMano, especialidad):
         indicado = Cocinero(nombre, habilidad, calificacion, dineroEnMano, especialidad, self)
         return indicado
@@ -125,6 +128,8 @@ class Panaderia():
         canastaDeProductosCocinar = Canasta()
         canastaDeProductosCocinar.setProductosEnLista(productosParaCocinar)
         cocinero = self.cocineroAleatorio()
+        Cocinero.setProcesosDeProductosCocinados([])
+        Cocinero.setFallosCocinando(0)
         while True:
             if cocinero.laborParticular(canastaDeProductosCocinar):
                 break

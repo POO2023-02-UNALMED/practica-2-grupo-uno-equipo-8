@@ -5,12 +5,16 @@ from gestorAplicacion.comida.Ingrediente import Ingrediente
 from gestorAplicacion.comida.Producto import Producto
 from gestorAplicacion.comida.ProductoFrio import ProductoFrio
 from gestorAplicacion.comida.ProductoCaliente import ProductoCaliente
+from gestorAplicacion.gestion.Panaderia import Panaderia
 from gestorAplicacion.humanos.Domiciliario import Domiciliario
 from gestorAplicacion.humanos.Catastrofe import Catastrofe
 
 
 class Cocinero(Domiciliario):
     nombres = ["Sergio", "Jaime", "David", "Juancho", "Will", "Kevin"]
+    
+    _procesosDeProductosCocinados = []
+    _fallosCocinando= 0
     
     def __init__(self, nombre="", habilidad=0.0, calificacion=0.0, dineroEnMano=0.0, especialidad="", panaderia=None):
         super().__init__(nombre, habilidad, calificacion, dineroEnMano, panaderia, True)
@@ -25,44 +29,60 @@ class Cocinero(Domiciliario):
         if especialidad != "":
             panaderia.getCocineros().append(self)
 
-    def get_especialidad(self):
+    def getEspecialidad(self):
         return self._especialidad
 
-    def set_especialidad(self, especialidad):
+    def setEspecialidad(self, especialidad):
         self._especialidad = especialidad
 
-    def is_fallado(self):
+    def isFallado(self):
         return self._fallado
 
-    def set_fallado(self, quemado):
+    def setFallado(self, quemado):
         self._fallado = quemado
 
-    def is_trabajo(self):
+    def isTrabajo(self):
         return self._trabajo
 
-    def set_trabajo(self, trabajo):
+    def setTrabajo(self, trabajo):
         self._trabajo = trabajo
 
-    def is_nevera(self):
+    def isNevera(self):
         return self._nevera
 
-    def set_nevera(self, nevera):
+    def setNevera(self, nevera):
         self._nevera = nevera
 
-    def is_horno(self):
+    def isHorno(self):
         return self._horno
 
-    def set_horno(self, horno):
+    def setHorno(self, horno):
         self._horno = horno
 
-    def get_panaderia(self):
+    def getPanaderia(self):
         return self._panaderia
 
-    def set_panaderia(self, panaderia):
+    def setPanaderia(self, panaderia):
         self._panaderia = panaderia
+        
+    @classmethod
+    def getProcesosDeProductosCocinados(cls):
+        return cls._procesosDeProductosCocinados
+    
+    @classmethod
+    def setProcesosDeProductosCocinados(cls, procesosDeProductosCocinados):
+        cls._procesosDeProductosCocinados = procesosDeProductosCocinados
+        
+    @classmethod
+    def getFallosCocinando(cls):
+        return cls._fallosCocinando
+    
+    @classmethod
+    def setFallosCocinando(cls, fallosCocinando):
+        cls._fallosCocinando = fallosCocinando
 
     def ingredientesCocinero(self, ingredientesNecesarios):
-        ingrFaltantes = self.panaderia.getInventario().revisarCantidadIngredientes(ingredientesNecesarios)
+        ingrFaltantes = self._panaderia.getInventario().revisarCantidadIngredientes(ingredientesNecesarios)
         return ingrFaltantes
 
     def cocineroIdeal(self, proceso):
@@ -81,18 +101,18 @@ class Cocinero(Domiciliario):
     def detenerCoccion(self, producto, cantidades):
         ingredientesUsados = producto.getIngredientes()
         for ingUsado, cantidad in ingredientesUsados.items():
-            ingredienteUsado = self._panaderia._inventario.buscarIngredientePorNombre(ingUsado)
-            self._panaderia._inventario.restarIngrediente(ingredienteUsado, cantidad * cantidades)
+            ingredienteUsado = self._panaderia.getInventario().buscarIngredientePorNombre(ingUsado)
+            self._panaderia.getInventario().restarIngrediente(ingredienteUsado, cantidad * cantidades)
             
     def repararCoccion(self, producto):
         ingredientesUsados = producto.getIngredientes()
-        self.panaderia.comprarIngredientes(ingredientesUsados)
+        self._panaderia.comprarIngredientes(ingredientesUsados)
         
     def detenerCoccion2(self, producto):
         ingredientesUsados = producto.getIngredientes()
         for ingUsado, cantidad in ingredientesUsados.items():
-            ingredienteUsado = self._panaderia._inventario.buscarIngredientePorNombre(ingUsado)
-            self._panaderia._inventario.restarIngrediente(ingredienteUsado, cantidad)
+            ingredienteUsado = self._panaderia.getInventario().buscarIngredientePorNombre(ingUsado)
+            self._panaderia.getInventario().restarIngrediente(ingredienteUsado, cantidad)
 
 
     def procesoCocinar(self, producto):
@@ -130,13 +150,14 @@ class Cocinero(Domiciliario):
             if cookProducto:
                 # Incrementa la habilidad del cocinero si el proceso falló.
                 chefIdeal.habilidad += 1
-                #GestionCocinar.fallosCocinando(procesoCook, longitud)
+                Cocinero._fallosCocinando +=1
                 chefIdeal.detenerCoccion(producto)
                 chefIdeal.repararCoccion(producto)
                 i = -1
             # Establece el cocinero como ocupado.
             chefIdeal.trabajo = True
-        GestionCocinar.barrasCocinando(procesoCook,longitud,ventana_principal)
+        Cocinero._procesosDeProductosCocinados.append(procesoCook)
+
 
         # Devuelve False si todos los procesos se completaron con éxito.
         return False
@@ -167,7 +188,7 @@ class Cocinero(Domiciliario):
 
             for ingredienteIdVerificar, cantidad in ingredientesAUsar.items():
                 ingrediente = Ingrediente.obtenerObjetoPorNombre(ingredienteIdVerificar)
-                ingrediente.revisarCaducidad(cantidad, self.panaderia)
+                ingrediente.revisarCaducidad(cantidad, self._panaderia)
 
         for productoId, cantidad in productos.items():
             producto = Producto.obtenerObjetoPorId(productoId)
@@ -180,25 +201,25 @@ class Cocinero(Domiciliario):
         ingrFaltantes = self.ingredientesCocinero(listaIngredientesTotales)
 
         if not ingrFaltantes:
-            #GestionCocinar.fallosCocinando()
-            self.panaderia.comprarIngredientes(ingrFaltantes)
+            Cocinero._fallosCocinando +=1
+            self._panaderia.comprarIngredientes(ingrFaltantes)
             ingrFaltantes.clear()
             return False
 
         for productoId, cantidad in productos.items():
-            producto = self.panaderia.inventario.buscarProductoPorId(productoId)
+            producto = self._panaderia.getInventario().buscarProductoPorId(productoId)
             productoNew = self.crearProducto(productoId)
-            cocinero = self.panaderia.cocineroAleatorio()
+            cocinero = self._panaderia.cocineroAleatorio()
 
             for i in range(cantidad):
                 fallado = cocinero.procesoCocinar(productoNew)
-                self.panaderia.inventario.agregarProducto(productoNew)
+                self._panaderia.getInventario().agregarProducto(productoNew)
                 if fallado:
                     continue
 
         for productoId, cantidad in productos.items():
-            producto = self.panaderia.inventario.buscarProductoPorId(productoId)
-            cocinero = self.panaderia.cocineroAleatorio()
+            producto = self._panaderia.getInventario().buscarProductoPorId(productoId)
+            cocinero = self._panaderia.cocineroAleatorio()
             cocinero.detenerCoccion(producto, cantidad)
 
         return True
