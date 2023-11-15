@@ -1,7 +1,24 @@
 import tkinter as tk
 from tkinter import ttk
+from gestorAplicacion.humanos.Cocinero import Cocinero
+import time
 
 class GestionCocinar:
+    
+    @staticmethod
+    def barraProgresoDeTodos(ventanaPrincipal):
+        listaDeListas = Cocinero.getProcesosDeProductosCocinados()
+        fallos = Cocinero.getFallosCocinando()
+        if fallos != 0:
+            print("fallo aleatorio")
+            time.sleep(2)
+            for lista in listaDeListas:
+                GestionCocinar.barrasCocinando(lista, len(lista), ventanaPrincipal)
+        else:
+            for lista in listaDeListas:
+                GestionCocinar.barrasCocinando(lista, len(lista), ventanaPrincipal)
+        
+    
     @staticmethod
     def barrasCocinando(proceso_cook, longitud, ventana_principal):
         # Crea una variable de control para la barra de progreso

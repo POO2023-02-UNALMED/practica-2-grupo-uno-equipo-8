@@ -1,10 +1,5 @@
 import pickle
 
-from gestorAplicacion.comida.Ingrediente import Ingrediente
-from gestorAplicacion.comida.Producto import Producto
-from gestorAplicacion.gestion.Panaderia import Panaderia
-from gestorAplicacion.gestion.Recibo import Recibo
-
 class Serializador:
     @staticmethod
     def guardarPanaderia(panaderia):
@@ -33,6 +28,11 @@ class Serializador:
 
     @staticmethod
     def guardarValoresEstaticos(file):
+
+        from gestorAplicacion.comida.Ingrediente import Ingrediente
+        from gestorAplicacion.comida.Producto import Producto
+        from gestorAplicacion.gestion.Panaderia import Panaderia
+        from gestorAplicacion.gestion.Recibo import Recibo
         pickle.dump(Panaderia.getCanastaDelDia(), file)
         pickle.dump(Ingrediente.getBaseDatosIngredientes(), file)
         file.write(Ingrediente.getCantidadIngredientesUnicos().to_bytes(4, byteorder='big'))
@@ -44,6 +44,10 @@ class Serializador:
 
     @staticmethod
     def cargarValoresEstaticos(file):
+        from gestorAplicacion.comida.Ingrediente import Ingrediente
+        from gestorAplicacion.comida.Producto import Producto
+        from gestorAplicacion.gestion.Panaderia import Panaderia
+        from gestorAplicacion.gestion.Recibo import Recibo
         Panaderia.setCanastaDelDia(pickle.load(file))
         Ingrediente.setBaseDatosIngredientes(pickle.load(file))
         Ingrediente.setCantidadIngredientesUnicos(int.from_bytes(file.read(4), byteorder='big'))
