@@ -3,7 +3,7 @@ from tkinter import FLAT, Menu
 from PIL import Image, ImageTk
 from tkinter import PhotoImage
 from tkinter import messagebox
-from ventanaPrincipal import VentanaPrincipal
+
 import os
 
 # Obtener el directorio del script actual
@@ -144,7 +144,9 @@ class VentanaInicio:
     def ingresar_sistema(self):
         self.master.destroy()  # Cerrar la ventana actual
         # Abrir la ventana principal
+        """
         app = VentanaPrincipal()
+        """
 
     def salir_aplicacion(self):
         self.master.destroy()
