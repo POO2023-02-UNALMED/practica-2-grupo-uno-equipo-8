@@ -137,7 +137,7 @@ class VentanaInicio:
         ancho_canvas = self.canvas_imagen.winfo_width()
         self.canvas_imagen.delete("all")
         imagen_original = Image.open(self.rutas_imagenes_sistema[self.indice_imagenes])
-        imagen_redimensionada = imagen_original.resize((ancho_canvas, 300), Image.ANTIALIAS)
+        imagen_redimensionada = imagen_original.resize((ancho_canvas, 300), Image.Resampling.LANCZOS)
         self.imagenes_sistema[self.indice_imagenes] = ImageTk.PhotoImage(imagen_redimensionada)
         self.canvas_imagen.create_image(0, 0, anchor=tk.NW, image=self.imagenes_sistema[self.indice_imagenes])
 
@@ -174,7 +174,7 @@ class VentanaInicio:
         # Cargar la imagen desde la ruta
         imagen_original = Image.open(self.rutas_imagenes_sistema[self.indice_imagenes])
         # Redimensionar la imagen para que llene el canvas
-        imagen_redimensionada = imagen_original.resize((ancho_canvas, 300), Image.ANTIALIAS)
+        imagen_redimensionada = imagen_original.resize((ancho_canvas, 300), Image.Resampling.LANCZOS)
         # Convertir la imagen a formato compatible con Tkinter
         self.imagenes_sistema[self.indice_imagenes] = ImageTk.PhotoImage(imagen_redimensionada)
         # Mostrar la imagen en el canvas
@@ -193,7 +193,7 @@ class VentanaInicio:
             ancho_canvas = canvas.winfo_width()
             alto_canvas = canvas.winfo_height()
             imagen_original = Image.open(f"../resources/desarrollador{self.indice_desarrollador+1}{i + 1}.png")
-            imagen_redimensionada = imagen_original.resize((ancho_canvas, alto_canvas), Image.ANTIALIAS)
+            imagen_redimensionada = imagen_original.resize((ancho_canvas, alto_canvas), Image.Resampling.LANCZOS)
             self.imagenes_canvas[i] = ImageTk.PhotoImage(imagen_redimensionada)
             canvas.itemconfig(canvas.find_all()[0], image=self.imagenes_canvas[i])  # Actualizar la imagen
 
