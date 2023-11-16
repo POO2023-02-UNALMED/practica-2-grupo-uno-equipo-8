@@ -1,9 +1,8 @@
 import random
-from gestorAplicacion.gestion import Panaderia
 from gestorAplicacion.gestion import Canasta
 
 class Trabajador:
-    def __init__(self, nombre="John Doe", calificacion=0, dinero_en_mano=0, salario=1000, panaderia=None, x=False):
+    def __init__(self, panaderia, nombre="John Doe", calificacion=0, dinero_en_mano=0, salario=1000):
         self.nombre = nombre
         self.habilidad = random.randint(9, 19)  # 9 <= habilidad <= 19
         self.calificacion = calificacion

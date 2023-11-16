@@ -9,7 +9,7 @@ class Ingrediente(ComidaDefault):
     _cantidadIngredientesUnicos = 0
     probabilidadConstante = 1
     _topMasVendidos = []
-    _cantidadProductosUnicos=0
+    _cantidadProductosUnicoss=0
 
     def __init__(self, nombre, identificador=None, precioVenta=None, precioCompra=None, vecesVendido=None):
         self._nombre = nombre
@@ -18,8 +18,8 @@ class Ingrediente(ComidaDefault):
             numeroAleatorio = aleatorio.randint(300, 3000)
             self._precioDeCompra = numeroAleatorio
             self._precioDeVenta = math.ceil(numeroAleatorio * ComidaDefault.tarifaGanancias)
-            Ingrediente._cantidadIngredientesUnicos += 1
-            self._id = str(Ingrediente._cantidadIngredientesUnicos + Ingrediente._cantidadProductosUnicos)
+            if identificador is None : Ingrediente._cantidadIngredientesUnicos += 1
+            self._id = str(Ingrediente._cantidadIngredientesUnicos + Ingrediente._cantidadProductosUnicoss)
             Ingrediente._baseDatosIngredientes.append(self)
             self._vecesVendido = 0
             self._caducado = False
@@ -29,8 +29,6 @@ class Ingrediente(ComidaDefault):
             self._precioDeVenta = precioVenta
             self._precioDeCompra = precioCompra
             self._vecesVendido = vecesVendido
-
-        
 
     def getNombre(self):
         return self._nombre
@@ -71,12 +69,12 @@ class Ingrediente(ComidaDefault):
         self._vecesVendido = vecesVendido
 
     @staticmethod
-    def getBaseDatosIngredientes():
-        return Ingrediente._baseDatosIngredientes
+    def getBaseDatosIngredientes(cls):
+        return cls._baseDatosIngredientes
     
     @staticmethod
-    def setBaseDatosIngredientes(baseDatosIngredientes):
-        Ingrediente._baseDatosIngredientes = baseDatosIngredientes
+    def setBaseDatosIngredientes(cls,baseDatosIngredientes):
+        cls._baseDatosIngredientes = baseDatosIngredientes
 
     def isCaducado(self):
         return self._caducado
@@ -108,11 +106,11 @@ class Ingrediente(ComidaDefault):
 
     @classmethod
     def getCantidadProductosUnicos(cls):
-        return cls._cantidadProductosUnicos
+        return cls._cantidadProductosUnicoss
     
     @classmethod
     def setCantidadProductosUnicos(cls, cantidadProductosUnicos):
-        cls._cantidadProductosUnicos = cantidadProductosUnicos
+        cls._cantidadProductosUnicoss = cantidadProductosUnicos
 
     
     @staticmethod

@@ -63,15 +63,18 @@ class SerializationTest:
             "azucar": 1,
             "mantequilla": 1
         }
-        
+
         Producto.crearProductoPersonalizado("bunuelo", ingredientes_bunuelo)
         Producto.crearProductoPersonalizado("rollos de canela", ingredientes_rollos_canela)
         Producto.crearProductoPersonalizado("brownie", ingredientes_brownie)
         Producto.crearProductoPersonalizado("torta de milo", ingredientes_torta_milo)
         Producto.crearProductoPersonalizado("cheesecake", ingredientes_cheesecake)
-        
+
+        for i in Ingrediente._baseDatosIngredientes:
+            print(i.getId() , i.getNombre(), i.getPrecioDeCompra(), i.getPrecioDeVenta())
+
         for i in Producto.baseDatosProductos:
-            print(i.getNombre())
+            print(i.getId() , i.getNombre(), i.getCosto(), i.getIngredientes())
 
         print("productos creados")
 

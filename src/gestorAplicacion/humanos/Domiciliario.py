@@ -4,8 +4,8 @@ from humanos.Trabajador import Trabajador
 from gestorAplicacion.comida.ComidaDefault import ComidaDefault
 
 class Domiciliario(Trabajador, ComidaDefault):
-    def __init__(self, nombre=None, panaderia=None, habilidad=None, calificacion=None, dineroEnMano=None, licencia=None, x=None):
-        super().__init__(nombre, habilidad, calificacion, dineroEnMano, panaderia, x)
+    def __init__(self, nombre="", panaderia=None, habilidad=None, calificacion=None, dineroEnMano=None, licencia=None):
+        super().__init__(panaderia, nombre, habilidad, calificacion, dineroEnMano)
         self.licencia = False if licencia is None else licencia
         self.ocupado = False
         self.canasta = None

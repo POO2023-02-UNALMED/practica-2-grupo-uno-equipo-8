@@ -7,7 +7,7 @@ class Producto(ComidaDefault):
     baseDatosProductos = []
     topMasVendidos = []
     
-    def __init__(self, nombre, ingredientes=None, id=None, vecesVendido=0, costo=None):
+    def __init__(self, nombre, ingredientes, id=None, vecesVendido=0, costo=None):
         self.nombre = nombre
         if ingredientes is None:
             self.ingredientes = {}
@@ -18,14 +18,16 @@ class Producto(ComidaDefault):
         else:
             self.vecesVendido = vecesVendido+1
         self.costo = self.calcularCosto()
-        self.id = id if id is not None else str(Producto.cantidadProductosUnicos + Ingrediente.getCantidadIngredientesUnicos())
-        self.procesosDeCocina = []
-        
+
         if id is None:
             Producto.cantidadProductosUnicos += 1
             Ingrediente.setCantidadProductosUnicos(Producto.cantidadProductosUnicos)
             Producto.baseDatosProductos.append(self)
             
+        print(Ingrediente.getCantidadIngredientesUnicos())
+        print(Producto.getCantidadProductosUnicos())
+        self.id = id if id is not None else str(Producto.cantidadProductosUnicos + Ingrediente.getCantidadIngredientesUnicos())
+        self.procesosDeCocina = []
     # Getter y Setter para el atributo 'nombre'
     def getNombre(self):
         return self.nombre

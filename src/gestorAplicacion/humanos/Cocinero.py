@@ -1,5 +1,4 @@
 from random import randint
-from UIMain.GestionCocinar import GestionCocinar
 
 from gestorAplicacion.comida.Ingrediente import Ingrediente
 from gestorAplicacion.comida.Producto import Producto
@@ -13,7 +12,7 @@ class Cocinero(Domiciliario):
     nombres = ["Sergio", "Jaime", "David", "Juancho", "Will", "Kevin"]
     
     def __init__(self, nombre="",especialidad="" , panaderia=None,habilidad=0.0, calificacion=0.0, dineroEnMano=0.0):
-        super().__init__(nombre,panaderia, habilidad, calificacion, dineroEnMano, True)
+        super().__init__(nombre,panaderia, habilidad, calificacion, dineroEnMano)
         self._especialidad = especialidad
         self._fallado = False
         self._trabajo = False
@@ -89,7 +88,7 @@ class Cocinero(Domiciliario):
             if especialidad == proceso:
                 ideal = cocinero
                 return ideal
-        idealNew = self._panaderia.contratarCocinero(chefRandom, proceso=proceso, super().habilidad, super().calificacion, 0)
+        idealNew = self._panaderia.contratarCocinero(chefRandom, proceso, super().habilidad, super().calificacion, 0)
         return idealNew
 
     def detenerCoccion(self, producto, cantidades):
@@ -173,7 +172,7 @@ class Cocinero(Domiciliario):
         return nuevoMapa
 
     def laborParticular(self, canastaTrabajar):
-        productos = canastaTrabajar.productosEnLista()
+        productos = canastaTrabajar.getProductosEnLista()
         listaDeMapas = []
 
         for productoId, cantidad in productos.items():
