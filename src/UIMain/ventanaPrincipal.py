@@ -1,72 +1,19 @@
+from tkinter import *
 import tkinter as tk
-from tkinter import ttk, messagebox
 
-class FieldFrame(tk.Frame):
-    def __init__(self, parent, titulo_criterios, criterios, titulo_valores, valores, habilitado):
-        super().__init__(parent)
+#Esta clase la cree yo (Richard), diganme si van a hacer algun cambio o si tienen alguna sugerencia
 
-        # Crear etiquetas y cuadros de texto dinámicamente
-        for i, criterio in enumerate(criterios):
-            label = tk.Label(self, text=f"{titulo_criterios} {criterio}:")
-            label.grid(row=i, column=0, sticky="e", padx=5, pady=5)
+class VentanaPrincipal:
+    def __init__(self, root):
 
-            entry = tk.Entry(self, state='normal' if habilitado is None or habilitado[i] else 'disabled')
-            entry.insert(tk.END, '' if valores is None else valores[i])
-            entry.grid(row=i, column=1, sticky="w", padx=5, pady=5)
+        #creando la ventana
+        self.root = root
+        self.root.title("Ventana principal")
+        self.root.geometry("1000x800")
 
-        # Botones Aceptar y Borrar
-        self.boton_aceptar = tk.Button(self, text="Aceptar", command=self.aceptar)
-        self.boton_aceptar.grid(row=len(criterios), column=0, columnspan=2, pady=10)
 
-        self.boton_borrar = tk.Button(self, text="Borrar", command=self.borrar)
-        self.boton_borrar.grid(row=len(criterios) + 1, column=0, columnspan=2)
-
-    def aceptar(self):
-        # Validar que todos los campos tengan un valor
-        for widget in self.winfo_children():
-            if isinstance(widget, tk.Entry) and not widget.get():
-                messagebox.showwarning("Campos Vacíos", "Todos los campos deben tener un valor.")
-                return
-
-        # Obtener los valores ingresados
-        valores = [widget.get() for widget in self.winfo_children() if isinstance(widget, tk.Entry)]
-
-        # Aquí puedes realizar la lógica necesaria con los valores ingresados
-
-        # Limpiar los campos después de procesar
-        for widget in self.winfo_children():
-            if isinstance(widget, tk.Entry):
-                widget.delete(0, tk.END)
-
-    def borrar(self):
-        # Borrar los valores de los campos
-        for widget in self.winfo_children():
-            if isinstance(widget, tk.Entry):
-                widget.delete(0, tk.END)
-
-class VentanaPrincipal(tk.Toplevel):
-    def __init__(self, master=None):
-        super().__init__(master)
-
-        self.title("Ventana Principal")
-        self.geometry("800x600")
-
-        # Crear frames
-        self.frame_titulo = tk.Frame(self, bg="red", height=50)
-        self.frame_titulo.pack(fill="x")
-
-        self.frame_menu = tk.Frame(self, bg="blue", height=30)
-        self.frame_menu.pack(fill="x")
-
-        self.frame_interaccion = tk.Frame(self, bg="green")
-        self.frame_interaccion.pack(fill="both", expand=True)
-
-        # Configuración de expansión
-        tk.Grid.rowconfigure(self, 2, weight=1)
-        tk.Grid.columnconfigure(self.frame_interaccion, 0, weight=1)
-
-        # Menú superior
-        self.menu_principal = tk.Menu(self)
+        #Menu superior
+        self.menu_principal = tk.Menu(self.root)
 
         menu_archivo = tk.Menu(self.menu_principal, tearoff=0)
         menu_archivo.add_command(label="Aplicación", command=self.mostrar_info)
@@ -74,75 +21,185 @@ class VentanaPrincipal(tk.Toplevel):
         self.menu_principal.add_cascade(label="Archivo", menu=menu_archivo)
 
         menu_procesos = tk.Menu(self.menu_principal, tearoff=0)
-        # Agregar procesos y consultas a menu_procesos
-        # ...
+        menu_procesos.add_command(label = "Iniciar sesion", command= lambda: self.cambiarFrame(self.frameSesion))
+        menu_procesos.add_command(label = "Registrarse", command= lambda: self.cambiarFrame(self.frameRegistro))
+        menu_procesos.add_command(label = "Cerrar sesion")
+        menu_procesos.add_command(label = "Ir a comprar")
+        menu_procesos.add_command(label = "Ver catalogo de productos y descripcion")
+        menu_procesos.add_command(label = "Lo mejor de nuestra panaderia")
+        menu_procesos.add_command(label = "Ver facturas pasadas")
+        menu_procesos.add_command(label = "Cambiar contraseña")
+        menu_procesos.add_command(label = "Meter plata a mi cuenta")
+        menu_procesos.add_command(label = "Validar tipo de cliente")
+        menu_procesos.add_command(label = "Modificar direccion")
+
         self.menu_principal.add_cascade(label="Procesos y Consultas", menu=menu_procesos)
+
+
 
         menu_ayuda = tk.Menu(self.menu_principal, tearoff=0)
         menu_ayuda.add_command(label="Acerca de", command=self.mostrar_autores)
         self.menu_principal.add_cascade(label="Ayuda", menu=menu_ayuda)
 
-        self.config(menu=self.menu_principal)
+        self.root.config(menu=self.menu_principal)
 
-        # Zona de interacción usuario
-        self.text_resultados = tk.Text(self.frame_interaccion, wrap=tk.WORD)
-        self.text_resultados.pack(fill="both", expand=True)
 
-        # Mostrar la interfaz de inicio
-        self.mostrar_interfaz_inicio()
 
-    def mostrar_interfaz_inicio(self):
-        # Aquí puedes mostrar una interfaz de inicio formativa para el usuario
-        texto_inicio = """
-        Bienvenido a la aplicación. Aquí puedes encontrar información sobre ...
-        Para comenzar, selecciona una opción del menú superior.
-        """
-        self.text_resultados.delete(1.0, tk.END)
-        self.text_resultados.insert(tk.END, texto_inicio)
+        # Lista que va a contener todos los frames para facilitar el cambio entre estos
+        self.frames = [] #lista de todos los frames necesaria para el metodo cambiarFrame
 
+        # Creacion de los frames:
+
+        # frameSesion inicio de sesion
+        self.frameSesion = Frame( #Esto esta pendiente de ser adaptado con fieldFrames
+        self.root, bd=1, relief=FLAT, padx=1, pady=1) 
+        self.frames.append(self.frameSesion) #agregando a la lista de frames, necesaria para cambiar entre frames metodo cambiarFrame
+        self.root.title("Inicio de Sesión")
+
+        self.label_usuario = Label(self.frameSesion, text="Usuario:")
+        self.label_usuario.pack(pady=10)
+
+        self.entry_usuario = Entry(self.frameSesion)
+        self.entry_usuario.pack(pady=10)
+
+        self.label_contrasena = Label(self.frameSesion, text="Contraseña:")
+        self.label_contrasena.pack(pady=10)
+
+        self.entry_contrasena = Entry(self.frameSesion, show="*")
+        self.entry_contrasena.pack(pady=10)
+
+        self.boton_iniciar_sesion = Button(self.frameSesion, text="Iniciar Sesión", command = self.iniciar_sesion)
+        self.boton_iniciar_sesion.pack(pady=10)
+
+        frameActual = self.frameSesion
+
+        # frameRegistro registro
+        self.frameRegistro = Frame( #Esto esta pendiente de ser adaptado con fieldFrames
+        self.root, bd=1, relief=FLAT, padx=1, pady=1)
+        self.frames.append(self.frameRegistro)
+
+        self.root.title("Registro")
+
+        self.label_RegistroUsuario = Label(self.frameRegistro, text="Usuario:")
+        self.label_RegistroUsuario.pack(pady=10)
+
+        self.entry_RegistroUsuario = Entry(self.frameRegistro)
+        self.entry_RegistroUsuario.pack(pady=10)
+
+        self.label_RegistroIdentificacion = Label(self.frameRegistro, text="Identificacion: ")
+        self.label_RegistroIdentificacion.pack(pady=10)
+
+        self.entry_RegistroIdentificacion = Entry(self.frameRegistro)
+        self.entry_RegistroIdentificacion.pack(pady=10)
+
+        self.label_RegistroContrasena = Label(self.frameRegistro, text="Contraseña:")
+        self.label_RegistroContrasena.pack(pady=10)
+
+        self.entry_RegistroContrasena = Entry(self.frameRegistro, show="*")
+        self.entry_RegistroContrasena.pack(pady=10)
+
+        self.boton_Registro = Button(self.frameRegistro, text="Registrarse", command = self.iniciar_sesion)
+        self.boton_Registro.pack(pady=10)
+
+        # frame2 menu principal
+        self.framePrincipal = Frame(
+        self.root, bd=1, relief=FLAT, padx=1, pady=1)
+        self.framePrincipal.pack()
+        self.frameActual = self.framePrincipal
+        self.frames.append(self.framePrincipal)
+        self.labelp1 = Label(self.framePrincipal, text="Bienvenido a pooBakery, este es el menu")
+        self.labelp1.pack()
+
+        # frameInfo frame con informacion
+        self.frameInfo = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
+        self.frames.append(self.frameInfo)
+        self.labelInformacion = Label(self.frameInfo, text="Informacion aqui")
+        self.labelInformacion.pack()
+        self.infoBoton = Button(self.frameInfo, text="Volver atras", command= self.volverAtras)
+        self.infoBoton.pack(pady = 20)
+
+        # framef1 funcionalidad 1
+        self.frameF1 = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
+        self.frames.append(self.frameF1)
+
+
+
+        # framef2 funcionalidad 2
+        self.frameF2 = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
+        self.frames.append(self.frameF2)
+
+
+
+        # framef3 funcionalidad 3
+        self.frameF3 = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
+        self.frames.append(self.frameF3)
+
+
+
+        # framef4 funcionalidad 4
+        self.frameF4 = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
+        self.frames.append(self.frameF4)
+
+
+
+    #Metodos necesiarios para la interfaz de usuario
+    def iniciar_sesion(self):
+        #aqui deberia haber algun condicional para ver si el usuario si existe
+        self.cambiarFrame(self.framePrincipal)
+    
     def mostrar_info(self):
-        # Aquí puedes mostrar información detallada sobre la aplicación
+        info = '''
+        ¡Bienvenido a la aplicación de POOBakery!
+        
+        Con nuestra aplicación, puedes realizar pedidos de postres y otros productos de nuestra panadería desde la comodidad de tu hogar. 
+        Hemos creado una interfaz fácil de usar que te permite navegar por nuestros productos y agregarlos a tu carrito de compras.
+        También puedes guardar tus productos favoritos para futuras compras. 
+        Una vez que hayas agregado los productos que deseas comprar a tu carrito, 
+        puedes realizar el pago de forma segura y sencilla a través de nuestra aplicación.
+        Estamos comprometidos a ofrecerte una experiencia de compra fácil y sin problemas.
+        Si tienes alguna pregunta o problema, no dudes en ponerte en contacto con nosotros a través de nuestra aplicación.
+         
+        ¡Gracias por elegir POOBakery!
+
+         '''
+        self.labelInformacion.config(text=info)
+        self.cambiarFrame(self.frameInfo)
         pass
 
     def mostrar_autores(self):
-        # Aquí puedes mostrar información sobre los autores de la aplicación
+        info = '''
+        Este programa fue creado por:
+        Mateo Builes
+        Richard Muñoz Henao
+        Sahely Romero
+        Samuel Castaño
+        Nicolas Echeverry
+         '''
+        self.labelInformacion.config(text=info)
+        self.cambiarFrame(self.frameInfo)
         pass
 
     def salir(self):
-        self.destroy()
+        self.root.destroy()
 
-class VentanaInicioSesion(tk.Toplevel):
-    def __init__(self, master=None):
-        super().__init__(master)
+    def cambiarFrame(self, frame):
+        self.frameAnterior = self.frameActual
+        for f in self.frames:
+            if f == frame:
+                f.pack()
+                self.frameActual = frame
+            else:
+                f.pack_forget()
+    
+    def volverAtras(self):
+        self.cambiarFrame(self.frameAnterior)
 
-        self.title("Inicio de Sesión")
-        self.geometry("400x200")
+# Codigo que produce la ejecucion de la ventana cuando se ejecuta desde este archivo
+def main():
+    root = Tk()
+    app = VentanaPrincipal(root)
+    root.mainloop()
 
-        # Elementos en la ventana de inicio de sesión
-        self.label_usuario = tk.Label(self, text="Usuario:")
-        self.label_usuario.pack(pady=10)
-
-        self.entry_usuario = tk.Entry(self)
-        self.entry_usuario.pack(pady=10)
-
-        self.label_contrasena = tk.Label(self, text="Contraseña:")
-        self.label_contrasena.pack(pady=10)
-
-        self.entry_contrasena = tk.Entry(self, show="*")
-        self.entry_contrasena.pack(pady=10)
-
-        self.boton_iniciar_sesion = tk.Button(self, text="Iniciar Sesión", command=self.iniciar_sesion)
-        self.boton_iniciar_sesion.pack(pady=10)
-
-    def iniciar_sesion(self):
-        # Aquí puedes agregar la lógica de inicio de sesión
-        # Por ahora, simplemente abre la VentanaPrincipal
-        self.withdraw()  # Oculta la ventana de inicio de sesión
-        ventana_principal = VentanaPrincipal(self)
-        ventana_principal.grab_set()  # Bloquea eventos en otras ventanas mientras esta esté abierta
-        ventana_principal.wait_window()  # Espera a que se cierre la VentanaPrincipal
-        self.destroy()  # Destruye la ventana de inicio de sesión cuando se cierra la VentanaPrincipal
 
 if __name__ == "__main__":
-    app = VentanaInicioSesion()
-    app.mainloop()
+    main()
