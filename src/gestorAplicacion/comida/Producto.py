@@ -15,8 +15,8 @@ class Producto(ComidaDefault):
         self.costo = self.calcularCosto()
 
         if id is None:
-            ComidaDefault.baseDatosProductos.append(self)
-        self.id = id if id is not None else str(ComidaDefault.obtener_proximo_id())
+            Producto.baseDatosProductos.append(self)
+        self.id = id if id is not None else str(Producto.obtener_proximo_id())
         self.procesosDeCocina = []
 
     # Getter y Setter para el atributo 'nombre'
@@ -72,7 +72,7 @@ class Producto(ComidaDefault):
     
 
     def crearProducto(Nnombre):
-        newProducto = ComidaDefault.obtenerObjetoPorIdP(Nnombre)
+        newProducto = Producto.obtenerObjetoPorIdP(Nnombre)
         return Producto(newProducto.getNombre(),newProducto.getIngredientes(), newProducto.getId(), newProducto.getCosto(), newProducto.getVecesVendido())
 
     def crearProductoPersonalizado(Nnombre, ingredientes):

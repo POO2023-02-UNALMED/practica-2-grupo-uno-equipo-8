@@ -12,8 +12,6 @@ class ComidaDefault:
         cls._contador += 1
         return cls._contador
 
-    
-
     # Tarifa por defecto para el servicio a domicilio.
     tarifaDomicilio = 2000
 
@@ -28,15 +26,23 @@ class ComidaDefault:
         Obtiene la descripción por defecto de la comida.
         """
         return "Ahora mismo no tenemos una descripcion para este producto, pero te invitamos a probarlo."
-    
+
+    @classmethod
+    def setContador(cls,contador):
+        cls._contador = contador
+
+    @classmethod
+    def getContador(cls):
+        return cls._contador
+
     @classmethod
     def getBaseDatosIngredientes(cls):
         return cls._baseDatosIngredientes
-    
+
     @classmethod
     def setBaseDatosIngredientes(cls,baseDatosIngredientes):
         cls._baseDatosIngredientes = baseDatosIngredientes
-    
+
     @classmethod
     def verificacionExistenciaPorNombreI(cls,nombre):
         existe = False
@@ -45,7 +51,7 @@ class ComidaDefault:
                 existe = True
                 break
         return existe
-    
+
     @classmethod
     def verificacionExistenciaPorIdI(cls,id):
         existe = False

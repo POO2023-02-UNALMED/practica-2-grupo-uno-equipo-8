@@ -47,7 +47,7 @@ class Serializador:
 
         pickle.dump(Panaderia.getCanastaDelDia(), file)
         pickle.dump(Ingrediente.getBaseDatosIngredientes(), file)
-        file.write(ComidaDefault._contador.to_bytes(4, byteorder='big'))
+        file.write(Producto.getContador().to_bytes(4, byteorder='big'))
         pickle.dump(Ingrediente.getTopMasVendidos(), file)
         pickle.dump(Producto.getBaseDatosProductos(), file)
         pickle.dump(Producto.getTopMasVendidos(), file)
@@ -63,7 +63,9 @@ class Serializador:
 
         Panaderia.setCanastaDelDia(pickle.load(file))
         Ingrediente.setBaseDatosIngredientes(pickle.load(file))
-        ComidaDefault._contador = int.from_bytes(file.read(4), byteorder='big')
+        Producto.setContador(int.from_bytes(file.read(4), byteorder='big'))
+        print(ComidaDefault.getContador())
+
         Ingrediente.setTopMasVendidos(pickle.load(file))
         Producto.setBaseDatosProductos(pickle.load(file))
         Producto.setTopMasVendidos(pickle.load(file))

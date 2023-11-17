@@ -7,16 +7,18 @@ import math
 class Ingrediente(ComidaDefault):
     probabilidadConstante = 1
     _topMasVendidos = []
+    contador1 = 0
 
     def __init__(self, nombre, identificador=None, precioVenta=None, precioCompra=None, vecesVendido=None):
+        from comida.Producto import Producto
         self._nombre = nombre
         if identificador is None:
             aleatorio = random.Random()
             numeroAleatorio = aleatorio.randint(300, 3000)
             self._precioDeCompra = numeroAleatorio
             self._precioDeVenta = math.ceil(numeroAleatorio * ComidaDefault.tarifaGanancias)
-            self._id = str(ComidaDefault.obtener_proximo_id())
-            ComidaDefault.getBaseDatosIngredientes().append(self)
+            self._id = str(Producto.obtener_proximo_id())
+            Ingrediente.getBaseDatosIngredientes().append(self)
             self._vecesVendido = 0
             self._caducado = False
             self._inventario = None
@@ -86,8 +88,8 @@ class Ingrediente(ComidaDefault):
 
     @classmethod
     def crearIngrediente(cls,nombreId):
-        if ComidaDefault.verificacionExistenciaPorNombreI(nombreId) or ComidaDefault.verificacionExistenciaPorIdI(nombreId):
-            ingredienteExistente = ComidaDefault.obtenerObjetoPorNombre(nombreId)
+        if Ingrediente.verificacionExistenciaPorNombreI(nombreId) or Ingrediente.verificacionExistenciaPorIdI(nombreId):
+            ingredienteExistente = Ingrediente.obtenerObjetoPorNombreI(nombreId)
             return Ingrediente(
                 ingredienteExistente.getNombre(),
                 ingredienteExistente.getId(),

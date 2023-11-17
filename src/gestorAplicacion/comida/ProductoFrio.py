@@ -5,8 +5,8 @@ from gestorAplicacion.comida.Producto import Ingrediente
 import random
 
 class ProductoFrio(Producto):
-    def __init__(self, nombre, ids, ingredientes, costo, vecesVendido, tiempoDeCongelamiento):
-        super().__init__(nombre, ids, ingredientes, costo, vecesVendido)
+    def __init__(self, nombre, ingredientes, ids=None, costo=0, vecesVendido=0, tiempoDeCongelamiento=0):
+        super().__init__(nombre,ingredientes, ids, costo, vecesVendido)
         self._congelador = False
         self._tiempoDeCongelamiento = tiempoDeCongelamiento
 
@@ -28,8 +28,8 @@ class ProductoFrio(Producto):
 
     @classmethod
     def crearProducto(cls, Nnombre):
-        newProducto = cls.obtenerObjetoPorId(Nnombre)
-        return cls(
+        newProducto = Producto.obtenerObjetoPorId(Nnombre)
+        return Producto(
             newProducto.nombre,
             newProducto.id, 
             newProducto.ingredientes,
@@ -38,11 +38,11 @@ class ProductoFrio(Producto):
             newProducto.tiempoDeCongelamiento)
     
     @classmethod
-    def crearProductoPersonalizado(cls, Nnombre, ingredientes, congelador):
+    def crearProductoPersonalizado(cls, Nnombre, ingredientes):
         for nombre, cantidad in ingredientes.items():
             if not Ingrediente.verificacionExistenciaPorNombreI(nombre):
                 Ingrediente(nombre)
-        return cls(Nnombre, None, ingredientes, None, None, None, congelador)
+        return ProductoFrio(Nnombre, ingredientes)
     
 
     def seleccionProcesosDeCocina(self):
