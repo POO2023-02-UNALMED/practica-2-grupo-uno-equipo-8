@@ -14,7 +14,7 @@ class Catastrofe:
         self._maldad = maldad
         
     def dificultadProducto(self, cocinero):
-        if cocinero._habilidad < self.maldad:
+        if cocinero._habilidad < self._maldad:
             cocinero._fallado = False
             return True
         return False

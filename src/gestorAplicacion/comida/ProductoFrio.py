@@ -40,7 +40,7 @@ class ProductoFrio(Producto):
     @classmethod
     def crearProductoPersonalizado(cls, Nnombre, ingredientes, congelador):
         for nombre, cantidad in ingredientes.items():
-            if not Ingrediente.verificacionExistenciaPorNombre(nombre):
+            if not Ingrediente.verificacionExistenciaPorNombreI(nombre):
                 Ingrediente(nombre)
         return cls(Nnombre, None, ingredientes, None, None, None, congelador)
     

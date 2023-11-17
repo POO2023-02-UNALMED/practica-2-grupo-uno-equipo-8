@@ -10,6 +10,8 @@ from gestorAplicacion.humanos.Catastrofe import Catastrofe
 
 class Cocinero(Domiciliario):
     nombres = ["Sergio", "Jaime", "David", "Juancho", "Will", "Kevin"]
+    _procesosDeProductosCocinados = []
+    _fallosCocinando= 0
     
     def __init__(self, nombre="",especialidad="" , panaderia=None,habilidad=0.0, calificacion=0.0, dineroEnMano=0.0):
         super().__init__(nombre,panaderia, habilidad, calificacion, dineroEnMano)
@@ -18,6 +20,7 @@ class Cocinero(Domiciliario):
         self._trabajo = False
         self._nevera = False
         self._horno = False
+        self._habilidad = super().getHabilidad()
         self._panaderia = panaderia
         if self._panaderia is not None:
             self._panaderia.getCocineros().append(self)
@@ -88,13 +91,13 @@ class Cocinero(Domiciliario):
             if especialidad == proceso:
                 ideal = cocinero
                 return ideal
-        idealNew = self._panaderia.contratarCocinero(chefRandom, proceso, super().habilidad, super().calificacion, 0)
+        idealNew = self._panaderia.contratarCocinero(chefRandom, proceso, randint(9, 19), 0, 0)
         return idealNew
 
-    def detenerCoccion(self, producto, cantidades):
+    def detenerCoccion(self, producto, cantidades=1):
         ingredientesUsados = producto.getIngredientes()
         for ingUsado, cantidad in ingredientesUsados.items():
-            ingredienteUsado = self._panaderia.getInventario().buscarIngredientePorNombre(ingUsado)
+            ingredienteUsado = self._panaderia.getInventario().ingredientePorNombreBuscar(ingUsado)
             self._panaderia.getInventario().restarIngrediente(ingredienteUsado, cantidad * cantidades)
             
     def repararCoccion(self, producto):
@@ -113,13 +116,13 @@ class Cocinero(Domiciliario):
         procesosProducto = producto.seleccionProcesosDeCocina()
 
         # Asigna la lista de procesos al producto.
-        producto.setProcesoDeCocina(procesosProducto)
+        producto.setProcesosDeCocina(procesosProducto)
 
         # Crea una instancia de la clase Catastrofe para gestionar la dificultad.
         dificultad = Catastrofe()
 
         # Obtiene la lista de procesos a realizar.
-        procesoCook = producto.getProcesoDeCocina()
+        procesoCook = producto.getProcesosDeCocina()
         longitud = len(procesoCook)
         
         # Itera a través de los procesos de cocina.
@@ -155,6 +158,7 @@ class Cocinero(Domiciliario):
         # Devuelve False si todos los procesos se completaron con éxito.
         return False
 
+    @staticmethod
     def unirMapasIngredientesId(listaDeMapas):
         mapaAcumulativo = {}
         for mapa in listaDeMapas:
@@ -162,6 +166,7 @@ class Cocinero(Domiciliario):
                 mapaAcumulativo[clave] = mapaAcumulativo.get(clave, 0) + valor
         return mapaAcumulativo
     
+    @staticmethod
     def multiplicarValoresEnMapa(mapa, multiplicador):
         nuevoMapa = {}
         
@@ -176,15 +181,15 @@ class Cocinero(Domiciliario):
         listaDeMapas = []
 
         for productoId, cantidad in productos.items():
-            producto = Producto.obtenerObjetoPorId(productoId)
+            producto = Producto.obtenerObjetoPorIdP(productoId)
             ingredientesAUsar = producto.ingredientes
 
             for ingredienteIdVerificar, cantidad in ingredientesAUsar.items():
-                ingrediente = Ingrediente.obtenerObjetoPorNombre(ingredienteIdVerificar)
+                ingrediente = Ingrediente.obtenerObjetoPorNombreI(ingredienteIdVerificar)
                 ingrediente.revisarCaducidad(cantidad, self._panaderia)
 
         for productoId, cantidad in productos.items():
-            producto = Producto.obtenerObjetoPorId(productoId)
+            producto = Producto.obtenerObjetoPorIdP(productoId)
             ingredientesNecesarios = producto.ingredientes
             ingredientesAbsolutos = self.multiplicarValoresEnMapa(ingredientesNecesarios, cantidad)
             listaDeMapas.append(ingredientesAbsolutos)
@@ -201,7 +206,7 @@ class Cocinero(Domiciliario):
 
         for productoId, cantidad in productos.items():
             producto = self._panaderia.getInventario().buscarProductoPorId(productoId)
-            productoNew = self.crearProducto(productoId)
+            productoNew = Producto.crearProducto(productoId)
             cocinero = self._panaderia.cocineroAleatorio()
 
             for i in range(cantidad):

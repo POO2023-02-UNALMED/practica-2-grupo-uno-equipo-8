@@ -1,5 +1,5 @@
 import random
-from gestorAplicacion.gestion import Canasta
+from gestorAplicacion.gestion.Canasta import Canasta
 
 class Trabajador:
     def __init__(self, panaderia, nombre="John Doe", calificacion=0, dinero_en_mano=0, salario=1000):

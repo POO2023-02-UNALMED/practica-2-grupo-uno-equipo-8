@@ -76,13 +76,14 @@ class SerializationTest:
         for i in Producto.baseDatosProductos:
             print(i.getId() , i.getNombre(), i.getCosto(), i.getIngredientes())
 
+        
+
         print("productos creados")
 
         cliente1 = Cliente()
         cliente1.crearCuenta("Sahely", 1123433775, "123")
         cliente1.crearCuenta("Richard", 202, "qwerty")
         Cliente.getSesion().setPresupuesto(30000)
-    
 
         print("Cliente en sesion: " + Cliente.getSesion().getNombre())
         print("clientes creados")

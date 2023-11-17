@@ -157,13 +157,13 @@ class Panaderia():
                 ingredientesFaltantes[ingrediente] = (cantidadExistente - cantidad) * (-2)
         if ingredientesFaltantes:
             for ingrediente, cantidad in ingredientesFaltantes.items():
-                ingredientesFaltantes[Ingrediente.obtenerObjetoPorId(ingrediente).getNombre()] = cantidad
+                ingredientesFaltantes[Ingrediente.obtenerObjetoPorIdI(ingrediente).getNombre()] = cantidad
             self.comprarIngredientes(ingredientesFaltantes)
         for ingrediente, cantidad in ingredientes.items():
             for i in range(cantidad):
                 ingredientesCanasta.append(self._inventario.buscarIngredientePorId(ingrediente))
                 self._inventario.restarIngrediente(ingrediente, cantidad)
-                Ingrediente.obtenerObjetoPorId(ingrediente).setVecesVendido(Ingrediente.obtenerObjetoPorId(ingrediente).getVecesVendido() + 1)
+                Ingrediente.obtenerObjetoPorIdI(ingrediente).setVecesVendido(Ingrediente.obtenerObjetoPorIdI(ingrediente).getVecesVendido() + 1)
                 Ingrediente.organizarTopMasVendidos()
         return ingredientesCanasta
 
@@ -173,7 +173,7 @@ class Panaderia():
         for kit, cantidad in kitsEnLista.items():
             idKit = kit
             cantidad = cantidad
-            ingredientesKit = Producto.obtenerObjetoPorId(idKit).getIngredientes()
+            ingredientesKit = Producto.obtenerObjetoPorIdP(idKit).getIngredientes()
             for ingrediente, cantidadIngrediente in ingredientesKit.items():
                 ingredientesKit[ingrediente] = cantidadIngrediente * cantidad
             for ingrediente, cantidadIngrediente in ingredientesKit.items():
@@ -190,10 +190,10 @@ class Panaderia():
             cantidad = cantidad
             for i in range(cantidad):
                 kitCanasta = []
-                for ingrediente, cantidadIngrediente in Producto.obtenerObjetoPorId(idKit).getIngredientes().items():
+                for ingrediente, cantidadIngrediente in Producto.obtenerObjetoPorIdP(idKit).getIngredientes().items():
                     for j in range(cantidadIngrediente):
                         kitCanasta.append(self._inventario.buscarIngredientePorId(ingrediente))
-                        Ingrediente.obtenerObjetoPorNombre(ingrediente).setVecesVendido(Ingrediente.obtenerObjetoPorNombre(ingrediente).getVecesVendido() + 1)
+                        Ingrediente.obtenerObjetoPorNombre(ingrediente).setVecesVendido(Ingrediente.obtenerObjetoPorNombreI(ingrediente).getVecesVendido() + 1)
                         Ingrediente.organizarTopMasVendidos()
                         self._inventario.restarIngrediente(ingrediente, 1)
                 kitsCanasta.append(kitCanasta)

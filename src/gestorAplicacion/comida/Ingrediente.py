@@ -5,11 +5,8 @@ import math
 
 
 class Ingrediente(ComidaDefault):
-    _baseDatosIngredientes = []
-    _cantidadIngredientesUnicos = 0
     probabilidadConstante = 1
     _topMasVendidos = []
-    _cantidadProductosUnicoss=0
 
     def __init__(self, nombre, identificador=None, precioVenta=None, precioCompra=None, vecesVendido=None):
         self._nombre = nombre
@@ -18,9 +15,8 @@ class Ingrediente(ComidaDefault):
             numeroAleatorio = aleatorio.randint(300, 3000)
             self._precioDeCompra = numeroAleatorio
             self._precioDeVenta = math.ceil(numeroAleatorio * ComidaDefault.tarifaGanancias)
-            if identificador is None : Ingrediente._cantidadIngredientesUnicos += 1
-            self._id = str(Ingrediente._cantidadIngredientesUnicos + Ingrediente._cantidadProductosUnicoss)
-            Ingrediente._baseDatosIngredientes.append(self)
+            self._id = str(ComidaDefault.obtener_proximo_id())
+            ComidaDefault.getBaseDatosIngredientes().append(self)
             self._vecesVendido = 0
             self._caducado = False
             self._inventario = None
@@ -42,14 +38,6 @@ class Ingrediente(ComidaDefault):
     def setId(self, Newid):
         self._id = Newid
 
-    @staticmethod
-    def getCantidadIngredientesUnicos():
-        return Ingrediente._cantidadIngredientesUnicos
-
-    @staticmethod
-    def setCantidadIngredientesUnicos(NewcantidadIngredientesUnicos):
-        Ingrediente._cantidadIngredientesUnicos = NewcantidadIngredientesUnicos
-
     def getPrecioDeVenta(self):
         return self._precioDeVenta
 
@@ -67,14 +55,6 @@ class Ingrediente(ComidaDefault):
 
     def setVecesVendido(self, vecesVendido):
         self._vecesVendido = vecesVendido
-
-    @staticmethod
-    def getBaseDatosIngredientes(cls):
-        return cls._baseDatosIngredientes
-    
-    @staticmethod
-    def setBaseDatosIngredientes(cls,baseDatosIngredientes):
-        cls._baseDatosIngredientes = baseDatosIngredientes
 
     def isCaducado(self):
         return self._caducado
@@ -105,50 +85,9 @@ class Ingrediente(ComidaDefault):
         cls._topMasVendidos = topMasVendidos
 
     @classmethod
-    def getCantidadProductosUnicos(cls):
-        return cls._cantidadProductosUnicoss
-    
-    @classmethod
-    def setCantidadProductosUnicos(cls, cantidadProductosUnicos):
-        cls._cantidadProductosUnicoss = cantidadProductosUnicos
-
-    
-    @staticmethod
-    def verificacionExistenciaPorNombre(nombre):
-        existe = False
-        for ingrediente in Ingrediente._baseDatosIngredientes:
-            if ingrediente._nombre == nombre:
-                existe = True
-                break
-        return existe
-    
-    @staticmethod
-    def verificacionExistenciaPorId(id):
-        existe = False
-        for ingrediente in Ingrediente._baseDatosIngredientes:
-            if ingrediente._id == id:
-                existe = True
-                break
-        return existe
-
-    @staticmethod
-    def obtenerObjetoPorNombre(nombre):
-        for ingrediente in Ingrediente._baseDatosIngredientes:
-            if ingrediente._nombre == nombre:
-                return ingrediente
-        return None
-    
-    @staticmethod
-    def obtenerObjetoPorId(id):
-        for ingrediente in Ingrediente._baseDatosIngredientes:
-            if ingrediente._id == id:
-                return ingrediente
-        return None
-    
-    @staticmethod
-    def crearIngrediente(nombreId):
-        if Ingrediente.verificacionExistenciaPorNombre(nombreId) or Ingrediente.verificacionExistenciaPorId(nombreId):
-            ingredienteExistente = Ingrediente.obtenerObjetoPorNombre(nombreId)
+    def crearIngrediente(cls,nombreId):
+        if ComidaDefault.verificacionExistenciaPorNombreI(nombreId) or ComidaDefault.verificacionExistenciaPorIdI(nombreId):
+            ingredienteExistente = ComidaDefault.obtenerObjetoPorNombre(nombreId)
             return Ingrediente(
                 ingredienteExistente.getNombre(),
                 ingredienteExistente.getId(),
@@ -159,33 +98,33 @@ class Ingrediente(ComidaDefault):
         else:
             return Ingrediente(nombreId)
 
-    def caducidad(self, ingrediente):
-        ingrediente.set_caducado(False)
+    def caducidad(cls, ingrediente):
+        ingrediente.setCaducado(False)
         caducidad = random.randint(0, 19)
-        if caducidad == Ingrediente.probabilidadConstante:
-            ingrediente.set_caducado(True)
+        if caducidad == cls.probabilidadConstante:
+            ingrediente.setCaducado(True)
             
     def revisarCaducidad(self, cantidad, panaderia):
-        self.caducidad()
+        self.caducidad(self)
         vencido = self.isCaducado()
         if vencido:
             ingredienteId = self.getId()
             panaderia.getInventario().restarIngrediente(ingredienteId, cantidad)
             #GestionCocinar.falloCaducado()
             self.setCaducado(False)
-            
-    @staticmethod
+    
+    #cambiar
+    @classmethod
     def organizarTopMasVendidos():
         Ingrediente.topMasVendidos.clear()
-        for i in range(len(Ingrediente.baseDatosIngredientes)):
-            for j in range(len(Ingrediente.baseDatosIngredientes)):
-                if (Ingrediente.baseDatosIngredientes[i].getVecesVendido() >
-                    Ingrediente.baseDatosIngredientes[j].getVecesVendido()):
-                    aux = Ingrediente.baseDatosIngredientes[i]
-                    Ingrediente.baseDatosIngredientes[i] = Ingrediente.baseDatosIngredientes[j]
-                    Ingrediente.baseDatosIngredientes[j] = aux
+        for i in range(len(ComidaDefault._baseDatosIngredientes)):
+            for j in range(len(ComidaDefault._baseDatosIngredientes)):
+                if (ComidaDefault._baseDatosIngredientes[i].getVecesVendido() >
+                    ComidaDefault._baseDatosIngredientes[j].getVecesVendido()):
+                    aux = ComidaDefault._baseDatosIngredientes[i]
+                    ComidaDefault._baseDatosIngredientes[i] = ComidaDefault._baseDatosIngredientes[j]
+                    ComidaDefault._baseDatosIngredientes[j] = aux
 
-        for i in range(len(Ingrediente.baseDatosIngredientes)):
+        for i in range(len(ComidaDefault._baseDatosIngredientes)):
             if i < 5:
-                Ingrediente.topMasVendidos.append(Ingrediente.baseDatosIngredientes[i])
-
+                Ingrediente.topMasVendidos.append(ComidaDefault._baseDatosIngredientes[i])

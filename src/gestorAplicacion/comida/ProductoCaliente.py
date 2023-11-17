@@ -17,7 +17,7 @@ class ProductoCaliente(Producto):
 
     @classmethod
     def crearProducto(cls, Nnombre):
-        newProducto = cls.obtenerObjetoPorId(Nnombre)
+        newProducto = cls.obtenerObjetoPorIdP(Nnombre)
         return cls(
             newProducto.getNombre(),
             newProducto.getId(),
@@ -29,10 +29,10 @@ class ProductoCaliente(Producto):
     @classmethod
     def crearProductoPersonalizado(cls, Nnombre, ingredientes):
         for nombreIngrediente, cantidad in ingredientes.items():
-            if not Ingrediente.verificacionExistenciaPorNombre(nombreIngrediente):
+            if not Ingrediente.verificacionExistenciaPorNombreI(nombreIngrediente):
                 Ingrediente(nombreIngrediente)
 
-        return cls(Nnombre, ingredientes)
+        return ProductoCaliente(Nnombre, ingredientes)
     
     def procesoHornear(self, cocinero):
         if cocinero.isHorno():

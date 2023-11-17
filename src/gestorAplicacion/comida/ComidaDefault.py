@@ -3,6 +3,17 @@ class ComidaDefault:
     Interfaz que define las tarifas y métodos por defecto para una comida.
     """
 
+    _baseDatosIngredientes = []  # Base de datos de ingredientes
+    _contador = 0  # Inicialización del contador único
+    baseDatosProductos = []
+
+    @classmethod
+    def obtener_proximo_id(cls):
+        cls._contador += 1
+        return cls._contador
+
+    
+
     # Tarifa por defecto para el servicio a domicilio.
     tarifaDomicilio = 2000
 
@@ -17,6 +28,88 @@ class ComidaDefault:
         Obtiene la descripción por defecto de la comida.
         """
         return "Ahora mismo no tenemos una descripcion para este producto, pero te invitamos a probarlo."
+    
+    @classmethod
+    def getBaseDatosIngredientes(cls):
+        return cls._baseDatosIngredientes
+    
+    @classmethod
+    def setBaseDatosIngredientes(cls,baseDatosIngredientes):
+        cls._baseDatosIngredientes = baseDatosIngredientes
+    
+    @classmethod
+    def verificacionExistenciaPorNombreI(cls,nombre):
+        existe = False
+        for ingrediente in cls._baseDatosIngredientes:
+            if ingrediente._nombre == nombre:
+                existe = True
+                break
+        return existe
+    
+    @classmethod
+    def verificacionExistenciaPorIdI(cls,id):
+        existe = False
+        for ingrediente in cls._baseDatosIngredientes:
+            if ingrediente._id == id:
+                existe = True
+                break
+        return existe
+
+    @classmethod
+    def obtenerObjetoPorNombreI(cls,nombre):
+        for ingrediente in cls._baseDatosIngredientes:
+            if ingrediente._nombre == nombre:
+                return ingrediente
+        return None
+    
+    @classmethod
+    def obtenerObjetoPorIdI(cls,id):
+        for ingrediente in cls._baseDatosIngredientes:
+            if ingrediente._id == id:
+                return ingrediente
+        return None
+    
+    # Getter y Setter para el atributo 'baseDatosProductos'
+    @classmethod
+    def getBaseDatosProductos(cls):
+        return cls.baseDatosProductos
+    
+    @classmethod
+    def setBaseDatosProductos(cls,nuevaBaseDatosProductos):
+        cls.baseDatosProductos = nuevaBaseDatosProductos
+
+    @classmethod
+    def verificarExistenciaPorNombreP(cls,nombre):
+        existe = False
+        for producto in cls.baseDatosProductos:
+            if producto.getNombre() == nombre:
+                existe = True
+                break
+        return existe
+    
+    @classmethod
+    def verificarExistenciaPorIdP(cls,id):
+        existe = False
+        for producto in cls.baseDatosProductos:
+            if producto.getId() == id:
+                existe = True
+        return existe
+    
+    @classmethod
+    def obtenerObjetoPorNombreP(cls,nombre):
+        producto = None
+        for productoActual in cls.baseDatosProductos:
+            if productoActual.getNombre() == nombre:
+                producto = productoActual
+        return producto
+    
+    @classmethod
+    def obtenerObjetoPorIdP(cls,id):
+        producto = None
+        for productoActual in cls.baseDatosProductos:
+            if productoActual.getId() == id:
+                producto = productoActual
+        return producto
 
     def getNutrientes(self, nombre):
         """

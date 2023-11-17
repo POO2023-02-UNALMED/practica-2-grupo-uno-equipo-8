@@ -88,7 +88,7 @@ class Domiciliario(Trabajador, ComidaDefault):
 
                     if cantidad + self.panaderia.getInventario().verificarCantidadIngredientePorNombre(ingredienteNombre) + (cantidad * 2) <= 40:
                         
-                        valorcompra = valorcompra+ ((Ingrediente.obtenerObjetoPorNombre(ingredienteNombre).getPrecioDeCompra()) * (cantidad)) + 100000
+                        valorcompra = valorcompra+ ((Ingrediente.obtenerObjetoPorNombreI(ingredienteNombre).getPrecioDeCompra()) * (cantidad)) + 100000
                         topp = True
 
                     else:
@@ -99,7 +99,7 @@ class Domiciliario(Trabajador, ComidaDefault):
 
                                 cantidad = cantidad*2
 
-                            valorcompra = valorcompra + ((Ingrediente.obtenerObjetoPorNombre(ingredienteNombre).getPrecioDeCompra()) * (cantidad))
+                            valorcompra = valorcompra + ((Ingrediente.obtenerObjetoPorNombreI(ingredienteNombre).getPrecioDeCompra()) * (cantidad))
                             topp = True
 
                         else:
@@ -108,21 +108,21 @@ class Domiciliario(Trabajador, ComidaDefault):
 
                                 cantidad = (40 - self.panaderia.getInventario().verificarCantidadIngredientePorNombre(ingredienteNombre))
 
-                            valorcompra = valorcompra + ((Ingrediente.obtenerObjetoPorNombre(ingredienteNombre).getPrecioDeCompra()) * (cantidad))
+                            valorcompra = valorcompra + ((Ingrediente.obtenerObjetoPorNombreI(ingredienteNombre).getPrecioDeCompra()) * (cantidad))
                             topp = True
             
             if topp == False:
 
                 if cantidad + self.panaderia.getInventario().verificarCantidadIngredientePorNombre(ingredienteNombre) > 20:
 
-                    valorcompra = valorcompra+ ((Ingrediente.obtenerObjetoPorNombre(ingredienteNombre).getPrecioDeCompra()) * (cantidad)) + 50000
+                    valorcompra = valorcompra+ ((Ingrediente.obtenerObjetoPorNombreI(ingredienteNombre).getPrecioDeCompra()) * (cantidad)) + 50000
                     topp = True
 
                 else:
 
                     if self.panaderia.getInventario().verificarCantidadIngredientePorNombre(ingredienteNombre) + (cantidad) <= 20:
 
-                        valorcompra = valorcompra + ((Ingrediente.obtenerObjetoPorNombre(ingredienteNombre).getPrecioDeCompra()) * (cantidad))
+                        valorcompra = valorcompra + ((Ingrediente.obtenerObjetoPorNombreI(ingredienteNombre).getPrecioDeCompra()) * (cantidad))
 
                     else:
 
@@ -130,7 +130,7 @@ class Domiciliario(Trabajador, ComidaDefault):
 
                             cantidad = (20 - self.panaderia.getInventario().verificarCantidadIngredientePorNombre(ingredienteNombre))
 
-                        valorcompra = valorcompra + ((Ingrediente.obtenerObjetoPorNombre(ingredienteNombre).getPrecioDeCompra()) * (cantidad))
+                        valorcompra = valorcompra + ((Ingrediente.obtenerObjetoPorNombreI(ingredienteNombre).getPrecioDeCompra()) * (cantidad))
             
             listIngredientes[ingredienteNombre] = cantidad #revisar esto 
         
