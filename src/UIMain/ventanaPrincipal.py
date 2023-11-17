@@ -127,6 +127,20 @@ class VentanaPrincipal:
         #framep2 = Frame(frame, bd = 5, relief=FLAT, padx = 2, pady = 2, bg = "white").grid(row =0 , column = 1)
         self.frameComprar1 = Frame(self.frameComprar, bg = "blue").grid(row =0 , column = 0, padx = 1, pady=1, sticky="nsew")
         self.frameComprar2 = Frame(self.frameComprar, bg = "red").grid(row =0 , column = 1, padx = 1, pady=1, sticky="nsew")
+        # Agregar un Scrollbar
+        self.scrollbar = Scrollbar(self.frameComprar2)
+        self.scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+
+        # Agregar un widget de Texto
+        #self.texto_widget = Text(self.frameComprar2, wrap=tk.WORD, yscrollcommand=self.scrollbar.set)
+        #self.texto_widget.pack(fill=tk.BOTH, expand=True)
+
+        # Configurar el Scrollbar para que funcione con el widget de Texto
+        #self.scrollbar.config(command=self.texto_widget.yview)
+
+        # Puedes agregar texto de ejemplo
+        #self.ejemplo_texto = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. ..."
+        #self.texto_widget.insert(tk.END, self.ejemplo_texto)
         
         # frameCatalogo Catalogo de opciones disponibles para comprar
         self.frameCatalogo = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
