@@ -97,6 +97,7 @@ class Cocinero(Domiciliario):
     def detenerCoccion(self, producto, cantidades):
         ingredientesUsados = producto.getIngredientes()
         for ingUsado, cantidad in ingredientesUsados.items():
+            print(ingUsado)
             ingredienteUsado = self._panaderia.getInventario().ingredientePorNombreBuscar(ingUsado)
             print(ingredienteUsado)
             self._panaderia.getInventario().restarIngrediente(ingredienteUsado, cantidad * cantidades)

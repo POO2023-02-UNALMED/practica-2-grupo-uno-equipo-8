@@ -4,8 +4,8 @@ from gestorAplicacion.comida.Producto import Ingrediente
 import random
 
 class ProductoCaliente(Producto):
-    def __init__(self, nombre, ids, ingredientes, costo, vecesVendido):
-        super().__init__(nombre, ids, ingredientes, costo, vecesVendido)
+    def __init__(self, nombre, ingredientes, ids=None, costo=0, vecesVendido=0):
+        super().__init__(nombre, ingredientes, ids, costo, vecesVendido)
         self._horno = False
 
     

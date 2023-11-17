@@ -11,6 +11,7 @@ class SerializationTest:
     def main(self, args):
         print("Test de funcionamiento")
         panaderia = Panaderia()
+        #panaderia = Serializador.cargarPanaderia()
         Cliente.setPanaderia(panaderia)
         #panaderia = Serializador.cargarPanaderia()
         print("panaderia cargada")
@@ -117,18 +118,42 @@ class SerializationTest:
 
         Cliente.getSesion().crearCanastaNueva()
         a=Cliente.getSesion().getCanastaOrden()
-        a.recibir_orden("13", 3,False)
-        a.recibir_orden("14", 2,False)
-        a.recibir_orden("15", 1,True)
-        a.recibir_orden("3", 3,False)
+        print(a.recibir_orden("13", "3",False))
+        a.recibir_orden("14", "2",False)
+        a.recibir_orden("15", "1",True)
+        a.recibir_orden("3", "3",False)
+        a.recibir_orden("13", "3",False)
         print("canasta creada")
 
         print(a.getProductosEnLista())
         print(a.getIngredientesEnLista())
         print(a.getKitsEnLista())
 
-        panaderia.cocinar(ingredientes_cocinar)
+        print("Elementos existentes añadidos correctamente a la canasta")
+        ingredientes_marmota = {
+            "carnita": 1,
+            "meme": 2,
+            "hormiga": 1,
+            "azucar": 1,
+            "mantequilla": 1
+        }
+
+        print(a.recibirOrdenPersonalizada("marmota", ingredientes_marmota, "3",False))
+
+        print(a.getProductosEnLista())
+        print(a.getIngredientesEnLista())
+        print(a.getKitsEnLista())
+
+        print("Elementos personalizados añadidos correctamente a la canasta")
+        #panaderia.cocinar(ingredientes_cocinar)
     
+        for i in Ingrediente._baseDatosIngredientes:
+            print(i.getId() , i.getNombre(), i.getPrecioDeCompra(), i.getPrecioDeVenta())
+
+        for i in Producto.baseDatosProductos:
+            print(i.getId() , i.getNombre(), i.getCosto(), i.getIngredientes())
+
+        #a.enviarOrdenCanasta()
         Serializador.guardarPanaderia(panaderia)
         print("panaderia guardada")
 
