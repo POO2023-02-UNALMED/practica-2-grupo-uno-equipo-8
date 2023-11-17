@@ -21,10 +21,11 @@ class VentanaPrincipal:
         self.menu_principal.add_cascade(label="Archivo", menu=menu_archivo)
 
         menu_procesos = tk.Menu(self.menu_principal, tearoff=0)
+        menu_procesos.add_command(label = "Ventana principal", command = lambda: self.cambiarFrame(self.framePrincipal))
         menu_procesos.add_command(label = "Iniciar sesion", command= lambda: self.cambiarFrame(self.frameSesion))
         menu_procesos.add_command(label = "Registrarse", command= lambda: self.cambiarFrame(self.frameRegistro))
         menu_procesos.add_command(label = "Cerrar sesion")
-        menu_procesos.add_command(label = "Ir a comprar")
+        menu_procesos.add_command(label = "Ir a comprar", command = lambda: self.cambiarFrame(self.frameComprar))
         menu_procesos.add_command(label = "Ver catalogo de productos y descripcion")
         menu_procesos.add_command(label = "Lo mejor de nuestra panaderia")
         menu_procesos.add_command(label = "Ver facturas pasadas")
@@ -34,22 +35,26 @@ class VentanaPrincipal:
         menu_procesos.add_command(label = "Modificar direccion")
 
         self.menu_principal.add_cascade(label="Procesos y Consultas", menu=menu_procesos)
-
-
-
         menu_ayuda = tk.Menu(self.menu_principal, tearoff=0)
         menu_ayuda.add_command(label="Acerca de", command=self.mostrar_autores)
         self.menu_principal.add_cascade(label="Ayuda", menu=menu_ayuda)
 
         self.root.config(menu=self.menu_principal)
 
-
-
         # Lista que va a contener todos los frames para facilitar el cambio entre estos
         self.frames = [] #lista de todos los frames necesaria para el metodo cambiarFrame
 
         # Creacion de los frames:
 
+        # framePrincipal menu principal
+        self.framePrincipal = Frame(
+        self.root, bd=1, relief=FLAT, padx=1, pady=1)
+        self.framePrincipal.pack()
+        self.frameActual = self.framePrincipal
+        self.frames.append(self.framePrincipal)
+        self.labelp1 = Label(self.framePrincipal, text="Bienvenido a pooBakery, este es el menu")
+        self.labelp1.pack()
+        
         # frameSesion inicio de sesion
         self.frameSesion = Frame( #Esto esta pendiente de ser adaptado con fieldFrames
         self.root, bd=1, relief=FLAT, padx=1, pady=1) 
@@ -101,15 +106,6 @@ class VentanaPrincipal:
         self.boton_Registro = Button(self.frameRegistro, text="Registrarse", command = self.iniciar_sesion)
         self.boton_Registro.pack(pady=10)
 
-        # frame2 menu principal
-        self.framePrincipal = Frame(
-        self.root, bd=1, relief=FLAT, padx=1, pady=1)
-        self.framePrincipal.pack()
-        self.frameActual = self.framePrincipal
-        self.frames.append(self.framePrincipal)
-        self.labelp1 = Label(self.framePrincipal, text="Bienvenido a pooBakery, este es el menu")
-        self.labelp1.pack()
-
         # frameInfo frame con informacion
         self.frameInfo = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
         self.frames.append(self.frameInfo)
@@ -118,30 +114,48 @@ class VentanaPrincipal:
         self.infoBoton = Button(self.frameInfo, text="Volver atras", command= self.volverAtras)
         self.infoBoton.pack(pady = 20)
 
-        # framef1 funcionalidad 1
-        self.frameF1 = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
-        self.frames.append(self.frameF1)
+        # frameComprar Ir a comprar
+        self.frameComprar = Frame(root, bd = 1, relief=FLAT, padx = 1, pady = 1)
+        self.frames.append(self.frameComprar)
+        #self.frameComprar.pack(padx = 5, pady = 5, fill = "both", expand=True)
+        tk.Grid.rowconfigure(self.frameComprar,0, weight=1)
+        #tk.Grid.rowconfigure(frame,1, weight=1)
+        tk.Grid.columnconfigure(self.frameComprar,0, weight=1)
+        tk.Grid.columnconfigure(self.frameComprar,1, weight=1)
 
-
-
-        # framef2 funcionalidad 2
-        self.frameF2 = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
-        self.frames.append(self.frameF2)
-
-
-
-        # framef3 funcionalidad 3
-        self.frameF3 = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
-        self.frames.append(self.frameF3)
-
-
-
-        # framef4 funcionalidad 4
-        self.frameF4 = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
-        self.frames.append(self.frameF4)
-
-
-
+        #framep1 = Frame(frame, bd = 5, relief=FLAT, padx = 2, pady = 2, bg = "white").grid(row =0 , column = 0)
+        #framep2 = Frame(frame, bd = 5, relief=FLAT, padx = 2, pady = 2, bg = "white").grid(row =0 , column = 1)
+        self.frameComprar1 = Frame(self.frameComprar, bg = "blue").grid(row =0 , column = 0, padx = 1, pady=1, sticky="nsew")
+        self.frameComprar2 = Frame(self.frameComprar, bg = "red").grid(row =0 , column = 1, padx = 1, pady=1, sticky="nsew")
+        
+        # frameCatalogo Catalogo de opciones disponibles para comprar
+        self.frameCatalogo = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
+        self.frames.append(self.frameCatalogo)
+        
+        # frameRanking Lo mejor de nuestra panaderia
+        self.frameRanking = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
+        self.frames.append(self.frameRanking)
+        
+        # frameHistorial Historial de facturas
+        self.frameHistorial = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
+        self.frames.append(self.frameHistorial)
+        
+        # frameContrasena cambiar contraseña
+        self.frameContrasena = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
+        self.frames.append(self.frameContrasena)
+        
+        # framePlata Meter plata a mi cuenta
+        self.framePlata = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
+        self.frames.append(self.framePlata)
+        
+        # frameValidarTipo Validar tipo de cliente
+        self.frameValidarTipo = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
+        self.frames.append(self.frameValidarTipo)
+        
+        # frameDireccion Modificar direccion
+        self.frameDireccion = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
+        self.frames.append(self.frameDireccion)
+        
     #Metodos necesiarios para la interfaz de usuario
     def iniciar_sesion(self):
         #aqui deberia haber algun condicional para ver si el usuario si existe
@@ -186,7 +200,7 @@ class VentanaPrincipal:
         self.frameAnterior = self.frameActual
         for f in self.frames:
             if f == frame:
-                f.pack()
+                f.pack(padx = 5, pady = 5, fill = "both", expand=True)
                 self.frameActual = frame
             else:
                 f.pack_forget()
