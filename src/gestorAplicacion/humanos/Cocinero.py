@@ -94,20 +94,22 @@ class Cocinero(Domiciliario):
         idealNew = self._panaderia.contratarCocinero(chefRandom, proceso, randint(9, 19), 0, 0)
         return idealNew
 
-    def detenerCoccion(self, producto, cantidades=1):
+    def detenerCoccion(self, producto, cantidades):
         ingredientesUsados = producto.getIngredientes()
         for ingUsado, cantidad in ingredientesUsados.items():
             ingredienteUsado = self._panaderia.getInventario().ingredientePorNombreBuscar(ingUsado)
+            print(ingredienteUsado)
             self._panaderia.getInventario().restarIngrediente(ingredienteUsado, cantidad * cantidades)
-            
+
     def repararCoccion(self, producto):
         ingredientesUsados = producto.getIngredientes()
         self._panaderia.comprarIngredientes(ingredientesUsados)
-        
+
     def detenerCoccion2(self, producto):
         ingredientesUsados = producto.getIngredientes()
         for ingUsado, cantidad in ingredientesUsados.items():
-            ingredienteUsado = self._panaderia.getInventario().buscarIngredientePorNombre(ingUsado)
+            ingredienteUsado = self._panaderia.getInventario().ingredientePorNombreBuscar(ingUsado)
+            print(ingredienteUsado)
             self._panaderia.getInventario().restarIngrediente(ingredienteUsado, cantidad)
 
 
@@ -147,7 +149,7 @@ class Cocinero(Domiciliario):
                 # Incrementa la habilidad del cocinero si el proceso falló.
                 chefIdeal.habilidad += 1
                 Cocinero._fallosCocinando +=1
-                chefIdeal.detenerCoccion(producto)
+                chefIdeal.detenerCoccion2(producto)
                 chefIdeal.repararCoccion(producto)
                 i = -1
             # Establece el cocinero como ocupado.

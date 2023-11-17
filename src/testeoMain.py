@@ -114,6 +114,19 @@ class SerializationTest:
             "16": 5,
             "17": 3
         }
+
+        Cliente.getSesion().crearCanastaNueva()
+        a=Cliente.getSesion().getCanastaOrden()
+        a.recibir_orden("13", 3,False)
+        a.recibir_orden("14", 2,False)
+        a.recibir_orden("15", 1,True)
+        a.recibir_orden("3", 3,False)
+        print("canasta creada")
+
+        print(a.getProductosEnLista())
+        print(a.getIngredientesEnLista())
+        print(a.getKitsEnLista())
+
         panaderia.cocinar(ingredientes_cocinar)
     
         Serializador.guardarPanaderia(panaderia)

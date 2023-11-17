@@ -1,5 +1,5 @@
-from gestorAplicacion.gestion import Canasta
-from gestorAplicacion.gestion import Panaderia
+from gestorAplicacion.gestion.Canasta import Canasta
+from gestorAplicacion.gestion.Panaderia import Panaderia
 from random import randint as random
 from enum import Enum
 

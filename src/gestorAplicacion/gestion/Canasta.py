@@ -1,8 +1,8 @@
-from gestorAplicacion.comida import Ingrediente
-from gestorAplicacion.comida import Producto
-from gestorAplicacion.comida import ProductoCaliente
-from gestorAplicacion.comida import ProductoFrio
-from gestorAplicacion.humanos import Cliente
+from gestorAplicacion.comida.Ingrediente import Ingrediente
+from gestorAplicacion.comida.ComidaDefault import ComidaDefault
+from gestorAplicacion.comida.Producto import Producto
+from gestorAplicacion.comida.ProductoCaliente import ProductoCaliente
+from gestorAplicacion.comida.ProductoFrio import ProductoFrio
 
 from enum import Enum
 import random
@@ -150,7 +150,7 @@ class Canasta:
     # agregarlo, en el caso de que si, simplemente agrega la cantidad indicada a la que ya había
 
     #Para productos
-    def gestionAgregarP(self,prdct,elementNum=0):
+    def gestionAgregarP(self,prdct,elementNum=1):
         if elementNum!=0:
             if ((prdct != None) & (not self._productosEnLista.has_key(prdct))):
                 self._productosEnLista[prdct] = elementNum
@@ -166,7 +166,7 @@ class Canasta:
                 self.calcularElementosCanasta()
 
     #Para ingredientes en lista
-    def gestionAgregarI(self,ingr,elementNum=0):
+    def gestionAgregarI(self,ingr,elementNum=1):
         if elementNum!=0:
             if ((ingr != None) & (not self._ingredientesEnLista.has_key(ingr))):
                 self._ingredientesEnLista[ingr] = elementNum
@@ -181,7 +181,7 @@ class Canasta:
             self.calcularElementosCanasta()
 
     #Para kits en lista
-    def gestionAgregarK(self,kit,elementNum=0):
+    def gestionAgregarK(self,kit,elementNum=1):
         if elementNum!=0:
             if ((kit != None) & (not self._kitsEnLista.has_key(kit))):
                 self._kitsEnLista[kit] = elementNum
@@ -308,20 +308,20 @@ class Canasta:
 
         if self._productosEnLista is not None:
             for producto_id, cantidad in self._productosEnLista.items():
-                producto = Producto.obtener_objeto_por_id(producto_id)
+                producto = Producto.obtenerObjetoPorIdP(producto_id)
                 descuento = self.cuponProductos(producto, cantidad)
-                costo_canasta += producto.get_costo() * cantidad * descuento
-                descuento_canasta += producto.get_costo() * cantidad * (1 - descuento)
+                costo_canasta += producto.getCosto() * cantidad * descuento
+                descuento_canasta += producto.getCosto() * cantidad * (1 - descuento)
 
         if self._ingredientesEnLista is not None:
             for ingrediente_id, cantidad in self._ingredientesEnLista.items():
-                ingrediente = Ingrediente.obtener_objeto_por_id(ingrediente_id)
-                costo_canasta += ingrediente.get_precio_de_venta() * cantidad
+                ingrediente = Ingrediente.obtenerObjetoPorId(ingrediente_id)
+                costo_canasta += ingrediente.getPrecioDeVenta() * cantidad
 
         if self._kitsEnLista is not None:
             for kit_id, cantidad in self._kitsEnLista.items():
-                producto = Producto.obtener_objeto_por_id(kit_id)
-                costo_canasta += producto.get_costo() * cantidad
+                producto = Producto.obtenerObjetoPorIdP(kit_id)
+                costo_canasta += producto.getCosto() * cantidad
 
         self._descuentoEnLista = descuento_canasta
         self._costoTotalEnLista = costo_canasta + descuento_canasta
@@ -333,7 +333,7 @@ class Canasta:
         if int(cantidad) < 0:
             estado = False
 
-            if Producto.verificacion_existencia_por_id(objeto_entrante):
+            if ComidaDefault.verificarExistenciaPorIdP(objeto_entrante):
                 if receta:
                     estado = self.gestionEliminarK(objeto_entrante, int(cantidad), True)
                 else:
@@ -345,7 +345,7 @@ class Canasta:
                 else:
                     return "No se ha podido restar la cantidad del producto de la canasta"
 
-            elif Ingrediente.verificacion_existencia_por_id(objeto_entrante) and not receta:
+            elif ComidaDefault.verificacionExistenciaPorIdI(objeto_entrante) and not receta:
                 estado = self.gestionEliminarI(objeto_entrante, int(cantidad), 1)
 
                 if estado:
@@ -356,7 +356,7 @@ class Canasta:
 
             return "No se ha podido realizar el proceso, vuelva a intentarlo"
         else:
-            if Producto.verificacion_existencia_por_id(objeto_entrante):
+            if ComidaDefault.verificarExistenciaPorIdP(objeto_entrante):
                 if receta:
                     self.gestionAgregarK(objeto_entrante, int(cantidad), True)
                 else:
@@ -365,7 +365,7 @@ class Canasta:
                 self._estadoOrden = True
                 return "Se ha agregado la cantidad del producto a la canasta"
 
-            elif Ingrediente.verificacion_existencia_por_id(objeto_entrante) and not receta:
+            elif ComidaDefault.verificacionExistenciaPorIdI(objeto_entrante) and not receta:
                 self.gestionAgregarI(objeto_entrante, int(cantidad), 1)
                 self._estadoOrden = True
                 return "Se ha agregado la cantidad del ingrediente a la canasta"
@@ -377,25 +377,26 @@ class Canasta:
         try:
             random_num = random.randint(1, 2)
             if random_num == 1:
-                ProductoFrio.crear_producto_personalizado(objeto_entrante, ingredientes_necesarios)
+                ProductoFrio.crearProductoPersonalizado(objeto_entrante, ingredientes_necesarios)
             else:
-                ProductoCaliente.crear_producto_personalizado(objeto_entrante, ingredientes_necesarios)
+                ProductoCaliente.crearProductoPersonalizado(objeto_entrante, ingredientes_necesarios)
         except Exception as e:
             return False
 
-        if Producto.verificacion_existencia_por_nombre(objeto_entrante):
+        if ComidaDefault.verificacionExistenciaPorNombre(objeto_entrante):
             if receta:
-                self.gestionAgregarK(Producto.obtener_objeto_por_nombre(objeto_entrante).get_id(), int(cantidad), True)
+                self.gestionAgregarK(Producto.obtenerObjetoPorNombre(objeto_entrante).getId(), int(cantidad), True)
             else:
-                self.gestionAgregarP(Producto.obtener_objeto_por_nombre(objeto_entrante).get_id(), int(cantidad), "1")
+                self.gestionAgregarP(Producto.obtenerObjetoPorNombre(objeto_entrante).getId(), int(cantidad), "1")
             return True
         else:
             return False
 
     def enviarOrdenCanasta(self):
-        productos_cocinados = Cliente.get_sesion().get_panaderia().agregar_productos_a_canasta(self._productosEnLista)
-        ingredientes_cocinados = Cliente.get_sesion().get_panaderia().agregar_ingredientes_a_canasta(self._ingredientesEnLista)
-        kits_cocinados = Cliente.get_sesion().get_panaderia().agregar_kits_a_canasta(self._kitsEnLista)
+        from gestorAplicacion.humanos import Cliente
+        productos_cocinados = Cliente.getSesion().getPanaderia().agregarProductosACanasta(self._productosEnLista)
+        ingredientes_cocinados = Cliente.getSesion().getPanaderia().agregarIngredientesACanasta(self._ingredientesEnLista)
+        kits_cocinados = Cliente.getSesion().getPanaderia().agregarKitsACanasta(self._kitsEnLista)
 
         self.gestionAgregarP(productos_cocinados)
         self.gestionAgregarI(ingredientes_cocinados)
