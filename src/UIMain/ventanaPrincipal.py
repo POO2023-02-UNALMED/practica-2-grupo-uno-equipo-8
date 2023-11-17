@@ -1,5 +1,6 @@
 from tkinter import *
 import tkinter as tk
+from tkinter import messagebox
 
 #Esta clase la cree yo (Richard), diganme si van a hacer algun cambio o si tienen alguna sugerencia
 
@@ -26,13 +27,13 @@ class VentanaPrincipal:
         menu_procesos.add_command(label = "Registrarse", command= lambda: self.cambiarFrame(self.frameRegistro))
         menu_procesos.add_command(label = "Cerrar sesion")
         menu_procesos.add_command(label = "Ir a comprar", command = lambda: self.cambiarFrame(self.frameComprar))
-        menu_procesos.add_command(label = "Ver catalogo de productos y descripcion")
-        menu_procesos.add_command(label = "Lo mejor de nuestra panaderia")
-        menu_procesos.add_command(label = "Ver facturas pasadas")
-        menu_procesos.add_command(label = "Cambiar contraseña")
-        menu_procesos.add_command(label = "Meter plata a mi cuenta")
-        menu_procesos.add_command(label = "Validar tipo de cliente")
-        menu_procesos.add_command(label = "Modificar direccion")
+        menu_procesos.add_command(label = "Ver catalogo de productos y descripcion", command = lambda: self.cambiarFrame(self.frameCatalogo))
+        menu_procesos.add_command(label = "Lo mejor de nuestra panaderia", command = lambda: self.cambiarFrame(self.frameRanking))
+        menu_procesos.add_command(label = "Ver facturas pasadas", command = lambda: self.cambiarFrame(self.frameHistorial))
+        menu_procesos.add_command(label = "Cambiar contraseña", command = lambda: self.cambiarFrame(self.frameContrasena))
+        menu_procesos.add_command(label = "Meter plata a mi cuenta", command = lambda: self.cambiarFrame(self.framePlata))
+        menu_procesos.add_command(label = "Validar tipo de cliente", command = lambda: self.cambiarFrame(self.frameValidarTipo))
+        menu_procesos.add_command(label = "Modificar direccion", command = lambda: self.cambiarFrame(self.frameDireccion))
 
         self.menu_principal.add_cascade(label="Procesos y Consultas", menu=menu_procesos)
         menu_ayuda = tk.Menu(self.menu_principal, tearoff=0)
@@ -123,12 +124,13 @@ class VentanaPrincipal:
 
         #framep1 = Frame(frame, bd = 5, relief=FLAT, padx = 2, pady = 2, bg = "white").grid(row =0 , column = 0)
         #framep2 = Frame(frame, bd = 5, relief=FLAT, padx = 2, pady = 2, bg = "white").grid(row =0 , column = 1)
-        self.frameComprar1 = Frame(self.frameComprar, bg = "blue")
+        self.frameComprar1 = Frame(self.frameComprar)
         self.frameComprar1.grid(row =0 , column = 0, padx = 1, pady=1, sticky="nsew")
-        self.labelfc1 = Label(self.frameComprar1, text="Hola este es un texto de frameComprar1")
+        self.labelfc1 = Label(self.frameComprar1, text="Productos disponibles para comprar")
         self.labelfc1.pack()
-        self.frameComprar2 = Frame(self.frameComprar, bg = "red")
+        self.frameComprar2 = Frame(self.frameComprar)
         self.frameComprar2.grid(row =0 , column = 1, padx = 1, pady=1, sticky="nsew")
+        self.labelfc1 = Label(self.frameComprar2, text="Lista de compras y factura")
 
         # Agregar un Scrollbar
         scrollbar = Scrollbar(self.frameComprar2)
@@ -147,30 +149,44 @@ class VentanaPrincipal:
         
         # frameCatalogo Catalogo de opciones disponibles para comprar
         self.frameCatalogo = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
+        self.LabelCatalogo = Label(self.frameCatalogo, text="Catalogo de productos")
+        self.LabelCatalogo.pack()
         self.frames.append(self.frameCatalogo)
         
         # frameRanking Lo mejor de nuestra panaderia
         self.frameRanking = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
+        self.LabelRanking = Label(self.frameRanking, text="Lo mejor de POOBakery")
+        self.LabelRanking.pack()
         self.frames.append(self.frameRanking)
         
         # frameHistorial Historial de facturas
         self.frameHistorial = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
+        self.LabelHistorial = Label(self.frameHistorial, text="Historial de facturas")
+        self.LabelHistorial.pack()
         self.frames.append(self.frameHistorial)
         
         # frameContrasena cambiar contraseña
         self.frameContrasena = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
+        self.LabelContrasena = Label(self.frameContrasena, text="Cambiar contraseña")
+        self.LabelContrasena.pack()
         self.frames.append(self.frameContrasena)
         
         # framePlata Meter plata a mi cuenta
         self.framePlata = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
+        self.LabelPlata = Label(self.framePlata, text="Meter plata")
+        self.LabelPlata.pack()
         self.frames.append(self.framePlata)
         
         # frameValidarTipo Validar tipo de cliente
         self.frameValidarTipo = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
+        self.LabelValidarTipo = Label(self.frameValidarTipo, text="Validar tipo de cliente")
+        self.LabelValidarTipo.pack()
         self.frames.append(self.frameValidarTipo)
         
         # frameDireccion Modificar direccion
         self.frameDireccion = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
+        self.LabelDireccion = Label(self.frameDireccion, text="Cambiar direccion")
+        self.LabelDireccion.pack()
         self.frames.append(self.frameDireccion)
         
     #Metodos necesiarios para la interfaz de usuario
@@ -179,22 +195,12 @@ class VentanaPrincipal:
         self.cambiarFrame(self.framePrincipal)
     
     def mostrar_info(self):
-        info = '''
-        ¡Bienvenido a la aplicación de POOBakery!
         
-        Con nuestra aplicación, puedes realizar pedidos de postres y otros productos de nuestra panadería desde la comodidad de tu hogar. 
-        Hemos creado una interfaz fácil de usar que te permite navegar por nuestros productos y agregarlos a tu carrito de compras.
-        También puedes guardar tus productos favoritos para futuras compras. 
-        Una vez que hayas agregado los productos que deseas comprar a tu carrito, 
-        puedes realizar el pago de forma segura y sencilla a través de nuestra aplicación.
-        Estamos comprometidos a ofrecerte una experiencia de compra fácil y sin problemas.
-        Si tienes alguna pregunta o problema, no dudes en ponerte en contacto con nosotros a través de nuestra aplicación.
-         
-        ¡Gracias por elegir POOBakery!
-
-         '''
-        self.labelInformacion.config(text=info)
-        self.cambiarFrame(self.frameInfo)
+        info = '''Con nuestra aplicación, puedes realizar pedidos de postres y otros productos de nuestra panadería desde la comodidad de tu hogar. Hemos creado una interfaz fácil de usar que te permite navegar por nuestros productos y agregarlos a tu carrito de compras. También puedes guardar tus productos favoritos para futuras compras. Una vez que hayas agregado los productos que deseas comprar a tu carrito, puedes realizar el pago de forma segura y sencilla a través de nuestra aplicación. Estamos comprometidos a ofrecerte una experiencia de compra fácil y sin problemas. Si tienes alguna pregunta o problema, no dudes en ponerte en contacto con nosotros a través de nuestra aplicación.
+        ¡Gracias por elegir POOBakery!'''
+        messagebox.showinfo("Información", info)
+        #self.labelInformacion.config(text=info)
+        #self.cambiarFrame(self.frameInfo)
         pass
 
     def mostrar_autores(self):
@@ -206,8 +212,9 @@ class VentanaPrincipal:
         Samuel Castaño
         Nicolas Echeverry
          '''
-        self.labelInformacion.config(text=info)
-        self.cambiarFrame(self.frameInfo)
+        messagebox.showinfo("Información", info)
+        #self.labelInformacion.config(text=info)
+        #self.cambiarFrame(self.frameInfo)
         pass
 
     def salir(self):
