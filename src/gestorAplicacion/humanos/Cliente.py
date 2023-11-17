@@ -358,12 +358,14 @@ class Cliente:
         
     # Métodos para la gestión de cuentas de los clientes
 
-    def inicioSesionId(self,id):
+    @staticmethod
+    def inicioSesionId(id):
         for cliente in Cliente._panaderia.getClientes():
             if cliente.getId() == id:
                 return cliente
         return None
 
+    @classmethod
     def inicioSesionContrasena(cls,cliente, contrasena):
         if cliente.getContrasena() == contrasena:
             cls.setSesion(cliente)

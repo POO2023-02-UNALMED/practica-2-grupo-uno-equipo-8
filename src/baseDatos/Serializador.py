@@ -1,10 +1,20 @@
+import os
 import pickle
+
+# Obtener la ruta del directorio donde se encuentra este script
+directorio_actual = os.path.dirname(os.path.abspath(__file__))
+
+# Nombre del archivo pickle
+nombre_archivo_pickle = "panaderia.pickle"
+
+# Crear la ruta al archivo pickle utilizando os.path.join()
+ruta_al_pickle = os.path.join(directorio_actual, nombre_archivo_pickle)
 
 class Serializador:
     @staticmethod
     def guardarPanaderia(panaderia):
         try:
-            with open("panaderia.pickle", "wb") as file:
+            with open(ruta_al_pickle, "wb") as file:
                 pickle.dump(panaderia, file)
                 Serializador.guardarValoresEstaticos(file)
 
@@ -16,7 +26,7 @@ class Serializador:
     def cargarPanaderia():
         panaderia = None
         try:
-            with open("panaderia.pickle", "rb") as file:
+            with open(ruta_al_pickle, "rb") as file:
                 panaderia = pickle.load(file)
                 Serializador.cargarValoresEstaticos(file)
 
@@ -33,12 +43,13 @@ class Serializador:
         from gestorAplicacion.comida.Producto import Producto
         from gestorAplicacion.gestion.Panaderia import Panaderia
         from gestorAplicacion.gestion.Recibo import Recibo
+        from gestorAplicacion.comida.ComidaDefault import ComidaDefault
+
         pickle.dump(Panaderia.getCanastaDelDia(), file)
         pickle.dump(Ingrediente.getBaseDatosIngredientes(), file)
-        file.write(Ingrediente.getCantidadIngredientesUnicos().to_bytes(4, byteorder='big'))
+        file.write(ComidaDefault._contador.to_bytes(4, byteorder='big'))
         pickle.dump(Ingrediente.getTopMasVendidos(), file)
         pickle.dump(Producto.getBaseDatosProductos(), file)
-        file.write(Producto.getCantidadProductosUnicos().to_bytes(4, byteorder='big'))
         pickle.dump(Producto.getTopMasVendidos(), file)
         file.write(Recibo.getTotalFacturas().to_bytes(4, byteorder='big'))
 
@@ -48,11 +59,12 @@ class Serializador:
         from gestorAplicacion.comida.Producto import Producto
         from gestorAplicacion.gestion.Panaderia import Panaderia
         from gestorAplicacion.gestion.Recibo import Recibo
+        from gestorAplicacion.comida.ComidaDefault import ComidaDefault
+
         Panaderia.setCanastaDelDia(pickle.load(file))
         Ingrediente.setBaseDatosIngredientes(pickle.load(file))
-        Ingrediente.setCantidadIngredientesUnicos(int.from_bytes(file.read(4), byteorder='big'))
+        ComidaDefault._contador = int.from_bytes(file.read(4), byteorder='big')
         Ingrediente.setTopMasVendidos(pickle.load(file))
         Producto.setBaseDatosProductos(pickle.load(file))
-        Producto.setCantidadProductosUnicos(int.from_bytes(file.read(4), byteorder='big'))
         Producto.setTopMasVendidos(pickle.load(file))
         Recibo.setTotalFacturas(int.from_bytes(file.read(4), byteorder='big'))

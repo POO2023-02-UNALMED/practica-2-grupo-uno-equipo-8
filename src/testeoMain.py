@@ -11,11 +11,10 @@ class SerializationTest:
     def main(self, args):
         print("Test de funcionamiento")
         panaderia = Panaderia()
-        #panaderia = Serializador.cargarPanaderia()
+        panaderia = Serializador.cargarPanaderia()
         Cliente.setPanaderia(panaderia)
-        #panaderia = Serializador.cargarPanaderia()
         print("panaderia cargada")
-
+        """
         Ingrediente.crearIngrediente("leche")
         Ingrediente.crearIngrediente("harina")
         Ingrediente.crearIngrediente("azucar")
@@ -28,7 +27,7 @@ class SerializationTest:
         Ingrediente.crearIngrediente("queso")
         Ingrediente.crearIngrediente("milo")
         Ingrediente.crearIngrediente("miga de galleta")
-        
+        """
         print("ingredientes creados")
 
         ingredientes_bunuelo = {
@@ -64,13 +63,13 @@ class SerializationTest:
             "azucar": 1,
             "mantequilla": 1
         }
-
+        """
         Producto.crearProductoPersonalizado("bunuelo", ingredientes_bunuelo)
         Producto.crearProductoPersonalizado("rollos de canela", ingredientes_rollos_canela)
         Producto.crearProductoPersonalizado("brownie", ingredientes_brownie)
         Producto.crearProductoPersonalizado("torta de milo", ingredientes_torta_milo)
         Producto.crearProductoPersonalizado("cheesecake", ingredientes_cheesecake)
-
+        """
         for i in Ingrediente._baseDatosIngredientes:
             print(i.getId() , i.getNombre(), i.getPrecioDeCompra(), i.getPrecioDeVenta())
 
@@ -80,20 +79,22 @@ class SerializationTest:
         
 
         print("productos creados")
-
+        """
         cliente1 = Cliente()
         cliente1.crearCuenta("Sahely", 1123433775, "123")
         cliente1.crearCuenta("Richard", 202, "qwerty")
         Cliente.getSesion().setPresupuesto(30000)
-
+        """
+        cliente1 = Cliente.inicioSesionId(202)
+        Cliente.inicioSesionContrasena(cliente1, "qwerty")
         print("Cliente en sesion: " + Cliente.getSesion().getNombre())
         print("clientes creados")
-
+        """
         domiciliario1 = Domiciliario("Nico", panaderia)
         domiciliario2 = Domiciliario("Sasha", panaderia)
         domiciliario2.setHabilidad(9)
         cocinero1 = Cocinero("Samuel", "Decoracion", panaderia)
-        
+        """
         for i in panaderia.getTrabajadores():
             print(i.getNombre())
 
@@ -115,16 +116,19 @@ class SerializationTest:
             "16": 5,
             "17": 3
         }
-
+        """
         Cliente.getSesion().crearCanastaNueva()
+        """
+        print()
         a=Cliente.getSesion().getCanastaOrden()
+        """
         print(a.recibir_orden("13", "3",False))
         a.recibir_orden("14", "2",False)
         a.recibir_orden("15", "1",True)
         a.recibir_orden("3", "3",False)
         a.recibir_orden("13", "3",False)
         print("canasta creada")
-
+        """
         print(a.getProductosEnLista())
         print(a.getIngredientesEnLista())
         print(a.getKitsEnLista())
@@ -137,13 +141,13 @@ class SerializationTest:
             "azucar": 1,
             "mantequilla": 1
         }
-
+        """
         print(a.recibirOrdenPersonalizada("marmota", ingredientes_marmota, "3",False))
 
         print(a.getProductosEnLista())
         print(a.getIngredientesEnLista())
         print(a.getKitsEnLista())
-
+        """
         print("Elementos personalizados añadidos correctamente a la canasta")
         #panaderia.cocinar(ingredientes_cocinar)
     
