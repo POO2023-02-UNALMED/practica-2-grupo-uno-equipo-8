@@ -2,6 +2,8 @@ from tkinter import *
 import tkinter as tk
 from tkinter import messagebox
 
+from ErrorAplicacion import CamposVaciosError
+
 #Esta clase la cree yo (Richard), diganme si van a hacer algun cambio o si tienen alguna sugerencia
 
 class VentanaPrincipal:
@@ -189,10 +191,31 @@ class VentanaPrincipal:
         self.LabelDireccion.pack()
         self.frames.append(self.frameDireccion)
         
-    #Metodos necesiarios para la interfaz de usuario
+        #Metodos necesiarios para la interfaz de usuario
+    def verificar_campos_llenos(self, campos):  # Asegúrate de pasar 'self' como primer argumento
+        campos_vacios = [campo for campo in campos if len(campo) == 0]
+        if campos_vacios:
+            raise CamposVaciosError(campos_vacios)
+
     def iniciar_sesion(self):
-        #aqui deberia haber algun condicional para ver si el usuario si existe
-        self.cambiarFrame(self.framePrincipal)
+        while True:  # Se ejecutará hasta que se ingresen los datos correctamente o se cancele
+            usuario = self.entry_usuario.get()
+            contrasena = self.entry_contrasena.get()
+
+            try:
+                campos = [usuario, contrasena]
+                self.verificar_campos_llenos(campos)
+                # Aquí podrías validar si el usuario y la contraseña son correctos antes de cambiar el frame
+                self.cambiarFrame(self.framePrincipal)
+                break  # Sale del bucle si los campos son válidos
+            except CamposVaciosError as e:
+                
+                mensaje = f"Por favor, complete los campos: {', '.join(e.campos_faltantes)}"
+                messagebox.showwarning("Campos Vacíos", mensaje)
+                # Reinicia los campos de entrada para permitir al usuario ingresar nuevamente
+                self.entry_usuario.delete(0, 'end')
+                self.entry_contrasena.delete(0, 'end')
+                break  # Sale del bucle para permitir al usuario reintentar el inicio de sesión
     
     def mostrar_info(self):
         

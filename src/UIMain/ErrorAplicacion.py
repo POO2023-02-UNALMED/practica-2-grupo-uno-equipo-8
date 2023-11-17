@@ -16,7 +16,8 @@ class ErrorTipoA(ErrorAplicacion):
 class CamposVaciosError(ErrorTipoA):
     def __init__(self, campos_faltantes):
         self.campos_faltantes = campos_faltantes
-        super().__init__("Campos faltantes: {}".format(", ".join(campos_faltantes)))
+        mensaje = "Campos faltantes: {}".format(", ".join(campos_faltantes))
+        super().__init__(mensaje)
         
 """"
 def verificar_campos_llenos(campos):
