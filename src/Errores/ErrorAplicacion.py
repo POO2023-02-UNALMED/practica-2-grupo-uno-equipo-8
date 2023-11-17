@@ -62,9 +62,31 @@ except ErrorSinPresupuesto as e:
     messagebox.showwarning("Advertencia", mensaje)  # Muestra una ventana de advertencia
 """#Este metodo o una logica parecida debe ir en la clase de la ventana
 
-class ErrorTipoA3(ErrorTipoA):
-    def __init__(self, message="Error de Tipo A - 3: "):
-        super().__init__(message)
+class CantidadInvalidaError(ErrorTipoA):
+    def __init__(self, cantidad):
+        self.cantidad = cantidad
+        super().__init__(f"Cantidad inválida: {cantidad}")
+        
+""""
+def verificar_cantidad(cantidad, limite):
+    try:
+        cantidad = float(cantidad)  # Convertir a float para verificar si es un número
+        if cantidad < 0:
+            raise CantidadInvalidaError(cantidad)
+        if cantidad >= limite:
+            raise CantidadInvalidaError(cantidad)
+    except ValueError:
+        raise CantidadInvalidaError(cantidad)
+
+# Ejemplo de uso
+try:
+    cantidad = 10  # Cantidad a verificar
+    limite = 5  # Límite que debe ser menor
+    verificar_cantidad(cantidad, limite)
+    print("La cantidad es válida.")  # Si pasa la verificación
+except CantidadInvalidaError as e:
+    print(e)  # Manejo del error: muestra el mensaje de cantidad inválida
+"""#Este metodo o una logica parecida debe ir en la clase de la ventana
         
 class ErrorTipoB(ErrorAplicacion):
     def __init__(self, message="Error de Tipo B: "):
@@ -98,10 +120,42 @@ except UsuarioNoEncontradoError as e:
     messagebox.showwarning("Error", mensaje)  # Muestra una ventana de advertencia
 """#Este metodo o una logica parecida debe ir en la clase de la ventana
     
-class ErrorTipoB2(ErrorTipoB):
-    def __init__(self, message="Error de Tipo B - 2: "):
+class ProductoNoEncontradoError(ErrorTipoB):
+    def __init__(self, producto):
+        self.producto = producto
+        super().__init__(f"El producto '{producto}' no está disponible en la panadería.")
+        
+""""
+def verificar_existencia_producto(producto, inventario):
+    if producto not in inventario:
+        raise ProductoNoEncontradoError(producto)
+
+# Ejemplo de uso
+try:
+    inventario = ['Pan', 'Leche', 'Galletas', 'Torta']
+    producto_buscado = 'Tostadas'
+
+    verificar_existencia_producto(producto_buscado, inventario)
+    print(f"El producto '{producto_buscado}' está disponible.")
+
+except ProductoNoEncontradoError as e:
+    print("Error:", e)  # Manejo del error, muestra el mensaje de producto no encontrado
+"""#Este metodo o una logica parecida debe ir en la clase de la ventana
+        
+class CanastaVaciaError(ErrorTipoB):
+    def __init__(self, message="La canasta está vacía"):
         super().__init__(message)
         
-class ErrorTipoB3(ErrorTipoB):
-    def __init__(self, message="Error de Tipo B - 3: "):
-        super().__init__(message)
+""""
+def verificar_canasta_vacia(canasta):
+    if not canasta:
+        raise CanastaVaciaError("La canasta está vacía. Agrega productos para realizar la compra.")
+
+# Ejemplo de uso
+try:
+    canasta = []  # Lista vacía
+    verificar_canasta_vacia(canasta)
+    print("La canasta tiene productos, puedes proceder con la compra.")
+except CanastaVaciaError as e:
+    print("Error:", e)
+"""#Este metodo o una logica parecida debe ir en la clase de la ventana
