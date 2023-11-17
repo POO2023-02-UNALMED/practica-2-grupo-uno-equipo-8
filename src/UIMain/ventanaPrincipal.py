@@ -210,7 +210,7 @@ class VentanaPrincipal:
                 break  # Sale del bucle si los campos son válidos
             except CamposVaciosError as e:
                 
-                mensaje = f"Por favor, complete los campos: {', '.join(e.campos_faltantes)}"
+                mensaje = f"Por favor, complete los campos: {len(e.campos_faltantes)} usuario y/o contraseña"
                 messagebox.showwarning("Campos Vacíos", mensaje)
                 # Reinicia los campos de entrada para permitir al usuario ingresar nuevamente
                 self.entry_usuario.delete(0, 'end')
