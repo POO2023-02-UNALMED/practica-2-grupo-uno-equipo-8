@@ -117,30 +117,33 @@ class VentanaPrincipal:
         # frameComprar Ir a comprar
         self.frameComprar = Frame(root, bd = 1, relief=FLAT, padx = 1, pady = 1)
         self.frames.append(self.frameComprar)
-        #self.frameComprar.pack(padx = 5, pady = 5, fill = "both", expand=True)
         tk.Grid.rowconfigure(self.frameComprar,0, weight=1)
-        #tk.Grid.rowconfigure(frame,1, weight=1)
-        tk.Grid.columnconfigure(self.frameComprar,0, weight=1)
+        tk.Grid.columnconfigure(self.frameComprar,0, weight=6)
         tk.Grid.columnconfigure(self.frameComprar,1, weight=1)
 
         #framep1 = Frame(frame, bd = 5, relief=FLAT, padx = 2, pady = 2, bg = "white").grid(row =0 , column = 0)
         #framep2 = Frame(frame, bd = 5, relief=FLAT, padx = 2, pady = 2, bg = "white").grid(row =0 , column = 1)
-        self.frameComprar1 = Frame(self.frameComprar, bg = "blue").grid(row =0 , column = 0, padx = 1, pady=1, sticky="nsew")
-        self.frameComprar2 = Frame(self.frameComprar, bg = "red").grid(row =0 , column = 1, padx = 1, pady=1, sticky="nsew")
+        self.frameComprar1 = Frame(self.frameComprar, bg = "blue")
+        self.frameComprar1.grid(row =0 , column = 0, padx = 1, pady=1, sticky="nsew")
+        self.labelfc1 = Label(self.frameComprar1, text="Hola este es un texto de frameComprar1")
+        self.labelfc1.pack()
+        self.frameComprar2 = Frame(self.frameComprar, bg = "red")
+        self.frameComprar2.grid(row =0 , column = 1, padx = 1, pady=1, sticky="nsew")
+
         # Agregar un Scrollbar
-        self.scrollbar = Scrollbar(self.frameComprar2)
-        self.scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        scrollbar = Scrollbar(self.frameComprar2)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
 
         # Agregar un widget de Texto
-        #self.texto_widget = Text(self.frameComprar2, wrap=tk.WORD, yscrollcommand=self.scrollbar.set)
-        #self.texto_widget.pack(fill=tk.BOTH, expand=True)
+        self.texto_widget = Text(self.frameComprar2, wrap=tk.WORD, yscrollcommand=scrollbar.set, width = 60)
+        self.texto_widget.pack(fill=tk.Y, expand=True)
 
         # Configurar el Scrollbar para que funcione con el widget de Texto
-        #self.scrollbar.config(command=self.texto_widget.yview)
+        scrollbar.config(command=self.texto_widget.yview)
 
         # Puedes agregar texto de ejemplo
-        #self.ejemplo_texto = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. ..."
-        #self.texto_widget.insert(tk.END, self.ejemplo_texto)
+        ejemplo_texto = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. ..."
+        self.texto_widget.insert(tk.END, ejemplo_texto)
         
         # frameCatalogo Catalogo de opciones disponibles para comprar
         self.frameCatalogo = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
