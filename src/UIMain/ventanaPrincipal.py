@@ -2,7 +2,7 @@ from tkinter import *
 import tkinter as tk
 from tkinter import messagebox
 
-from ErrorAplicacion import CamposVaciosError
+from ErrorAplicacion import CamposVaciosError, UsuarioNoEncontradoError
 
 #Esta clase la cree yo (Richard), diganme si van a hacer algun cambio o si tienen alguna sugerencia
 
@@ -203,9 +203,16 @@ class VentanaPrincipal:
         campos_vacios = [campo for campo in campos if len(campo) == 0]
         if campos_vacios:
             raise CamposVaciosError(campos_vacios)
+        
+    def verificar_existencia_usuario(self, usuario):
+        # Lógica para verificar si el usuario existe
+        # Podrías usar alguna base de datos o alguna estructura de datos para almacenar usuarios y verificar su existencia
+        # Por ejemplo, si tienes una lista de usuarios, podrías hacer algo como esto:
+        # return usuario in self.lista_de_usuarios
+        return False  # Aquí devolverías True si el usuario existe y False si no existe
 
     def iniciar_sesion(self):
-        while True:  # Se ejecutará hasta que se ingresen los datos correctamente o se cancele
+        while True:
             usuario = self.entry_usuario.get()
             contrasena = self.entry_contrasena.get()
 
@@ -213,13 +220,20 @@ class VentanaPrincipal:
                 campos = [usuario, contrasena]
                 self.verificar_campos_llenos(campos)
                 # Aquí podrías validar si el usuario y la contraseña son correctos antes de cambiar el frame
-                self.cambiarFrame(self.framePrincipal)
-                break  # Sale del bucle si los campos son válidos
-            except CamposVaciosError as e:
+                # Agregar lógica para verificar la existencia del usuario
+                if not self.verificar_existencia_usuario(usuario):
+                    raise UsuarioNoEncontradoError(usuario)
                 
+                self.cambiarFrame(self.framePrincipal)
+                break  # Sale del bucle si los campos son válidos y el usuario existe
+            except CamposVaciosError as e:
                 mensaje = f"Por favor, complete los campos: {len(e.campos_faltantes)} usuario y/o contraseña"
                 messagebox.showwarning("Campos Vacíos", mensaje)
-                # Reinicia los campos de entrada para permitir al usuario ingresar nuevamente
+                self.entry_usuario.delete(0, 'end')
+                self.entry_contrasena.delete(0, 'end')
+                break  # Sale del bucle para permitir al usuario reintentar el inicio de sesión
+            except UsuarioNoEncontradoError as e:
+                messagebox.showwarning("Usuario no encontrado", f"El usuario '{e.usuario}' no fue encontrado.")
                 self.entry_usuario.delete(0, 'end')
                 self.entry_contrasena.delete(0, 'end')
                 break  # Sale del bucle para permitir al usuario reintentar el inicio de sesión
