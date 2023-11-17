@@ -153,42 +153,49 @@ class VentanaPrincipal:
         self.frameCatalogo = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
         self.LabelCatalogo = Label(self.frameCatalogo, text="Catalogo de productos")
         self.LabelCatalogo.pack()
+        #usar fieldframe aqui ...
         self.frames.append(self.frameCatalogo)
         
         # frameRanking Lo mejor de nuestra panaderia
         self.frameRanking = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
         self.LabelRanking = Label(self.frameRanking, text="Lo mejor de POOBakery")
         self.LabelRanking.pack()
+        #usar fieldframe aqui ...
         self.frames.append(self.frameRanking)
         
         # frameHistorial Historial de facturas
         self.frameHistorial = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
         self.LabelHistorial = Label(self.frameHistorial, text="Historial de facturas")
         self.LabelHistorial.pack()
+        #usar fieldframe aqui ...
         self.frames.append(self.frameHistorial)
         
         # frameContrasena cambiar contraseña
         self.frameContrasena = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
         self.LabelContrasena = Label(self.frameContrasena, text="Cambiar contraseña")
         self.LabelContrasena.pack()
+        #usar fieldframe aqui ...
         self.frames.append(self.frameContrasena)
         
         # framePlata Meter plata a mi cuenta
         self.framePlata = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
         self.LabelPlata = Label(self.framePlata, text="Meter plata")
         self.LabelPlata.pack()
+        #usar fieldframe aqui ...
         self.frames.append(self.framePlata)
         
         # frameValidarTipo Validar tipo de cliente
         self.frameValidarTipo = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
         self.LabelValidarTipo = Label(self.frameValidarTipo, text="Validar tipo de cliente")
         self.LabelValidarTipo.pack()
+        #usar fieldframe aqui ...
         self.frames.append(self.frameValidarTipo)
         
         # frameDireccion Modificar direccion
         self.frameDireccion = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
         self.LabelDireccion = Label(self.frameDireccion, text="Cambiar direccion")
         self.LabelDireccion.pack()
+        #usar fieldframe aqui ...
         self.frames.append(self.frameDireccion)
         
         #Metodos necesiarios para la interfaz de usuario
