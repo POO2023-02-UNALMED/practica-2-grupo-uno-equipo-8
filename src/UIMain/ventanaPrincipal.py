@@ -2,6 +2,7 @@ from tkinter import *
 import tkinter as tk
 from tkinter import messagebox
 from tkinter import ttk
+from PIL import Image, ImageTk
 
 from ErrorAplicacion import CamposVaciosError, UsuarioNoEncontradoError
 
@@ -56,8 +57,12 @@ class VentanaPrincipal:
         self.framePrincipal.pack()
         self.frameActual = self.framePrincipal
         self.frames.append(self.framePrincipal)
-        self.labelp1 = Label(self.framePrincipal, text="Bienvenido a pooBakery, este es el menu")
-        self.labelp1.pack()
+        #self.labelp1 = Label(self.framePrincipal, text="Entra a procesos y consultas para empezar a comprar")
+        #self.labelp1.pack()
+        self.imagen1 = Image.open('src/resources/logoBienvenida.png')
+        self.imagen_1tk = ImageTk.PhotoImage(self.imagen1)
+        self.labelBienvenida = Label(self.framePrincipal, image = self.imagen_1tk)
+        self.labelBienvenida.pack()
         
         # frameSesion inicio de sesion
         self.frameSesion = Frame( #Esto esta pendiente de ser adaptado con fieldFrames
@@ -177,15 +182,20 @@ class VentanaPrincipal:
         ejemplo_texto = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. ..."
         self.texto_widget.insert(tk.END, ejemplo_texto)
         
+
         # frameCatalogo Catalogo de opciones disponibles para comprar
         self.frameCatalogo = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
         self.LabelCatalogo = Label(self.frameCatalogo, text="Catalogo de productos")
         self.BotonAtrasCatalogo = Button(self.frameCatalogo, text="volver atras", command= self.volverAtras)
         self.BotonAtrasCatalogo.pack(side=BOTTOM, pady=40)
         self.LabelCatalogo.pack()
-        #usar fieldframe aqui ...
+        
+        
+
         self.frames.append(self.frameCatalogo)
         
+
+
         # frameRanking Lo mejor de nuestra panaderia
         self.frameRanking = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
         self.LabelRanking = Label(self.frameRanking, text="Lo mejor de POOBakery")
