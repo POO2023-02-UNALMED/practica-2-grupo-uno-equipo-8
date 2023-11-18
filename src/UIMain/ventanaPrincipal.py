@@ -145,7 +145,7 @@ class VentanaPrincipal:
         self.labelfc1_3 = Label(self.frameComprar1, text="Elija una cantidad")
         self.labelfc1_3.pack(pady = 5)
         
-        self.botonIrCatalogo = tk.Button(self.frameComprar1, text="Ir al catalogo")
+        self.botonIrCatalogo = tk.Button(self.frameComprar1, text="Ir al catalogo", command = lambda: self.cambiarFrame(self.frameCatalogo))
         self.botonIrCatalogo.pack(side="bottom", pady=50)
 
         self.botonCocinar = tk.Button(self.frameComprar1, text="Cocinar producto personalizado")
@@ -180,6 +180,8 @@ class VentanaPrincipal:
         # frameCatalogo Catalogo de opciones disponibles para comprar
         self.frameCatalogo = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
         self.LabelCatalogo = Label(self.frameCatalogo, text="Catalogo de productos")
+        self.BotonAtrasCatalogo = Button(self.frameCatalogo, text="volver atras", command= self.volverAtras)
+        self.BotonAtrasCatalogo.pack(side=BOTTOM, pady=40)
         self.LabelCatalogo.pack()
         #usar fieldframe aqui ...
         self.frames.append(self.frameCatalogo)
