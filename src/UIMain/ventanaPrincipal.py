@@ -2,7 +2,6 @@ from tkinter import *
 import tkinter as tk
 from tkinter import messagebox
 from tkinter import ttk
-from PIL import Image, ImageTk
 
 from ErrorAplicacion import CamposVaciosError, UsuarioNoEncontradoError
 
@@ -59,8 +58,7 @@ class VentanaPrincipal:
         self.frames.append(self.framePrincipal)
         #self.labelp1 = Label(self.framePrincipal, text="Entra a procesos y consultas para empezar a comprar")
         #self.labelp1.pack()
-        self.imagen1 = Image.open('src/resources/logoBienvenida.png')
-        self.imagen_1tk = ImageTk.PhotoImage(self.imagen1)
+        self.imagen_1tk = tk.PhotoImage(file='src/resources/logoBienvenida.png')
         self.labelBienvenida = Label(self.framePrincipal, image = self.imagen_1tk)
         self.labelBienvenida.pack()
         
