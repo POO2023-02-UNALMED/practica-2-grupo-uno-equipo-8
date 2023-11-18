@@ -6,6 +6,7 @@ from tkinter import ttk
 from ErrorAplicacion import CamposVaciosError, UsuarioNoEncontradoError
 
 #Esta clase la cree yo (Richard), diganme si van a hacer algun cambio o si tienen alguna sugerencia
+#Los errores los esta manejando samuel
 
 class VentanaPrincipal:
     def __init__(self, root):
@@ -191,8 +192,6 @@ class VentanaPrincipal:
 
         #El catalogo va a ser una fila de 3 productos,
 
-        #copiare a partir de aqui
-
         # Crear un canvas con un scrollbar
         self.canvas = tk.Canvas(self.frameCatalogo2)
         scrollbar = tk.Scrollbar(self.frameCatalogo2, orient="vertical", command=self.canvas.yview)
@@ -229,17 +228,28 @@ class VentanaPrincipal:
 
         self.BotonAtrasCatalogo = Button(self.frameCatalogo, text="volver atras", command= self.volverAtras)
         self.BotonAtrasCatalogo.pack()
-        
-        
 
+        # frameDescripcion Descripcion de los productos
+        self.frameDescripcion = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
+        self.frames.append(self.frameDescripcion)
+        self.LabelDescripcion = Label(self.frameDescripcion)
+        self.LabelDescripcion.pack(pady = 15)
+        self.fotoDescripcion = Label(self.frameDescripcion)
+        self.fotoDescripcion.pack(pady=15)
+        self.LabelDescripcion2 = Label(self.frameDescripcion) #En este label va a ir la calificacion del producto
+        self.LabelDescripcion2.pack(pady = 15)
+        self.LabelDescripcion3 = Label(self.frameDescripcion) #En este label va a ir la descripcion del producto
+        self.LabelDescripcion3.pack(pady = 15)
+        self.botonAtrasDescripcion = Button(self.frameDescripcion, text = "Volver al catalogo", command= self.volverAtras)
+        self.botonAtrasDescripcion.pack(side="bottom", pady=15)
 
-        # frameRanking Lo mejor de nuestra panaderia
+        #frameRanking Lo mejor de nuestra panaderia
         self.frameRanking = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
         self.LabelRanking = Label(self.frameRanking, text="Lo mejor de POOBakery")
         self.LabelRanking.pack()
         #usar fieldframe aqui ...
         self.frames.append(self.frameRanking)
-        
+                
         # frameHistorial Historial de facturas
         self.frameHistorial = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
         self.LabelHistorial = Label(self.frameHistorial, text="Historial de facturas")
@@ -364,8 +374,10 @@ class VentanaPrincipal:
     def salir(self):
         self.root.destroy()
 
-    def cambiarFrame(self, frame):
-        self.frameAnterior = self.frameActual
+    def cambiarFrame(self, frame, guardarComoFrameAnterior = True):
+        if guardarComoFrameAnterior == True:
+            self.frameAnterior = self.frameActual
+
         for f in self.frames:
             if f == frame:
                 f.pack(padx = 5, pady = 5, fill = "both", expand=True)
@@ -376,8 +388,7 @@ class VentanaPrincipal:
     def volverAtras(self):
         self.cambiarFrame(self.frameAnterior)
 
-    def agregarAlCatalogo(self, nombre, foto = None):
-
+    def agregarAlCatalogo(self, nombre, foto = None, descripcion = "Este producto aun no tiene descripcion, pero te invitamos a probarlo" , calificacion = "☆☆☆☆☆"):
         if foto == None:
             foto = self.iconoDefault
 
@@ -385,7 +396,7 @@ class VentanaPrincipal:
         self.contadorCatalogo.set(self.contadorCatalogo.get() + 1)
 
         # Crear un botón con una imagen y un nombre
-        boton = tk.Button(self.frameCatalogo3, text=nombre, image = foto, compound="top")
+        boton = tk.Button(self.frameCatalogo3, text=nombre, image = foto, compound="top", command = lambda: self.mostrarDescripcion(nombre, foto, descripcion, calificacion))
 
         # Colocar el botón en el grid según el contador
         fila = (self.contadorCatalogo.get() - 1) // 3
@@ -395,6 +406,14 @@ class VentanaPrincipal:
         # Actualizar el tamaño del frame y el canvas
         self.frameCatalogo3.update_idletasks()
         self.canvas.config(scrollregion=self.canvas.bbox("all"))
+
+    def mostrarDescripcion(self, nombre, foto, descripcion, calificacion):
+        self.cambiarFrame(self.frameDescripcion, False)
+        self.LabelDescripcion.config(text="Descripcion de "+ nombre)
+        self.fotoDescripcion.config(image = foto)
+        self.LabelDescripcion2.config(text = "Calificacion de nuestros clientes: "+calificacion)
+        self.LabelDescripcion3.config(text = descripcion)
+
         
 
 # Codigo que produce la ejecucion de la ventana cuando se ejecuta desde este archivo
