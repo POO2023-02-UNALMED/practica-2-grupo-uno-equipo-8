@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import FLAT, Menu
-from PIL import Image, ImageTk
+from tkinter import StringVar
 from tkinter import PhotoImage
 from tkinter import messagebox
 
@@ -19,7 +19,7 @@ class VentanaInicio:
         self.master.geometry("1000x800")
 
         # Crear Frames
-        self.frame = tk.Frame(master, bd=1, relief=FLAT, padx=1, pady=1, bg="green")
+        self.frame = tk.Frame(master, bd=1, relief=FLAT, padx=1, pady=1, bg="#FCD9EF")
         self.frame.pack(padx=5, pady=5, fill="both", expand=True)
 
         # Configuración de la expansión
@@ -41,7 +41,7 @@ class VentanaInicio:
         tk.Grid.rowconfigure(self.frame_derecha, 1, weight=3)
         tk.Grid.columnconfigure(self.frame_derecha, 0, weight=1)
 
-        self.frame_arriba_izquierda = tk.Frame(self.frame_izquierda, bg="red")
+        self.frame_arriba_izquierda = tk.Frame(self.frame_izquierda, bg="#DCF7F0")
         self.frame_arriba_izquierda.grid(row=0, column=0, sticky="nsew")
 
         self.frame_abajo_izquierda = tk.Frame(self.frame_izquierda, bg="blue")
@@ -55,37 +55,34 @@ class VentanaInicio:
 
         # Elementos en la parte superior izquierda
         self.label_bienvenida = tk.Label(self.frame_arriba_izquierda, text="¡Bienvenido a POO Bakery!", font=("Arial", 15))
-        self.label_bienvenida.pack(pady=10)
+        self.label_bienvenida.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
         # Elementos en la parte superior derecha
-        self.text_hoja_vida = tk.Text(self.frame_arriba_derecha, wrap=tk.WORD, width=40, height=10)
-        self.text_hoja_vida.insert(tk.END, "Hoja de vida del desarrollador 1\n\n[Detalles del desarrollador 1]")
+
+
+        self.text_hoja_vida = tk.Label(self.frame_arriba_derecha, width=40, height=10, anchor="center", cursor="hand1", relief="groove", borderwidth=5, text="Hoja de vida del desarrollador 1\n\nSahely, una joven apasionada por el conocimiento, cumple años un día después de la entrega de este trabajo y espera un gran regalo de cumpleaños.\n\nEstudiosa y encantadora, su amor por el color rosa es evidente en cada aspecto de su vida. Aunque ama la brujería y practica amarres para esparcir alegría, tiene un miedo irracional a las palomas.\n\nCon su cumpleaños cercano, su mayor deseo es triunfar en su proyecto de Programación Orientada a Objetos, una meta que aborda con determinación y energía. Su vida está llena de colores vibrantes, amor por el conocimiento y una determinación inquebrantable para superar sus miedos y alcanzar sus metas.")
         self.text_hoja_vida.pack(expand=True, fill='both', pady=5)
+        self.text_hoja_vida.configure(wraplength=380, justify="center")
         self.text_hoja_vida.configure(state=tk.DISABLED)
 
         # Elementos en la parte inferior izquierda
         self.button_ingreso = tk.Button(self.frame_abajo_izquierda, text="Ingresar al Sistema", command=self.ingresar_sistema, height=3, width=20, font=("Arial", 13))
         self.button_ingreso.pack(side=tk.BOTTOM, pady=40)
 
-        # Canvas para mostrar la imagen
-        self.canvas_imagen = tk.Canvas(self.frame_abajo_izquierda, bg="white", width=400, height=300)
-        self.canvas_imagen.pack(fill='x', expand=True, pady=10, side=tk.BOTTOM)
-        # Evento al cambiar el tamaño del Canvas
+        self.indice_imagen_actual = 0
+        self.imagenes = [PhotoImage(file=f"../resources/imagen{i+1}.png").subsample(1) for i in range(5)]
 
-        # Rutas de las imágenes asociadas al sistema
-        self.rutas_imagenes_sistema = [f"../resources/imagen{i}.png" for i in range(1, 6)]
-        # Lista para almacenar objetos PhotoImage
-        self.imagenes_sistema = [PhotoImage() for _ in range(5)]
+        self.label_imagen = tk.Label(self.frame_abajo_izquierda, bg="white", width=400, height=300)
+        self.label_imagen.pack(fill='x', expand=True, pady=10, side=tk.BOTTOM)
+        self.label_imagen.bind("<Enter>", self.mostrar_siguiente_imagen)
+
+        # Mostrar la primera imagen al inicio
+        self.label_imagen.configure(image=self.imagenes[self.indice_imagen_actual])
+        self.label_imagen.image = self.imagenes[self.indice_imagen_actual]  # Mantener una referencia a la imagen
 
         # Inicializar el índice actual de la imagen
-        self.indice_imagenes = 0
+        #self.canvas_imagen.bind("<Configure>", self.configurar_ancho_imagen)
 
-        # Cargar la imagen inicial
-        self.cargar_imagen()
-        self.canvas_imagen.bind("<Configure>", self.configurar_ancho_imagen)
-
-        # Evento al pasar el ratón sobre el canvas_imagen
-        self.canvas_imagen.bind("<Enter>", self.mostrar_siguiente_imagen)
 
         # Nueva configuración de Frames
         for i in range(2):
@@ -94,34 +91,52 @@ class VentanaInicio:
         for i in range(2):
             tk.Grid.rowconfigure(self.frame_abajo_derecha, i, weight=1)
 
-        # Canvas
-        self.canvas_imagen1 = tk.Canvas(self.frame_abajo_derecha, bg="white")
-        self.canvas_imagen1.grid(row=0, column=0, sticky="nsew")
+        # Imágenes
+        self.rutas_imagenes_desarrollador = [
+            [f"../resources/desarrollador{desarrollador + 1}{i + 1}.png" for i in range(4)] for desarrollador in range(5)
+        ]
 
-        self.canvas_imagen2 = tk.Canvas(self.frame_abajo_derecha, bg="white")
-        self.canvas_imagen2.grid(row=0, column=1, sticky="nsew")
-
-        self.canvas_imagen3 = tk.Canvas(self.frame_abajo_derecha, bg="white")
-        self.canvas_imagen3.grid(row=1, column=0, sticky="nsew")
-
-        self.canvas_imagen4 = tk.Canvas(self.frame_abajo_derecha, bg="white")
-        self.canvas_imagen4.grid(row=1, column=1, sticky="nsew")
-
-        # Rutas de las imágenes asociadas al sistema
-        self.rutas_imagenes_desarrollador = [[f"../resources/desarrollador{i}{j}.png" for j in range(1, 5)] for i in range(1, 6)]
         # Lista para almacenar objetos PhotoImage
-        self.imagenes_canvas = [[PhotoImage() for _ in range(4)] for _ in range(5)]
-        
-        # Inicializar el índice actual de las imágenes del desarrollador
-        self.indice_desarrollador = 0
-        self.indice_hoja_vida = 0
-        # Cargar las imágenes en los Canvas
-        self.cargar_imagenes_canvas()
-        # Evento al cambiar el tamaño de la ventana
-        self.master.bind("<Configure>", self.configurar_tamanio_canvas)
+        self.imagenes_desarrollador = [
+            [PhotoImage(file=image_path) for image_path in desarrollador_images] for desarrollador_images in self.rutas_imagenes_desarrollador
+        ]
 
+        # Labels para mostrar las imágenes
+        self.labels_imagenes = [
+            [
+                tk.Label(self.frame_abajo_derecha, bg="white", image=self.imagenes_desarrollador[desarrollador][i])
+                for i in range(4)
+            ] for desarrollador in range(5)
+        ]
+
+        tamaño_imagenes = (150, 150)  # El tamaño que desees para las imágenes
+        # Labels para mostrar las imágenes
+        self.label_imagen1 = tk.Label(self.frame_abajo_derecha, bg="white", width=tamaño_imagenes[0], height=tamaño_imagenes[1])
+        self.label_imagen1.grid(row=0, column=0, sticky="nsew")
+
+        self.label_imagen2 = tk.Label(self.frame_abajo_derecha, bg="white", width=tamaño_imagenes[0], height=tamaño_imagenes[1])
+        self.label_imagen2.grid(row=0, column=1, sticky="nsew")
+
+        self.label_imagen3 = tk.Label(self.frame_abajo_derecha, bg="white", width=tamaño_imagenes[0], height=tamaño_imagenes[1])
+        self.label_imagen3.grid(row=1, column=0, sticky="nsew")
+
+        self.label_imagen4 = tk.Label(self.frame_abajo_derecha, bg="white", width=tamaño_imagenes[0], height=tamaño_imagenes[1])
+        self.label_imagen4.grid(row=1, column=1, sticky="nsew")
+
+        self.label_imagen1.configure(image=self.imagenes_desarrollador[0][0])
+        self.label_imagen2.configure(image=self.imagenes_desarrollador[0][1])
+        self.label_imagen3.configure(image=self.imagenes_desarrollador[0][2])
+        self.label_imagen4.configure(image=self.imagenes_desarrollador[0][3])
+
+        for i, label in enumerate([self.label_imagen1, self.label_imagen2, self.label_imagen3, self.label_imagen4]):
+            imagen = self.imagenes_desarrollador[0][i]  # Utiliza la primera lista de imágenes, correspondiente al primer desarrollador
+            imagen_resized = imagen.subsample(3)  # Escala la imagen a la mitad, puedes ajustar este valor según tus necesidades
+            label.configure(image=imagen_resized)
+            label.image = imagen_resized  # Mantener una referencia a la imagen para evitar que el recolector de basura la elimine
+
+        self.indice_hoja_vida = 0
         # Menú de cambio de hoja de vida
-        self.menu_hoja_vida = ["Hoja de vida del desarrollador 1\n\n[Detalles del desarrollador 1]", "Hoja de vida del desarrollador 2\n\n[Detalles del desarrollador 2]", "Hoja de vida del desarrollador 3\n\n[Detalles del desarrollador 3]", "Hoja de vida del desarrollador 4\n\n[Detalles del desarrollador 4]", "Hoja de vida del desarrollador 5\n\n[Detalles del desarrollador 5]"]
+        self.menu_hoja_vida = ["Hoja de vida del desarrollador 1\n\nSahely, una joven apasionada por el conocimiento, cumple años un día después de la entrega de este trabajo y espera un gran regalo de cumpleaños.\n\nEstudiosa y encantadora, su amor por el color rosa es evidente en cada aspecto de su vida. Aunque ama la brujería y practica amarres para esparcir alegría, tiene un miedo irracional a las palomas.\n\nCon su cumpleaños cercano, su mayor deseo es triunfar en su proyecto de Programación Orientada a Objetos, una meta que aborda con determinación y energía. Su vida está llena de colores vibrantes, amor por el conocimiento y una determinación inquebrantable para superar sus miedos y alcanzar sus metas.","Hoja de vida del desarrollador 2\n\nMateo, estudiante de ingeniería de sistemas, destaca por su atractiva apariencia y dedicación al fitness.\n\nFiel asistente del gimnasio, combina su pasión por la tecnología con una perseverancia tranquila, recordando a una tortuga que avanza con determinación.\n\nEste joven busca el equilibrio perfecto entre el desarrollo físico y académico, demostrando que la fuerza y la tenacidad pueden estar envueltas en una apariencia serena.", "Hoja de vida del desarrollador 3\n\nRichard, actualmente estudiante de ciencias de la computación, se sumerge con entusiasmo en el vasto campo de la tecnología\n\nSu aprecio por las manzanas va más allá de la fruta, y se está planteando cambiar a la carrera de ingeniería de sistemas.\n\nAdemás de su compromiso con la informática, Richard destaca como un amigo leal y confiable, siempre dispuesto a apoyar a quienes lo rodean.", "Hoja de vida del desarrollador 4\n\nSamuel, estudiante de ingeniería de sistemas y apasionado del fútbol, encuentra su equilibrio entre el mundo tecnológico y su amor por el deporte.\n\nCon un estilo distintivo, colecciona gorras que reflejan su personalidad única.\n\nAdemás de sus logros académicos, este joven entusiasta está a punto de celebrar su cumpleaños el lunes 20 de noviembre, y su energía contagiosa y amistosa siempre lo convierte en el alma de cualquier reunión.", "Hoja de vida del desarrollador 5\n\nNicolas, dedicado estudiante de ingeniería de sistemas, encuentra inspiración en el genio innovador de Tesla.\n\nSu fascinación por la ciencia y la tecnología se refleja en su admiración por el número 3.\n\nAdemás, el color morado es su preferido, simbolizando su creatividad y espiritualidad.\n\nCon una mente inquisitiva y apasionada, Nicolas busca constantemente la conexión entre la ingeniería y la innovación, creando un espacio donde la ciencia y la creatividad convergen."]
         self.text_hoja_vida.bind("<Button-1>", self.cambiar_hoja_vida)
 
         # Menú
@@ -131,15 +146,6 @@ class VentanaInicio:
         self.menu_inicio.add_command(label="Salir de la aplicación", command=self.salir_aplicacion, font=("Arial", 10))
         self.menu_inicio.add_command(label="Descripción del sistema", command=self.mostrar_descripcion, font=("Arial", 10))
         self.menu_bar.add_cascade(label="Inicio", menu=self.menu_inicio)
-
-    def configurar_ancho_imagen(self, event):
-        # Obtener el ancho del Canvas
-        ancho_canvas = self.canvas_imagen.winfo_width()
-        self.canvas_imagen.delete("all")
-        imagen_original = Image.open(self.rutas_imagenes_sistema[self.indice_imagenes])
-        imagen_redimensionada = imagen_original.resize((ancho_canvas, 300), Image.Resampling.LANCZOS)
-        self.imagenes_sistema[self.indice_imagenes] = ImageTk.PhotoImage(imagen_redimensionada)
-        self.canvas_imagen.create_image(0, 0, anchor=tk.NW, image=self.imagenes_sistema[self.indice_imagenes])
 
     def ingresar_sistema(self):
         self.master.destroy()  # Cerrar la ventana actual
@@ -152,52 +158,30 @@ class VentanaInicio:
         self.master.destroy()
 
     def cambiar_hoja_vida(self, event):
-        self.text_hoja_vida.configure(state=tk.NORMAL)
         # Cambiar la hoja de vida al hacer clic
         self.indice_hoja_vida = (self.indice_hoja_vida + 1) % len(self.menu_hoja_vida)
-        self.text_hoja_vida.delete("1.0", tk.END)
-        self.text_hoja_vida.insert(tk.END, self.menu_hoja_vida[self.indice_hoja_vida])
-
+        self.texto_anadir = StringVar()
+        self.texto_anadir.set(self.menu_hoja_vida[self.indice_hoja_vida])
+        self.text_hoja_vida.config(textvariable=self.texto_anadir)
         # Cambiar las imágenes del desarrollador
-        self.indice_desarrollador = (self.indice_desarrollador + 1) % len(self.rutas_imagenes_desarrollador)
-        self.cargar_imagenes_canvas()
-        self.configurar_tamanio_canvas(None)
+        # Actualizar imágenes
+        # Actualizar las imágenes en los labels
+        imagenes_nuevas = self.imagenes_desarrollador[self.indice_hoja_vida]
+        for i, label in enumerate([self.label_imagen1, self.label_imagen2, self.label_imagen3, self.label_imagen4]):
+            imagen_resized = imagenes_nuevas[i].subsample(3)  # Escala la imagen al tamaño deseado
+            label.configure(image=imagen_resized)
+            label.image = imagen_resized  # Mantener una referencia a la imagen
+
+        # Actualizar texto de la hoja de vida
+        self.texto_anadir.set(self.menu_hoja_vida[self.indice_hoja_vida])
+
         self.text_hoja_vida.configure(state=tk.DISABLED)
 
     def mostrar_siguiente_imagen(self, event):
         # Cambiar la imagen al pasar el ratón sobre ella
-        self.indice_imagenes = (self.indice_imagenes + 1) % len(self.rutas_imagenes_sistema)
-        self.cargar_imagen()
-
-    def cargar_imagen(self):
-        ancho_canvas = self.canvas_imagen.winfo_width()
-        # Limpiar el canvas
-        self.canvas_imagen.delete("all")
-        # Cargar la imagen desde la ruta
-        imagen_original = Image.open(self.rutas_imagenes_sistema[self.indice_imagenes])
-        # Redimensionar la imagen para que llene el canvas
-        imagen_redimensionada = imagen_original.resize((ancho_canvas, 300), Image.Resampling.LANCZOS)
-        # Convertir la imagen a formato compatible con Tkinter
-        self.imagenes_sistema[self.indice_imagenes] = ImageTk.PhotoImage(imagen_redimensionada)
-        # Mostrar la imagen en el canvas
-        self.canvas_imagen.create_image(0, 0, anchor=tk.NW, image=self.imagenes_sistema[self.indice_imagenes])
-
-    def cargar_imagenes_canvas(self):
-        for i, canvas in enumerate([self.canvas_imagen1, self.canvas_imagen2, self.canvas_imagen3, self.canvas_imagen4]):
-            ruta_imagen = f"../resources/desarrollador{self.indice_desarrollador+1}{i + 1}.png"
-            imagen_original = Image.open(ruta_imagen)
-            self.imagenes_canvas[i] = ImageTk.PhotoImage(imagen_original)
-            canvas.create_image(0, 0, anchor=tk.NW, image=self.imagenes_canvas[i])
-
-    def configurar_tamanio_canvas(self, event):
-        # Redimensionar las imágenes proporcionalmente al tamaño del Canvas
-        for i, canvas in enumerate([self.canvas_imagen1, self.canvas_imagen2, self.canvas_imagen3, self.canvas_imagen4]):
-            ancho_canvas = canvas.winfo_width()
-            alto_canvas = canvas.winfo_height()
-            imagen_original = Image.open(f"../resources/desarrollador{self.indice_desarrollador+1}{i + 1}.png")
-            imagen_redimensionada = imagen_original.resize((ancho_canvas, alto_canvas), Image.Resampling.LANCZOS)
-            self.imagenes_canvas[i] = ImageTk.PhotoImage(imagen_redimensionada)
-            canvas.itemconfig(canvas.find_all()[0], image=self.imagenes_canvas[i])  # Actualizar la imagen
+        self.indice_imagen_actual = (self.indice_imagen_actual + 1) % len(self.imagenes)
+        self.label_imagen.configure(image=self.imagenes[self.indice_imagen_actual])
+        self.label_imagen.image = self.imagenes[self.indice_imagen_actual]  # Mantener una referencia a la imagen
 
     def mostrar_descripcion(self):
         descripcion = "Este proyecto es una aplicación de panadería virtual que permite realizar pedidos " \

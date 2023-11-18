@@ -79,13 +79,12 @@ class Producto(ComidaDefault):
         for ingrediente, cantidad in ingredientes.items():
             if not ComidaDefault.verificacionExistenciaPorNombreI(ingrediente):
                 Ingrediente(ingrediente)
-
         return Producto(Nnombre, ingredientes)
-    
+
     def calcularCosto(self):
         costo = 0
         for ingrediente, cantidad in self.ingredientes.items():
-            costo += ComidaDefault.obtenerObjetoPorNombreI(ingrediente).getPrecioDeVenta() * cantidad
+            costo += Producto.obtenerObjetoPorNombreI(ingrediente).getPrecioDeVenta() * cantidad
         return costo * ComidaDefault.tarifaGanancias
     
     @staticmethod

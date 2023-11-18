@@ -30,8 +30,8 @@ class SerializationTest:
         Ingrediente.crearIngrediente("miga de galleta")
         """
 
-        print(Ingrediente.crearIngrediente("meme"))
-        Producto.crearProducto("marmota")
+        #print(Ingrediente.crearIngrediente("meme"))
+        #Producto.crearProducto("marmota")
 
         print("ingredientes creados")
 
@@ -83,18 +83,12 @@ class SerializationTest:
             print(i.getId() , i.getNombre(), i.getCosto(), i.getIngredientes())
 
         """
-
         print("productos creados")
         
         cliente1 = Cliente()
         cliente1.crearCuenta("Sahely", 1123433775, "123")
         cliente1.crearCuenta("Richard", 202, "qwerty")
         Cliente.getSesion().setPresupuesto(30000)
-        
-        cliente1 = Cliente.inicioSesionId(202)
-        Cliente.inicioSesionContrasena(cliente1, "qwerty")
-        print("Cliente en sesion: " + Cliente.getSesion().getNombre())
-        print("clientes creados")
         
         domiciliario1 = Domiciliario("Nico", panaderia)
         domiciliario2 = Domiciliario("Sasha", panaderia)
@@ -124,8 +118,12 @@ class SerializationTest:
         }
         
         Cliente.getSesion().crearCanastaNueva()
-        
-        print()
+        """
+        cliente1 = Cliente.inicioSesionId(202)
+        Cliente.inicioSesionContrasena(cliente1, "qwerty")
+        print("Cliente en sesion: " + Cliente.getSesion().getNombre())
+        print("clientes creados")
+
         a=Cliente.getSesion().getCanastaOrden()
         
         print(a.recibir_orden("13", "3",False))
@@ -138,7 +136,7 @@ class SerializationTest:
         print(a.getProductosEnLista())
         print(a.getIngredientesEnLista())
         print(a.getKitsEnLista())
-
+    
         print("Elementos existentes añadidos correctamente a la canasta")
         ingredientes_marmota = {
             "carnita": 1,
@@ -147,8 +145,8 @@ class SerializationTest:
             "azucar": 1,
             "mantequilla": 1
         }
-        
-        print(a.recibirOrdenPersonalizada("marmota", ingredientes_marmota, "3",False))
+
+        #print(a.recibirOrdenPersonalizada("marmota", ingredientes_marmota, "3",False))
 
         print(a.getProductosEnLista())
         print(a.getIngredientesEnLista())
@@ -162,8 +160,8 @@ class SerializationTest:
 
         for i in Producto.baseDatosProductos:
             print(i.getId() , i.getNombre(), i.getCosto(), i.getIngredientes())
-        """
-        #a.enviarOrdenCanasta()
+        
+        a.enviarOrdenCanasta()
         #Serializador.guardarPanaderia(panaderia)
         print("panaderia guardada")
 
