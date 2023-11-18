@@ -68,8 +68,8 @@ class FieldFrame(Frame):
         botonT = Button(self.frame, text="Borrar", command=eliminar)
         botonT.grid(row=len(criterios)+1, column=1, padx=10, pady=10)
 
-    def defRoot(self, root):
-        self.frame.pack(in_=root)
+    def defRoot(self, frame):
+        self.frame.pack(in_=frame)
 
     def defFunc(self, funcion):
         self.funcionAsociada = funcion 

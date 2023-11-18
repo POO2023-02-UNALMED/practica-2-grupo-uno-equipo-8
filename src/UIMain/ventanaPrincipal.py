@@ -2,6 +2,7 @@ from tkinter import *
 import tkinter as tk
 from tkinter import messagebox
 from tkinter import ttk
+from FieldFrame import FieldFrame
 
 from ErrorAplicacion import CamposVaciosError, UsuarioNoEncontradoError
 
@@ -172,18 +173,14 @@ class VentanaPrincipal:
 
         # Agregar un widget de Texto
         self.texto_widget = Text(self.frameComprar2, wrap=tk.WORD, yscrollcommand=scrollbar.set, width = 60)
-        self.texto_widget.pack(fill=tk.Y, expand=True)
-
-        # Configurar el Scrollbar para que funcione con el widget de Texto
-        scrollbar.config(command=self.texto_widget.yview)
-
-        # Puedes agregar texto de ejemplo
-        ejemplo_texto = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. ..."
-        self.texto_widget.insert(tk.END, ejemplo_texto)
-        
-
+        self.texto_widget.pack(fill=tk.Y, expand=True),
         # frameCatalogo Catalogo de opciones disponibles para comprar
         self.frameCatalogo = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
+        self.LabelCatalogo = Label(self.frameCatalogo, text="Catalogo de productos")
+        self.BotonAtrasCatalogo = Button(self.frameCatalogo, text="volver atras", command= self.volverAtras)
+        self.BotonAtrasCatalogo.pack(side=BOTTOM, pady=40)
+        self.LabelCatalogo.pack()
+    
         self.frames.append(self.frameCatalogo)
         self.LabelCatalogo = Label(self.frameCatalogo, text="Catalogo de productos")
         self.LabelCatalogo.pack()
@@ -262,6 +259,8 @@ class VentanaPrincipal:
         self.LabelContrasena = Label(self.frameContrasena, text="Cambiar contraseña")
         self.LabelContrasena.pack()
         #usar fieldframe aqui ...
+        self.fieldFrameContrasena = FieldFrame("Cambio", ["Contraseña nueva:", "hola"], "Ingrese aqui") #Ver ejemplo de uso en FieldFrame.py
+        self.fieldFrameContrasena.defRoot(self.frameContrasena)
         self.frames.append(self.frameContrasena)
         
         # framePlata Meter plata a mi cuenta

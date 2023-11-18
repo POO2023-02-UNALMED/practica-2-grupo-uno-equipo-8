@@ -3,6 +3,7 @@ from tkinter import FLAT, Menu
 from tkinter import StringVar
 from tkinter import PhotoImage
 from tkinter import messagebox
+from ventanaPrincipal import VentanaPrincipal
 
 import os
 
@@ -44,35 +45,34 @@ class VentanaInicio:
         self.frame_arriba_izquierda = tk.Frame(self.frame_izquierda, bg="#DCF7F0")
         self.frame_arriba_izquierda.grid(row=0, column=0, sticky="nsew")
 
-        self.frame_abajo_izquierda = tk.Frame(self.frame_izquierda, bg="blue")
+        self.frame_abajo_izquierda = tk.Frame(self.frame_izquierda, bg="#DCF7F0")
         self.frame_abajo_izquierda.grid(row=1, column=0, sticky="nsew")
 
-        self.frame_arriba_derecha = tk.Frame(self.frame_derecha, bg="green")
+        self.frame_arriba_derecha = tk.Frame(self.frame_derecha, bg="#DCF7F0")
         self.frame_arriba_derecha.grid(row=0, column=0, sticky="nsew")
 
         self.frame_abajo_derecha = tk.Frame(self.frame_derecha, bg="yellow")
         self.frame_abajo_derecha.grid(row=1, column=0, sticky="nsew")
 
         # Elementos en la parte superior izquierda
-        self.label_bienvenida = tk.Label(self.frame_arriba_izquierda, text="¡Bienvenido a POO Bakery!", font=("Arial", 15))
+        self.label_bienvenida = tk.Label(self.frame_arriba_izquierda, text="¡Bienvenido a POO Bakery!", font=("Arial", 15), bg="#FCD9EF")
         self.label_bienvenida.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
         # Elementos en la parte superior derecha
 
 
-        self.text_hoja_vida = tk.Label(self.frame_arriba_derecha, width=40, height=10, anchor="center", cursor="hand1", relief="groove", borderwidth=5, text="Hoja de vida del desarrollador 1\n\nSahely, una joven apasionada por el conocimiento, cumple años un día después de la entrega de este trabajo y espera un gran regalo de cumpleaños.\n\nEstudiosa y encantadora, su amor por el color rosa es evidente en cada aspecto de su vida. Aunque ama la brujería y practica amarres para esparcir alegría, tiene un miedo irracional a las palomas.\n\nCon su cumpleaños cercano, su mayor deseo es triunfar en su proyecto de Programación Orientada a Objetos, una meta que aborda con determinación y energía. Su vida está llena de colores vibrantes, amor por el conocimiento y una determinación inquebrantable para superar sus miedos y alcanzar sus metas.")
+        self.text_hoja_vida = tk.Label(self.frame_arriba_derecha, width=40, height=10, anchor="center", cursor="hand1", relief="groove", borderwidth=5, text="Hoja de vida del desarrollador 1\n\nSahely, una joven apasionada por el conocimiento, cumple años un día después de la entrega de este trabajo y espera un gran regalo de cumpleaños.\n\nEstudiosa y encantadora, su amor por el color rosa es evidente en cada aspecto de su vida. Aunque ama la brujería y practica amarres para esparcir alegría, tiene un miedo irracional a las palomas.\n\nCon su cumpleaños cercano, su mayor deseo es triunfar en su proyecto de Programación Orientada a Objetos, una meta que aborda con determinación y energía. Su vida está llena de colores vibrantes, amor por el conocimiento y una determinación inquebrantable para superar sus miedos y alcanzar sus metas.",bg="#F7EBF3")
         self.text_hoja_vida.pack(expand=True, fill='both', pady=5)
         self.text_hoja_vida.configure(wraplength=380, justify="center")
-        self.text_hoja_vida.configure(state=tk.DISABLED)
 
         # Elementos en la parte inferior izquierda
-        self.button_ingreso = tk.Button(self.frame_abajo_izquierda, text="Ingresar al Sistema", command=self.ingresar_sistema, height=3, width=20, font=("Arial", 13))
+        self.button_ingreso = tk.Button(self.frame_abajo_izquierda, text="Ingresar al Sistema", command=self.ingresar_sistema, height=3, width=20, font=("Arial", 13), bg="#FCD9EF", cursor="hand1")
         self.button_ingreso.pack(side=tk.BOTTOM, pady=40)
 
         self.indice_imagen_actual = 0
         self.imagenes = [PhotoImage(file=f"../resources/imagen{i+1}.png").subsample(1) for i in range(5)]
 
-        self.label_imagen = tk.Label(self.frame_abajo_izquierda, bg="white", width=400, height=300)
+        self.label_imagen = tk.Label(self.frame_abajo_izquierda, bg="#F7EBF3", width=400, height=300)
         self.label_imagen.pack(fill='x', expand=True, pady=10, side=tk.BOTTOM)
         self.label_imagen.bind("<Enter>", self.mostrar_siguiente_imagen)
 
@@ -111,13 +111,13 @@ class VentanaInicio:
 
         tamaño_imagenes = (150, 150)  # El tamaño que desees para las imágenes
         # Labels para mostrar las imágenes
-        self.label_imagen1 = tk.Label(self.frame_abajo_derecha, bg="white", width=tamaño_imagenes[0], height=tamaño_imagenes[1])
+        self.label_imagen1 = tk.Label(self.frame_abajo_derecha, bg="#F7EBF3", width=tamaño_imagenes[0], height=tamaño_imagenes[1])
         self.label_imagen1.grid(row=0, column=0, sticky="nsew")
 
-        self.label_imagen2 = tk.Label(self.frame_abajo_derecha, bg="white", width=tamaño_imagenes[0], height=tamaño_imagenes[1])
+        self.label_imagen2 = tk.Label(self.frame_abajo_derecha, bg="#F7EBF3", width=tamaño_imagenes[0], height=tamaño_imagenes[1])
         self.label_imagen2.grid(row=0, column=1, sticky="nsew")
 
-        self.label_imagen3 = tk.Label(self.frame_abajo_derecha, bg="white", width=tamaño_imagenes[0], height=tamaño_imagenes[1])
+        self.label_imagen3 = tk.Label(self.frame_abajo_derecha, bg="#F7EBF3", width=tamaño_imagenes[0], height=tamaño_imagenes[1])
         self.label_imagen3.grid(row=1, column=0, sticky="nsew")
 
         self.label_imagen4 = tk.Label(self.frame_abajo_derecha, bg="white", width=tamaño_imagenes[0], height=tamaño_imagenes[1])
@@ -140,7 +140,7 @@ class VentanaInicio:
         self.text_hoja_vida.bind("<Button-1>", self.cambiar_hoja_vida)
 
         # Menú
-        self.menu_bar = Menu(self.master,)
+        self.menu_bar = Menu(self.master)
         self.master.config(menu=self.menu_bar)
         self.menu_inicio = Menu(self.menu_bar, tearoff=0)
         self.menu_inicio.add_command(label="Salir de la aplicación", command=self.salir_aplicacion, font=("Arial", 10))
@@ -148,11 +148,10 @@ class VentanaInicio:
         self.menu_bar.add_cascade(label="Inicio", menu=self.menu_inicio)
 
     def ingresar_sistema(self):
-        self.master.destroy()  # Cerrar la ventana actual
-        # Abrir la ventana principal
-        """
-        app = VentanaPrincipal()
-        """
+        self.master.destroy()
+        root_principal = tk.Tk()
+        app_principal = VentanaPrincipal(root_principal)
+        root_principal.mainloop()
 
     def salir_aplicacion(self):
         self.master.destroy()
