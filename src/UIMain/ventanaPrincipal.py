@@ -1,6 +1,7 @@
 from tkinter import *
 import tkinter as tk
 from tkinter import messagebox
+from tkinter import ttk
 
 from ErrorAplicacion import CamposVaciosError, UsuarioNoEncontradoError
 
@@ -128,8 +129,35 @@ class VentanaPrincipal:
         #framep2 = Frame(frame, bd = 5, relief=FLAT, padx = 2, pady = 2, bg = "white").grid(row =0 , column = 1)
         self.frameComprar1 = Frame(self.frameComprar)
         self.frameComprar1.grid(row =0 , column = 0, padx = 1, pady=1, sticky="nsew")
-        self.labelfc1 = Label(self.frameComprar1, text="Productos disponibles para comprar")
-        self.labelfc1.pack()
+        self.labelfc1 = Label(self.frameComprar1, text="Hola cliente, bienvenido a su canasta de compras, use el comboBox para ordenar, recuerde que en el menu procesos y consultas puede ver un catalogo mas completo de los productos que puede ordenar", wraplength=300)
+        self.labelfc1.pack(pady=30)
+
+        #Label para el primer comboBox
+        self.labelfc1_2 = Label(self.frameComprar1, text="Elija un producto")
+        self.labelfc1_2.pack(pady = 5)
+        
+        #Creando el primer comboBox
+        self.opcionesCompra = ["Pandequeso", "Bonice", "Manzana podrida"] #IMPORTANTE despues de configurar serializacion colocar lista aqui
+        self.comboboxfc1 = ttk.Combobox(self.frameComprar1, values = self.opcionesCompra)
+        self.comboboxfc1.pack(pady = 10)
+
+        #Label para el segundo comboBox
+        self.labelfc1_3 = Label(self.frameComprar1, text="Elija una cantidad")
+        self.labelfc1_3.pack(pady = 5)
+        
+        self.botonIrCatalogo = tk.Button(self.frameComprar1, text="Ir al catalogo")
+        self.botonIrCatalogo.pack(side="bottom", pady=50)
+
+        self.botonCocinar = tk.Button(self.frameComprar1, text="Cocinar producto personalizado")
+        self.botonCocinar.pack(side="bottom", pady=10)
+
+        #credando el segundo comboBox
+        self.opcionesCantidad = [1,2,3,4,5,6,7,8,9,10]
+        self.comboboxfc1_2 = ttk.Combobox(self.frameComprar1, values = self.opcionesCantidad)
+        self.comboboxfc1_2.pack(pady = 10)
+        self.botonfc1 = Button(self.frameComprar1, text="Agregar a la canasta")
+        self.botonfc1.pack(pady = 10)
+
         self.frameComprar2 = Frame(self.frameComprar)
         self.frameComprar2.grid(row =0 , column = 1, padx = 1, pady=1, sticky="nsew")
         self.labelfc1 = Label(self.frameComprar2, text="Lista de compras y factura")
