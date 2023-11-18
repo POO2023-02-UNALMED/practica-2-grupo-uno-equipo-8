@@ -69,17 +69,20 @@ class VentanaInicio:
         self.button_ingreso = tk.Button(self.frame_abajo_izquierda, text="Ingresar al Sistema", command=self.ingresar_sistema, height=3, width=20, font=("Arial", 13))
         self.button_ingreso.pack(side=tk.BOTTOM, pady=40)
 
-        # Canvas para mostrar la imagen
-        self.canvas_imagen = tk.Canvas(self.frame_abajo_izquierda, bg="white", width=400, height=300)
-        self.canvas_imagen.pack(fill='x', expand=True, pady=10, side=tk.BOTTOM)
-        # Evento al cambiar el tamaño del Canvas
+        self.indice_imagen_actual = 0
+        self.imagenes = [PhotoImage(file=f"../resources/imagen{i+1}.png").subsample(1) for i in range(5)]
+
+        self.label_imagen = tk.Label(self.frame_abajo_izquierda, bg="white", width=400, height=300)
+        self.label_imagen.pack(fill='x', expand=True, pady=10, side=tk.BOTTOM)
+        self.label_imagen.bind("<Enter>", self.mostrar_siguiente_imagen)
+
+        # Mostrar la primera imagen al inicio
+        self.label_imagen.configure(image=self.imagenes[self.indice_imagen_actual])
+        self.label_imagen.image = self.imagenes[self.indice_imagen_actual]  # Mantener una referencia a la imagen
 
         # Inicializar el índice actual de la imagen
-        self.indice_imagenes = 0
+        #self.canvas_imagen.bind("<Configure>", self.configurar_ancho_imagen)
 
-        self.canvas_imagen.bind("<Configure>")#, self.configurar_ancho_imagen
-        # Evento al pasar el ratón sobre el canvas_imagen
-        self.canvas_imagen.bind("<Enter>", self.mostrar_siguiente_imagen)
 
         # Nueva configuración de Frames
         for i in range(2):
@@ -176,8 +179,9 @@ class VentanaInicio:
 
     def mostrar_siguiente_imagen(self, event):
         # Cambiar la imagen al pasar el ratón sobre ella
-        self.indice_imagenes = (self.indice_imagenes + 1) % len(self.rutas_imagenes_sistema)
-        self.cargar_imagen()
+        self.indice_imagen_actual = (self.indice_imagen_actual + 1) % len(self.imagenes)
+        self.label_imagen.configure(image=self.imagenes[self.indice_imagen_actual])
+        self.label_imagen.image = self.imagenes[self.indice_imagen_actual]  # Mantener una referencia a la imagen
 
     def mostrar_descripcion(self):
         descripcion = "Este proyecto es una aplicación de panadería virtual que permite realizar pedidos " \
