@@ -160,3 +160,24 @@ try:
 except CanastaVaciaError as e:
     print("Error:", e)
 """#Este metodo o una logica parecida debe ir en la clase de la ventana
+
+class AccionSinInicioSesionError(ErrorTipoB):
+    def __init__(self, message="Debes iniciar sesión para realizar esta acción"):
+        super().__init__(message)
+        
+""""
+def realizar_accion(self):
+        if not self.usuario_logueado:
+            raise AccionSinInicioSesionError()
+
+        # Resto de la lógica que solo debe ejecutarse si el usuario está logueado
+
+# Ejemplo de uso
+objeto_mi_clase = MiClase()
+
+# Intentar realizar una acción sin iniciar sesión
+try:
+    objeto_mi_clase.realizar_accion()
+except AccionSinInicioSesionError as e:
+    print("Error:", e)  # Manejo del error, por ejemplo, mostrando un mensaje al usuario
+"""#Este metodo o una logica parecida debe ir en la clase de la ventana
