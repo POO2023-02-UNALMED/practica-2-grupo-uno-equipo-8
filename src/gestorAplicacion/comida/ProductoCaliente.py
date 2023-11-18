@@ -32,7 +32,7 @@ class ProductoCaliente(Producto):
             if not Ingrediente.verificacionExistenciaPorNombreI(nombreIngrediente):
                 Ingrediente(nombreIngrediente)
         return ProductoCaliente(Nnombre, ingredientes)
-    
+
     def procesoHornear(self, cocinero):
         if cocinero.isHorno():
             return cocinero

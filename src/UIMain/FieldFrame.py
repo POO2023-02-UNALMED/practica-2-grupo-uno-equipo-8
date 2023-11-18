@@ -1,4 +1,6 @@
 from tkinter import *
+from ErrorAplicacion import CamposVaciosError
+from tkinter import messagebox
 class FieldFrame(Frame):
 
     # Esta clase sirve para crear frames genericos, se debe crear un objeto field frame y en el contructor se le debe ingresar como primer parametro el nombre que desea que 
@@ -25,8 +27,19 @@ class FieldFrame(Frame):
                 p.delete(0, END)
 
         def adicionValida():
-            pass
-        
+            
+            entriesValues = []
+            for l in self.entradas:
+                entriesValues.append(l.get())
+            self.valores = entriesValues
+
+            try:
+                self.verificar_campos_llenos(entriesValues)
+            except CamposVaciosError as e:
+                mensaje = f"Por favor, complete los campos: {len(e.campos_faltantes)}"
+                messagebox.showwarning("Campos Vacíos", mensaje)
+                eliminar()
+
         for k in criterios:
             cont = criterios.index(k)
 
@@ -69,3 +82,8 @@ class FieldFrame(Frame):
             return self.valores
         else:
             print("No hay valores")
+    
+    def verificar_campos_llenos(self, campos):
+        campos_vacios = [campo for campo in campos if len(campo) == 0]
+        if campos_vacios:
+            raise CamposVaciosError(campos_vacios)
