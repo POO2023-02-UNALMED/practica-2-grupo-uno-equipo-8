@@ -183,14 +183,53 @@ class VentanaPrincipal:
 
         # frameCatalogo Catalogo de opciones disponibles para comprar
         self.frameCatalogo = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
-        self.LabelCatalogo = Label(self.frameCatalogo, text="Catalogo de productos")
-        self.BotonAtrasCatalogo = Button(self.frameCatalogo, text="volver atras", command= self.volverAtras)
-        self.BotonAtrasCatalogo.pack(side=BOTTOM, pady=40)
-        self.LabelCatalogo.pack()
-        
-        
-
         self.frames.append(self.frameCatalogo)
+        self.LabelCatalogo = Label(self.frameCatalogo, text="Catalogo de productos")
+        self.LabelCatalogo.pack()
+        self.frameCatalogo2 = Frame(self.frameCatalogo, bd=1, relief=FLAT, padx=1, pady=1)
+        self.frameCatalogo2.pack(fill="both", expand=True)
+
+        #El catalogo va a ser una fila de 3 productos,
+
+        #copiare a partir de aqui
+
+        # Crear un canvas con un scrollbar
+        self.canvas = tk.Canvas(self.frameCatalogo2)
+        scrollbar = tk.Scrollbar(self.frameCatalogo2, orient="vertical", command=self.canvas.yview)
+        self.canvas.configure(yscrollcommand=scrollbar.set)
+
+        # Crear un frame dentro del canvas para colocar los botones
+        self.frameCatalogo3 = tk.Frame(self.canvas)
+        self.canvas.create_window((0, 0), window = self.frameCatalogo3, anchor="nw")
+
+        # Crear una variable para contar los botones
+        self.contadorCatalogo = tk.IntVar()
+        self.contadorCatalogo.set(0)
+
+        self.iconoDefault = tk.PhotoImage(file="src/resources/iconoManzana1.png")
+        
+        #Empaquetar el canvas y el scrollbar
+        self.canvas.pack(side="left", fill="both", expand=True)
+        scrollbar.pack(side="right", fill="y")
+
+        self.agregarAlCatalogo("Pancake con forma de manzana1")
+        self.agregarAlCatalogo("Pancake con forma de manzana2")
+        self.agregarAlCatalogo("Pancake con forma de manzana3")
+        self.agregarAlCatalogo("Pancake con forma de manzana4")
+        self.agregarAlCatalogo("Pancake con forma de manzana5")
+        self.agregarAlCatalogo("Pancake con forma de manzana6")
+        self.agregarAlCatalogo("Pancake con forma de manzana7")
+        self.agregarAlCatalogo("Pancake con forma de manzana8")
+        self.agregarAlCatalogo("Pancake con forma de manzana9")
+        self.agregarAlCatalogo("Pancake con forma de manzana10")
+        self.agregarAlCatalogo("Pancake con forma de manzana11")
+        self.agregarAlCatalogo("Pancake con forma de manzana12")
+        self.agregarAlCatalogo("Pancake con forma de manzana13")
+        self.agregarAlCatalogo("Pancake con forma de manzana14")
+
+        self.BotonAtrasCatalogo = Button(self.frameCatalogo, text="volver atras", command= self.volverAtras)
+        self.BotonAtrasCatalogo.pack()
+        
         
 
 
@@ -336,6 +375,27 @@ class VentanaPrincipal:
     
     def volverAtras(self):
         self.cambiarFrame(self.frameAnterior)
+
+    def agregarAlCatalogo(self, nombre, foto = None):
+
+        if foto == None:
+            foto = self.iconoDefault
+
+        # Incrementar el contador
+        self.contadorCatalogo.set(self.contadorCatalogo.get() + 1)
+
+        # Crear un botón con una imagen y un nombre
+        boton = tk.Button(self.frameCatalogo3, text=nombre, image = foto, compound="top")
+
+        # Colocar el botón en el grid según el contador
+        fila = (self.contadorCatalogo.get() - 1) // 3
+        columna = (self.contadorCatalogo.get() - 1) % 3
+        boton.grid(row=fila, column=columna, padx=5, pady=5)
+
+        # Actualizar el tamaño del frame y el canvas
+        self.frameCatalogo3.update_idletasks()
+        self.canvas.config(scrollregion=self.canvas.bbox("all"))
+        
 
 # Codigo que produce la ejecucion de la ventana cuando se ejecuta desde este archivo
 def main():
