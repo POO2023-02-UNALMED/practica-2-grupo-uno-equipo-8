@@ -1,7 +1,8 @@
 import random
+from abc import ABC, abstractmethod
 from gestorAplicacion.gestion.Canasta import Canasta
 
-class Trabajador:
+class Trabajador(ABC):
     def __init__(self, panaderia, nombre="John Doe", calificacion=0, dinero_en_mano=0, salario=1000):
         self.nombre = nombre
         self.habilidad = random.randint(9, 19)  # 9 <= habilidad <= 19
@@ -13,11 +14,14 @@ class Trabajador:
         if panaderia:
             panaderia.getTrabajadores().append(self)
 
+    @abstractmethod
     def laborParticular(self, canasta: Canasta):
         pass
 
+    @abstractmethod
     def conseguirIngredientes(self, listingredientes):
         pass
+
 
     # Getters y setters
     def getNombre(self):
