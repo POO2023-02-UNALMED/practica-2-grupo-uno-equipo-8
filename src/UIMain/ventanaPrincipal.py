@@ -107,7 +107,7 @@ class VentanaPrincipal:
         self.entry_RegistroContrasena = Entry(self.frameRegistro, show="*")
         self.entry_RegistroContrasena.pack(pady=10)
 
-        self.boton_Registro = Button(self.frameRegistro, text="Registrarse", command = self.iniciar_sesion)
+        self.boton_Registro = Button(self.frameRegistro, text="Registrarse", command = self.registrarse)
         self.boton_Registro.pack(pady=10)
 
         # frameInfo frame con informacion
@@ -267,6 +267,29 @@ class VentanaPrincipal:
                 self.entry_usuario.delete(0, 'end')
                 self.entry_contrasena.delete(0, 'end')
                 break  # Sale del bucle para permitir al usuario reintentar el inicio de sesión
+        
+    def registrarse(self):
+        while True:
+            usuario = self.entry_RegistroUsuario.get()
+            contrasena = self.entry_RegistroContrasena.get()
+            identificacion = self.entry_RegistroIdentificacion.get()
+
+            try:
+                campos = [usuario, contrasena, identificacion]
+                self.verificar_campos_llenos(campos)
+                # Aquí podrías validar si el usuario y la contraseña son correctos antes de cambiar el frame
+                # Agregar lógica para verificar la existencia del usuario
+                if not self.verificar_existencia_usuario(usuario):
+                    raise UsuarioNoEncontradoError(usuario)
+                
+                self.cambiarFrame(self.framePrincipal)
+                break  # Sale del bucle si los campos son válidos y el usuario existe
+            except CamposVaciosError as e:
+                mensaje = f"Por favor, complete los campos: {len(e.campos_faltantes)} usuario y/o contraseña y/o identificacion"
+                messagebox.showwarning("Campos Vacíos", mensaje)
+                self.entry_usuario.delete(0, 'end')
+                self.entry_contrasena.delete(0, 'end')
+                break
     
     def mostrar_info(self):
         

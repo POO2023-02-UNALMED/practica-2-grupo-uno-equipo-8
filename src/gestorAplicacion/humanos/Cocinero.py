@@ -201,7 +201,7 @@ class Cocinero(Domiciliario):
 
         ingrFaltantes = self.ingredientesCocinero(listaIngredientesTotales)
 
-        if not ingrFaltantes:
+        if ingrFaltantes:
             Cocinero._fallosCocinando +=1
             self._panaderia.comprarIngredientes(ingrFaltantes)
             ingrFaltantes.clear()
