@@ -43,7 +43,7 @@ class VentanaPrincipal:
         self.menu_procesos.add_command(label = "Cerrar sesion", state="disabled",command = self.cerrarSesion)
         self.menu_procesos.add_command(label = "Func. Crear Canasta de Compras", state="disabled",command = lambda: self.cambiarFrame(self.frameComprar))
         self.menu_procesos.add_command(label = "Func. Facturar", state="disabled")
-        self.menu_procesos.add_command(label = "Func. Cocinar", state="disabled")
+        self.menu_procesos.add_command(label = "Func. Cocinar",command=lambda:self.cambiarFrame(self.frameCocinar), state="disabled")
         self.menu_procesos.add_command(label = "Func. Conseguir Ingredientes", command=lambda:self.cambiarFrame(self.frameComprarIngredientes), state="disabled")
         self.menu_procesos.add_command(label = "Func. Domicilio", state="disabled")
         self.menu_procesos.add_command(label = "Lo mejor de nuestra panaderia", state="disabled",command = lambda: self.cambiarFrame(self.frameRanking))
@@ -132,17 +132,32 @@ class VentanaPrincipal:
         # frameComprar Ir a comprar
         self.frameComprar = Frame(root, bd = 1, relief=FLAT, padx = 1, pady = 1)
         self.frames.append(self.frameComprar)
-        tk.Grid.rowconfigure(self.frameComprar,0, weight=1)
-        tk.Grid.columnconfigure(self.frameComprar,0, weight=1)
-        # tk.Grid.columnconfigure(self.frameComprar,1, weight=1)
-        tk.Grid.rowconfigure(self.frameComprar, 1, weight = 1)
 
+        #El frame del carrito lo volví una funcion cargarFrameCarrito()
 
+        # framePreguntarDomicilio preguntar al cliente si deseaDomicilio
+        self.framePreguntarDomicilio = Frame(self.root, bd = 1, relief=FLAT, pady = 1)
+        self.frames.append(self.framePreguntarDomicilio)
+        #self.imagenPreguntarDomicilio = Label(self.framePreguntarDomicilio)
+        #self.imagenPreguntarDomicilio.pack()
+        self.labelPreguntarDomicilio = Label(self.framePreguntarDomicilio, text="Desea que le entreguemos su pedido a domicilio? Haga click abajo si asi lo desea")
+        self.labelPreguntarDomicilio.pack()
+        self.checkButtonFramePreguntarDomicilio = ttk.Checkbutton(self.framePreguntarDomicilio, text="Pedido a domicilio") # Logica Domicilio que cuando el checkButton este activado se envie a domicilio
+        self.checkButtonFramePreguntarDomicilio.pack()
 
-        #El frame del carrito lo volví una funcion
-
-
-
+        # fieldframe domicilio
+        self.frameDireccion2 = Frame(self.framePreguntarDomicilio, bd=1, relief=FLAT, padx=1, pady=1)
+        self.frameDireccion2.pack()
+        self.LabelDireccion2 = Label(self.frameDireccion2, text="Cambiar direccion")
+        self.LabelDireccionDes2 = Label(self.frameDireccion2, text="Descripcion")
+        self.LabelDireccion2.pack(pady=20)
+        self.LabelDireccionDes2.pack(pady=20)
+        self.comboBoxDireccion2 = ttk.Combobox(self.frameDireccion2, values = ["Medellin", "Bogota", "Envigado","Itagui"])
+        self.comboBoxDireccion2.pack(pady = 10)
+        self.fieldFrameDireccion2 = FieldFrame("Datos", ["Direccion específica:"], "Ingrese aqui")
+        self.fieldFrameDireccion2.defRoot(self.frameDireccion2)
+        self.fieldFrameDireccion2.defFunc(self.cambiarDireccion)
+        
         # frameCatalogo Catalogo de opciones disponibles para comprar
         self.frameCatalogo = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
         self.LabelCatalogo = Label(self.frameCatalogo, text="Catalogo de productos")
@@ -225,7 +240,24 @@ class VentanaPrincipal:
         self.LabelRanking.pack()
         #usar fieldframe aqui ...
         self.frames.append(self.frameRanking)
-                
+
+        # frameFacturacion
+        self.frameFacturacion = Frame(self.root, bd = 1, relief = FLAT)
+        self.LabelFacturacion = Label(self.frameFacturacion, text="Su factura")
+
+        # Agregar un Scrollbar
+        scrollbar = Scrollbar(self.frameFacturacion)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+
+        # Agregar un widget de Texto
+        self.textoFacturacion = Text(self.frameFacturacion, wrap=tk.WORD, yscrollcommand=scrollbar.set)
+        self.textoFacturacion.pack(fill=tk.BOTH, expand=True)
+
+        #Botones
+        self.botonPagar = Button(self.frameFacturacion, text = "Pagar factura")
+        self.botonAtrasFacturacion = Button(self.frameFacturacion, text = "Volver a la canasta de compras", command = lambda: self.cambiarFrame(self.frameComprar))
+        
+
         # frameHistorial Historial de facturas
         self.frameHistorial = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
         self.LabelHistorial = Label(self.frameHistorial, text="Historial de facturas")
@@ -255,6 +287,7 @@ class VentanaPrincipal:
         #usar fieldframe aqui ...
         self.fieldFrameContrasena = FieldFrame("Cambio", ["Contraseña nueva:"], "Ingrese aqui") #Ver ejemplo de uso en FieldFrame.py
         self.fieldFrameContrasena.defRoot(self.frameContrasena)
+        self.fieldFrameContrasena.defFunc(self.cambiarContrasena)
         
         # framePlata Meter plata a mi cuenta
         self.framePlata = Frame(self.frameModificarDatos, bd=1, relief=FLAT, padx=1, pady=1)
@@ -266,7 +299,7 @@ class VentanaPrincipal:
         #usar fieldframe aqui ...
         self.fieldFramePlata = FieldFrame("Valor", ["Cantidad a ingresar:"], "Ingrese aqui")
         self.fieldFramePlata.defRoot(self.framePlata)
-        self.frames.append(self.framePlata)
+        self.fieldFramePlata.defFunc(self.meterPlata)
         
         # frameValidarTipo Validar tipo de cliente
         self.frameValidarTipo = Frame(self.frameModificarDatos, bd=1, relief=FLAT, padx=1, pady=1)
@@ -280,8 +313,6 @@ class VentanaPrincipal:
         self.botonValidarTipo = Button(self.frameValidarTipo, text="Establecer")
         self.botonValidarTipo.pack(pady = 10)
         self.LabelValidarTipo.pack()
-        #usar fieldframe aqui ...
-        self.frames.append(self.frameValidarTipo)
         
         # frameDireccion Modificar direccion
         self.frameDireccion = Frame(self.frameModificarDatos, bd=1, relief=FLAT, padx=1, pady=1)
@@ -290,10 +321,63 @@ class VentanaPrincipal:
         self.LabelDireccionDes = Label(self.frameDireccion, text="Descripcion")
         self.LabelDireccion.pack(pady=20)
         self.LabelDireccionDes.pack(pady=20)
+        self.comboBoxDireccion = ttk.Combobox(self.frameDireccion, values = ["Medellin", "Bogota", "Envigado","Itagui"])
+        self.comboBoxDireccion.pack(pady = 10)
         #usar fieldframe aqui ...
-        self.fieldFrameDireccion = FieldFrame("Datos", ["Ciudad", "Direccion específica:"], "Ingrese aqui")
+        self.fieldFrameDireccion = FieldFrame("Datos", ["Direccion específica:"], "Ingrese aqui")
         self.fieldFrameDireccion.defRoot(self.frameDireccion)
-        self.frames.append(self.frameDireccion)
+        self.fieldFrameDireccion.defFunc(self.cambiarDireccion)
+
+        # Frame funcionalidad 4 (FrameCocinar)
+        
+        self.frameCocinar = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
+        self.frames.append(self.frameCocinar)
+        self.tituloCocinar = Label(self.frameCocinar, text="COCINAR PRODUCTOS")
+        self.descipCocinar = Label(self.frameCocinar, text="DESCRIPCION")
+        self.tituloCocinar.pack(pady = 5)
+        self.descipCocinar.pack(pady = 5)
+        self.labelCocinar = Label(self.frameCocinar, text="Elija un producto")
+        self.labelCocinar.pack(pady = 5)
+
+        #Creando el comboBox
+        self.opcionesCompra = [] 
+        for producto in Producto.baseDatosProductos:
+            self.opcionesCompra.append(producto.getNombre())
+        
+        self.comboboxCocinar= ttk.Combobox(self.frameCocinar, values = self.opcionesCompra)
+        self.comboboxCocinar.pack(pady = 10)
+
+        #Implementaion del field frame
+        self.ffCocinar = FieldFrame("Elija la cantidad", ["Cantidad a comprar:"], "Ingrese aquí")
+        self.ffCocinar.defRoot(self.frameCocinar)
+
+        #Boton para cocinar
+        self.botonCocinar = Button(self.frameCocinar, text="Cocinar")
+        self.botonCocinar.pack(pady = 5)
+
+        #Frame CocinarPersonalizado 
+        self.frameCocinarPersonalizado = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
+        self.frames.append(self.frameCocinarPersonalizado)
+        self.ffCocinarPersonalizado1 = FieldFrame("Datos del producto", ["Nombre del producto:", "Cantidad a cocinar:"], "Ingreselos Aquí")
+        self.ffCocinarPersonalizado1.defRoot(self.frameCocinarPersonalizado)
+        self.ffCocinarPersonalizado2 = FieldFrame("Ingredientes necesarios", ["Nombre del ingrediente:", "Cantidad:"], "Ingreselos Aquí")
+        self.ffCocinarPersonalizado2.defRoot(self.ffCocinarPersonalizado1)
+        self.botonTerminarPersonalizado = Button(self.frameCocinarPersonalizado, text="Mandar a Cocinar")
+        self.botonTerminarPersonalizado.pack()
+        self.frameCocinarPersonalizado2 = Frame(self.frameCocinarPersonalizado, bd=1, relief=FLAT, padx=1, pady=1)
+        self.textEjecCocinarPersonalizado= Text(self.frameCocinarPersonalizado2)
+        self.textEjecCocinarPersonalizado.pack(fill=tk.BOTH, expand=True)
+        self.frameCocinarPersonalizado2.pack(fill=tk.BOTH, expand=True)
+
+        #Boton para cocinar Porducto personalizado
+        self.botonCocinarProductoPersonalizado = Button(self.frameCocinar, text="Cocinar producto personalizado", command=lambda: self.cambiarFrame(self.frameCocinarPersonalizado))
+        self.botonCocinarProductoPersonalizado.pack()
+        
+        #Frame de resultados de la ejecuion de Cocinar
+        self.frameCocinar2 = Frame(self.frameCocinar, bd=1, relief=FLAT, padx=1, pady=1)
+        self.textEjecCocinar= Text(self.frameCocinar2)
+        self.textEjecCocinar.pack(fill=tk.BOTH, expand=True)
+        self.frameCocinar2.pack(fill=tk.BOTH, expand=True)
 
         #Frame funcionalidad 5
         
@@ -303,7 +387,7 @@ class VentanaPrincipal:
         self.descipComprarIngredientes = Label(self.frameComprarIngredientes, text="DESCRIPCION")
         self.tituloComprarIngredientes.pack(pady = 5)
         self.descipComprarIngredientes.pack(pady = 5)
-        self.labelComprarIngredientes = Label(self.frameComprarIngredientes, text="Elija un producto")
+        self.labelComprarIngredientes = Label(self.frameComprarIngredientes, text="Elija un ingrediente")
         self.labelComprarIngredientes.pack(pady = 5)
         
         #Creando el comboBox
@@ -315,21 +399,26 @@ class VentanaPrincipal:
         self.comboboxComprarIngredientes.pack(pady = 10)
 
         #Implementaion del field frame
-
-        self.ffComprarIngredientes = FieldFrame("Valores", ["Cantidad a comprar:"], "Ingrese aquí")
+        self.ffComprarIngredientes = FieldFrame("Elija la cantidad", ["Cantidad a comprar:"], "Ingrese aquí")
         self.ffComprarIngredientes.defRoot(self.frameComprarIngredientes)
 
+        #Boton 
         self.botonComprarIngredientes = Button(self.frameComprarIngredientes, text="Comprar")
         self.botonComprarIngredientes.pack(pady = 5)
+        
+        self.frameComprarIngredientes2 = Frame(self.frameComprarIngredientes, bd=1, relief=FLAT, padx=1, pady=1)
+        self.textEjecComprarIngredientes = Text(self.frameComprarIngredientes2)
+        self.textEjecComprarIngredientes.pack(fill=tk.BOTH, expand=True)
+        self.frameComprarIngredientes2.pack(fill=tk.BOTH, expand=True)
 
-
+    # frameComprar
     def cargarFrameCarrito(self):
         #framep1 = Frame(frame, bd = 5, relief=FLAT, padx = 2, pady = 2, bg = "white").grid(row =0 , column = 0)
         #framep2 = Frame(frame, bd = 5, relief=FLAT, padx = 2, pady = 2, bg = "white").grid(row =0 , column = 1)
         self.frameComprar1 = Frame(self.frameComprar)
-        self.frameComprar1.grid(row =0 , column = 0, padx = 1, pady=1, sticky="nsew")
-        self.labelfc1 = Label(self.frameComprar1, text="Hola cliente, bienvenido a su canasta de compras, use el comboBox para ordenar, recuerde que en el menu procesos y consultas puede ver un catalogo mas completo de los productos que puede ordenar", wraplength=300)
-        self.labelfc1.pack(pady=30)
+        self.frameComprar1.pack()
+        self.labelfc1 = Label(self.frameComprar1, text="Hola cliente, bienvenido a su canasta de compras", wraplength=300)
+        self.labelfc1.pack(pady=5)
 
         #Label para el primer comboBox
         self.labelfc1_2 = Label(self.frameComprar1, text="Elija un producto")
@@ -344,30 +433,29 @@ class VentanaPrincipal:
             self.opcionesCompra.append(ingrediente.getNombre())
         
         self.comboboxfc1 = ttk.Combobox(self.frameComprar1, values = self.opcionesCompra)
-        self.comboboxfc1.pack(pady = 10)
+        self.comboboxfc1.pack(pady = 5)
 
-        #Label para el segundo comboBo
-        self.labelfc1_3 = Label(self.frameComprar1, text="Elija una cantidad")
-        self.labelfc1_3.pack(pady = 5)
-        
-        self.botonIrCatalogo = tk.Button(self.frameComprar1, text="Ir al catalogo", command = lambda: self.cambiarFrame(self.frameCatalogo))
-        self.botonIrCatalogo.pack(side="bottom", pady=50)
+        # FieldFrame para cantidad
+
+        self.ffCarrito = FieldFrame("Valores", ["Cantidad a comprar:"], "Ingrese aquí")
+        self.ffCarrito.defRoot(self.frameComprar1)
+
+        self.botonfc1 = Button(self.frameComprar1, text="Agregar a la canasta", command= self.registrarPedidoCanasta)
+        self.botonfc1.pack(pady = 10)
 
         self.botonCocinar = tk.Button(self.frameComprar1, text="Cocinar producto personalizado")
         self.botonCocinar.pack(side="bottom", pady=10)
 
-        #credando el segundo comboBox
-        self.opcionesCantidad = [1,2,3,4,5,6,7,8,9,10]
-        self.comboboxfc1_2 = ttk.Combobox(self.frameComprar1, values = self.opcionesCantidad)
-        self.comboboxfc1_2.pack(pady = 10)
-        self.botonfc1 = Button(self.frameComprar1, text="Agregar a la canasta", command= self.registrarPedidoCanasta)
-        self.botonfc1.pack(pady = 10)
+        self.botonIrCatalogo = tk.Button(self.frameComprar1, text="Ir al catalogo", command = lambda: self.cambiarFrame(self.frameCatalogo))
+        self.botonIrCatalogo.pack(side="bottom", pady=10)
+
+        self.botonIrPreguntarDomicilio = Button(self.frameComprar1, text = "Continuar con proceso de compra", command = lambda: self.cambiarFrame(self.framePreguntarDomicilio))
+        self.botonIrPreguntarDomicilio.pack(side="bottom", pady=10)
 
         self.frameComprar2 = Frame(self.frameComprar)
-        self.frameComprar2.grid(row =1 , column = 0, padx = 1, pady=1, sticky="nsew")
+        self.frameComprar2.pack(fill=tk.BOTH, expand=True)
         self.labelfc1 = Label(self.frameComprar2, text="Lista de compras y factura")
 
-        
         # Agregar un Scrollbar
         scrollbar = Scrollbar(self.frameComprar2)
         scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
@@ -580,10 +668,6 @@ class VentanaPrincipal:
         self.menu_procesos.entryconfigure("Lo mejor de nuestra panaderia", state="disabled")
         self.menu_procesos.entryconfigure("Ver facturas pasadas", state="disabled")
         self.menu_procesos.entryconfigure("Modificar datos", state="disabled")
-        #self.menu_procesos.entryconfigure("Cambiar contraseña", state="disabled")
-        #self.menu_procesos.entryconfigure("Meter plata a mi cuenta", state="disabled")
-        #self.menu_procesos.entryconfigure("Validar tipo de cliente", state="disabled")
-        #self.menu_procesos.entryconfigure("Modificar direccion", state="disabled")
         self.cambiarFrame(self.framePrincipal)
 
     def iniciarSesion(self, val):
@@ -609,10 +693,6 @@ class VentanaPrincipal:
                 self.menu_procesos.entryconfigure("Lo mejor de nuestra panaderia", state="normal")
                 self.menu_procesos.entryconfigure("Ver facturas pasadas", state="normal")
                 self.menu_procesos.entryconfigure("Modificar datos", state="normal")
-                #self.menu_procesos.entryconfigure("Cambiar contraseña", state="normal")
-                #self.menu_procesos.entryconfigure("Meter plata a mi cuenta", state="normal")
-                #self.menu_procesos.entryconfigure("Validar tipo de cliente", state="normal")
-                #self.menu_procesos.entryconfigure("Modificar direccion", state="normal")
                 messagebox.showinfo("Inicio de sesion", "Inicio de sesion exitoso")
                 self.cambiarFrame(self.framePrincipal)
                 self.cargarFrameCarrito()
@@ -643,13 +723,29 @@ class VentanaPrincipal:
             self.menu_procesos.entryconfigure("Lo mejor de nuestra panaderia", state="normal")
             self.menu_procesos.entryconfigure("Ver facturas pasadas", state="normal")
             self.menu_procesos.entryconfigure("Modificar datos", state="normal")
-            #self.menu_procesos.entryconfigure("Cambiar contraseña", state="normal")
-            #self.menu_procesos.entryconfigure("Meter plata a mi cuenta", state="normal")
-            #self.menu_procesos.entryconfigure("Validar tipo de cliente", state="normal")
-            #self.menu_procesos.entryconfigure("Modificar direccion", state="normal")
             self.cambiarFrame(self.framePrincipal)
         except usuarioExistenteError as e:
             messagebox.showwarning("Error", "El usuario ya existe")
+
+    def cambiarContrasena(self, val):
+        Cliente.getSesion().setContrasena(val[0])
+        messagebox.showinfo("Cambio de contraseña", "Contraseña cambiada correctamente")
+
+    def meterPlata(self, val):
+        Cliente.getSesion().setPresupuesto(Cliente.getSesion().getPresupuesto() + int(val[0]))
+        messagebox.showinfo("Meter plata", "Plata ingresada correctamente")
+
+    def cambiarDireccion(self, val):
+        try:
+            if val[0] == "":
+                raise CamposVaciosError([val[0]])
+            elif not Cliente.getSesion().establecerDomicilioValido(val[0],self.comboBoxDireccion.get()):
+                raise CamposVaciosError([self.comboBoxDireccion.get()])
+            else:
+                messagebox.showinfo("Cambio de direccion", "Direccion cambiada correctamente")
+        except CamposVaciosError as e:
+            messagebox.showwarning("Error", "Direccion inválida o campo vacio")
+
 
 # Codigo que produce la ejecucion de la ventana cuando se ejecuta desde este archivo
 def main():

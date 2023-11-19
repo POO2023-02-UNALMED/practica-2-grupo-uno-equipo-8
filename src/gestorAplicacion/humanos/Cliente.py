@@ -350,7 +350,7 @@ class Cliente:
         return True
 
     def verificarContrasenaNueva(self, contrasena):
-        if len(contrasena) < 8:
+        if len(contrasena) < 1:
             self._contrasena = contrasena
             return "La contraseña debe tener al menos 8 caracteres"
         else:
