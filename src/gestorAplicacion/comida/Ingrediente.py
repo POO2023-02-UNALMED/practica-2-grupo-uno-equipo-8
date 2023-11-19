@@ -116,8 +116,8 @@ class Ingrediente(ComidaDefault):
     
     #cambiar
     @classmethod
-    def organizarTopMasVendidos():
-        Ingrediente.topMasVendidos.clear()
+    def organizarTopMasVendidos(cls):
+        Ingrediente._topMasVendidos.clear()
         for i in range(len(ComidaDefault._baseDatosIngredientes)):
             for j in range(len(ComidaDefault._baseDatosIngredientes)):
                 if (ComidaDefault._baseDatosIngredientes[i].getVecesVendido() >
@@ -128,4 +128,4 @@ class Ingrediente(ComidaDefault):
 
         for i in range(len(ComidaDefault._baseDatosIngredientes)):
             if i < 5:
-                Ingrediente.topMasVendidos.append(ComidaDefault._baseDatosIngredientes[i])
+                Ingrediente._topMasVendidos.append(ComidaDefault._baseDatosIngredientes[i])

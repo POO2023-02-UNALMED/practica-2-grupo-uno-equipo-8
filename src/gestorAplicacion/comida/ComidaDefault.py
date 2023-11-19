@@ -103,16 +103,18 @@ class ComidaDefault:
     
     @classmethod
     def obtenerObjetoPorNombreP(cls,nombre):
+        from gestorAplicacion.comida.Producto import Producto
         producto = None
-        for productoActual in cls.baseDatosProductos:
+        for productoActual in Producto.baseDatosProductos:
             if productoActual.getNombre() == nombre:
                 producto = productoActual
         return producto
     
     @classmethod
     def obtenerObjetoPorIdP(cls,id):
+        from gestorAplicacion.comida.Producto import Producto
         producto = None
-        for productoActual in cls.baseDatosProductos:
+        for productoActual in Producto.baseDatosProductos:
             if productoActual.getId() == id:
                 producto = productoActual
         return producto

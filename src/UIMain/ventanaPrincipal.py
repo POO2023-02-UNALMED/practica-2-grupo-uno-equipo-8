@@ -10,6 +10,9 @@ import os
 import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from gestorAplicacion.humanos.Cliente import Cliente
+from gestorAplicacion.comida.Producto import Producto
+from gestorAplicacion.comida.Ingrediente import Ingrediente
+from baseDatos.Serializador import Serializador
 
 #Esta clase la cree yo (Richard), diganme si van a hacer algun cambio o si tienen alguna sugerencia
 #Los errores los esta manejando samuel
@@ -22,6 +25,12 @@ class VentanaPrincipal:
         self.root.title("Ventana principal")
         self.root.geometry("1000x800")
 
+        self.panaderia = Serializador.cargarPanaderia()
+        Cliente.setPanaderia(self.panaderia)
+        cliente1 = Cliente.inicioSesionId(202)
+        Cliente.inicioSesionContrasena(cliente1, "qwerty")
+        print(Cliente.getSesion().getCanastaOrden().getProductosEnLista())
+        print(Producto.obtenerObjetoPorIdP("13").getNombre())
 
         #Menu superior
         self.menu_principal = tk.Menu(self.root)
@@ -151,7 +160,7 @@ class VentanaPrincipal:
         self.comboboxfc1 = ttk.Combobox(self.frameComprar1, values = self.opcionesCompra)
         self.comboboxfc1.pack(pady = 10)
 
-        #Label para el segundo comboBox
+        #Label para el segundo comboBo
         self.labelfc1_3 = Label(self.frameComprar1, text="Elija una cantidad")
         self.labelfc1_3.pack(pady = 5)
         
@@ -179,13 +188,20 @@ class VentanaPrincipal:
         # Agregar un widget de Texto
         self.texto_widget = Text(self.frameComprar2, wrap=tk.WORD, yscrollcommand=scrollbar.set, width = 60)
         self.texto_widget.pack(fill=tk.Y, expand=True),
+        for elements, cantidad in Cliente.getSesion().getCanastaOrden().getProductosEnLista().items():
+            self.texto_widget.insert(tk.END, "Producto: " + Producto.obtenerObjetoPorIdP(elements).getNombre() + " - Cantidad: " + str(cantidad) + "\n")
+        for elements, cantidad in Cliente.getSesion().getCanastaOrden().getIngredientesEnLista().items():
+            self.texto_widget.insert(tk.END, "Ingrediente: " + Ingrediente.obtenerObjetoPorIdI(elements).getNombre() + " - Cantidad: " + str(cantidad) + "\n")
+        for elements, cantidad in Cliente.getSesion().getCanastaOrden().getKitsEnLista().items():
+            self.texto_widget.insert(tk.END, "Kits: " + Producto.obtenerObjetoPorIdP(elements).getNombre() + " - Cantidad: " + str(cantidad) + "\n")
+
         # frameCatalogo Catalogo de opciones disponibles para comprar
         self.frameCatalogo = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
         self.LabelCatalogo = Label(self.frameCatalogo, text="Catalogo de productos")
         self.BotonAtrasCatalogo = Button(self.frameCatalogo, text="volver atras", command= self.volverAtras)
         self.BotonAtrasCatalogo.pack(side=BOTTOM, pady=40)
         self.LabelCatalogo.pack()
-    
+
         self.frames.append(self.frameCatalogo)
         self.LabelCatalogo = Label(self.frameCatalogo, text="Catalogo de productos")
         self.LabelCatalogo.pack()
@@ -421,7 +437,7 @@ class VentanaPrincipal:
     def registrarPedidoCanasta(self):
         producto = self.comboboxfc1.get()
         cantidad = self.comboboxfc1_2.get()
-        self.texto_widget.insert(tk.END, "Producto: " + producto + " Cantidad: " + cantidad + "\n")
+        self.texto_widget.insert(tk.END, "Producto: " + producto + " - Cantidad: " + cantidad + "\n")
         self.comboboxfc1.delete(0, 'end')
         self.comboboxfc1_2.delete(0, 'end')
         Cliente.getSesion().getCanastaOrden().recibir_orden(producto, cantidad, False)

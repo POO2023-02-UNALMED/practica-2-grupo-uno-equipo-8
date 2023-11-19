@@ -134,10 +134,11 @@ class Domiciliario(Trabajador, ComidaDefault):
             
             listIngredientes[ingredienteNombre] = cantidad #revisar esto 
         
-        if valorcompra <= self.panaderia.getPanaderia():
+        if valorcompra <= self.panaderia.getDinero():
             
-            self.dineroEnMano += valorcompra  
-            dinero = self.panaderia.getPanaderia()
+            x = self.dinero_en_mano + valorcompra
+            self.dinero_en_mano = x  
+            dinero = self.panaderia.getDinero()
             self.panaderia.setDinero((dinero-valorcompra))
 
             if self.robado == True:

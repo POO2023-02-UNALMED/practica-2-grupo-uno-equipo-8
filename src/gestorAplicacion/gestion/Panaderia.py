@@ -228,13 +228,13 @@ class Panaderia():
 
             while self._enQuiebra == True:
                 
-                GestionConseguirIngredientes.lecturaQuiebra(self._enQuiebra) #Crear estas lecturas
+                #GestionConseguirIngredientes.lecturaQuiebra(self._enQuiebra) #Crear estas lecturas
                 self.saldarDeudas()
 
             self._dinero += valorNecesitado
             self._valorDeudas = valorNecesitado
 
-        GestionConseguirIngredientes.lecturaQuiebra(self._enQuiebra) #Crear estas lecturas
+        #GestionConseguirIngredientes.lecturaQuiebra(self._enQuiebra) #Crear estas lecturas
 
     def cocineroAleatorio(self):
         
@@ -260,17 +260,17 @@ class Panaderia():
     def comprarIngredientes(self, listIngredientes):
 
         elegido = self.domiciliarioAleatorio()
-        GestionConseguirIngredientes.lecturaCompra(elegido.isRobado()) #Recordar hacer este lector
+        #GestionConseguirIngredientes.lecturaCompra(elegido.isRobado()) #Recordar hacer este lector
 
         x = elegido.conseguirIngredientes(listIngredientes)
-        GestionConseguirIngredientes.lecturaRobo(x)
+        #GestionConseguirIngredientes.lecturaRobo(x)
 
         while(x == True):
 
             elegido.setRobado(False)
-            GestionConseguirIngredientes.lecturaCompra(elegido.isRobado()) #Recordar hacer este lector
+            #GestionConseguirIngredientes.lecturaCompra(elegido.isRobado()) #Recordar hacer este lector
             x = elegido.conseguirIngredientes(listIngredientes)
-            GestionConseguirIngredientes.lecturaRobo(x)
+            #GestionConseguirIngredientes.lecturaRobo(x)
 
         elegido.setRobado(True)
 
