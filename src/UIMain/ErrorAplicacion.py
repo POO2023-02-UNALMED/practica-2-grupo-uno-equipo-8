@@ -147,7 +147,7 @@ class CanastaVaciaError(ErrorTipoB):
     def __init__(self, message="La canasta está vacía"):
         super().__init__(message)
 
-class UsuarioExistente(ErrorTipoB):
+class usuarioExistenteError(ErrorTipoB):
     def __init__(self, message="El usuario ya existe"):
         super().__init__(message)
         

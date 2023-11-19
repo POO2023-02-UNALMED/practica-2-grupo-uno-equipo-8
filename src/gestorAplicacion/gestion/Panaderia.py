@@ -281,11 +281,11 @@ class Panaderia():
         #GestionConseguirIngredientes.lecturaRobo(x)
         if x == True:
             text.config(state=tk.NORMAL)
-            text.insert("Se ha enviado a comprar mas ingredientes, por favor espere a que se compren correctamente")
+            text.insert("Han robado al trabajador que iba por los ingredientes, pedimos disculpas por el atraso, enviaremos a alguien mas por la compra")
             text.config(state=tk.DISABLED)
         else:
             text.config(state=tk.NORMAL)
-            text.insert("Estamos en proceso de conseguir los ingredientes, lamentamos los inconvenientes")
+            text.insert("El trabajador ha regresado con los ingredientes!!")
             text.config(state=tk.DISABLED)
 
 
@@ -293,8 +293,23 @@ class Panaderia():
 
             elegido.setRobado(False)
             #GestionConseguirIngredientes.lecturaCompra(elegido.isRobado()) #Recordar hacer este lector
-            x = elegido.conseguirIngredientes(listIngredientes)
+            if elegido.isRobado() == True:
+                text.config(state=tk.NORMAL)
+                text.insert("Se ha enviado a comprar mas ingredientes, por favor espere a que se compren correctamente")
+                text.config(state=tk.DISABLED)
+            else:
+                text.config(state=tk.NORMAL)
+                text.insert("Estamos en proceso de conseguir los ingredientes, lamentamos los inconvenientes")
+                text.config(state=tk.DISABLED)
             #GestionConseguirIngredientes.lecturaRobo(x)
+            if x == True:
+                text.config(state=tk.NORMAL)
+                text.insert("Han robado al trabajador que iba por los ingredientes, pedimos disculpas por el atraso, enviaremos a alguien mas por la compra")
+                text.config(state=tk.DISABLED)
+            else:
+                text.config(state=tk.NORMAL)
+                text.insert("El trabajador ha regresado con los ingredientes!!")
+                text.config(state=tk.DISABLED)
 
         elegido.setRobado(True)
 

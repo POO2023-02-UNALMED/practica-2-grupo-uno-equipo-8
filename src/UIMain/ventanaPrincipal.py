@@ -4,7 +4,7 @@ from tkinter import messagebox
 from tkinter import ttk
 from FieldFrame import FieldFrame
 
-from ErrorAplicacion import CamposVaciosError, UsuarioNoEncontradoError
+from ErrorAplicacion import CamposVaciosError, UsuarioNoEncontradoError, usuarioExistenteError
 
 import os
 import sys
@@ -25,18 +25,20 @@ class VentanaPrincipal:
         self.root.title("Ventana principal")
         self.root.geometry("1000x800")
 
-        #frameframeRoot1 frame con los widgets
-        self.frameframeRoot2 = Frame()
+        #frameRoot1 frame con los widgets
+        self.frameRoot1 = Frame(self.root)
+        self.frameRoot1.pack()
         
 
-        #frameframeRoot2 frame con la informacion de los procesos
-        self.frameframeRoot2
+        #frameRoot2 frame con la informacion de los procesos
+        self.frameRoot2 = Frame(self.root)
+        self.frameRoot2.pack()
 
         self.panaderia = Serializador.cargarPanaderia()
         Cliente.setPanaderia(self.panaderia)
 
         #Menu superior
-        self.menu_principal = tk.Menu(self.frameRoot1)
+        self.menu_principal = tk.Menu(self.root)
 
         menu_archivo = tk.Menu(self.menu_principal, tearoff=0)
         menu_archivo.add_command(label="Aplicación", command=self.mostrar_info)
@@ -72,8 +74,7 @@ class VentanaPrincipal:
 
 
         # framePrincipal menu principal
-        self.framePrincipal = Frame(
-        self.frameRoot1, bd=1, relief=FLAT, padx=1, pady=1)
+        self.framePrincipal = Frame(self.frameRoot1, bd=1, relief=FLAT, padx=1, pady=1)
         self.framePrincipal.pack()
         self.frameActual = self.framePrincipal
         self.frames.append(self.framePrincipal)
@@ -97,7 +98,7 @@ class VentanaPrincipal:
         self.descripTituloInicioSesion.pack(pady=20)
 
         self.fieldFrameInicioSesion = FieldFrame("Datos Pedidos", ["Id:", "Contraseña:"], "Ingreselos Aquí")
-        self.fieldFrameInicioSesion.defframeRoot1(self.frameSesion)
+        self.fieldFrameInicioSesion.defRoot(self.frameSesion)
         self.fieldFrameInicioSesion.defFunc(self.iniciarSesion)
 
         #frameActual = self.frameSesion
@@ -106,7 +107,7 @@ class VentanaPrincipal:
 
         # frameRegistro registro
         self.frameRegistro = Frame( #Esto esta pendiente de ser adaptado con fieldFrames
-        self.frameRoot1, bd=1, relief=FLAT, padx=1, pady=1)
+        self.root, bd=1, relief=FLAT, padx=1, pady=1)
         self.frames.append(self.frameRegistro)
 
         self.labelTituloRegistro = Label(self.frameRegistro, text="REGISTRO")
@@ -116,7 +117,7 @@ class VentanaPrincipal:
         self.descripRegistro.pack(pady=20)
 
         self.fieldRegistro = FieldFrame("Datos Pedidos", ["Nombre:", "Id:", "Contraseña:"], "Ingreselos Aquí")
-        self.fieldRegistro.defframeRoot1(self.frameRegistro)
+        self.fieldRegistro.defRoot(self.frameRegistro)
         self.fieldRegistro.defFunc(self.registrarUsuario)
 
         #frameActual = self.frameRegistro
@@ -132,7 +133,7 @@ class VentanaPrincipal:
         self.infoBoton.pack(pady = 20)
 
         # frameComprar Ir a comprar
-        self.frameComprar = Frame(frameRoot1, bd = 1, relief=FLAT, padx = 1, pady = 1)
+        self.frameComprar = Frame(root, bd = 1, relief=FLAT, padx = 1, pady = 1)
         self.frames.append(self.frameComprar)
         tk.Grid.rowconfigure(self.frameComprar,0, weight=1)
         tk.Grid.columnconfigure(self.frameComprar,0, weight=1)
@@ -229,7 +230,7 @@ class VentanaPrincipal:
         self.LabelContrasenaDes.pack(pady=20)
         #usar fieldframe aqui ...
         self.fieldFrameContrasena = FieldFrame("Cambio", ["Contraseña nueva:"], "Ingrese aqui") #Ver ejemplo de uso en FieldFrame.py
-        self.fieldFrameContrasena.defframeRoot1(self.frameContrasena)
+        self.fieldFrameContrasena.defRoot(self.frameContrasena)
         self.frames.append(self.frameContrasena)
         
         # framePlata Meter plata a mi cuenta
@@ -240,7 +241,7 @@ class VentanaPrincipal:
         self.LabelPlataDes.pack(pady=20)
         #usar fieldframe aqui ...
         self.fieldFramePlata = FieldFrame("Valor", ["Cantidad a ingresar:"], "Ingrese aqui")
-        self.fieldFramePlata.defframeRoot1(self.framePlata)
+        self.fieldFramePlata.defRoot(self.framePlata)
         self.frames.append(self.framePlata)
         
         # frameValidarTipo Validar tipo de cliente
@@ -258,7 +259,7 @@ class VentanaPrincipal:
         self.LabelDireccionDes.pack(pady=20)
         #usar fieldframe aqui ...
         self.fieldFrameDireccion = FieldFrame("Datos", ["Ciudad", "Direccion específica:"], "Ingrese aqui")
-        self.fieldFrameDireccion.defframeRoot1(self.frameDireccion)
+        self.fieldFrameDireccion.defRoot(self.frameDireccion)
         self.frames.append(self.frameDireccion)
 
 
@@ -313,7 +314,7 @@ class VentanaPrincipal:
         scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
 
         # Agregar un widget de Texto
-        self.texto_widget = Text(self.frameRoot1, wrap=tk.WORD, yscrollcommand=scrollbar.set)
+        self.texto_widget = Text(self.root, wrap=tk.WORD, yscrollcommand=scrollbar.set)
         self.texto_widget.pack(fill=tk.BOTH, expand=True),
         for elements, cantidad in Cliente.getSesion().getCanastaOrden().getProductosEnLista().items():
             self.texto_widget.insert(tk.END, "Producto: " + Producto.obtenerObjetoPorIdP(elements).getNombre() + " - Cantidad: " + str(cantidad) + "\n")
@@ -411,7 +412,7 @@ class VentanaPrincipal:
         pass
 
     def salir(self):
-        self.frameRoot1.destroy()
+        self.root.destroy()
 
     def cambiarFrame(self, frame, guardarComoFrameAnterior = True):
         #if Cliente.getSesion() == None:
@@ -482,10 +483,10 @@ class VentanaPrincipal:
             try:
                 cliente1 = Cliente.inicioSesionId(int(val[0]))
                 if cliente1 is None:
-                    raise UsuarioNoEncontradoError(val[0])
+                    raise UsuarioNoEncontradoError(int(val[0]))
 
                 if Cliente.inicioSesionContrasena(cliente1, val[1]) == "Contraseña incorrecta":
-                    raise UsuarioNoEncontradoError(val[0])
+                    raise UsuarioNoEncontradoError(int(val[0]))
 
                 self.menu_procesos.entryconfigure("Iniciar sesion", state="disabled")
                 self.menu_procesos.entryconfigure("Registrarse", state="disabled")
@@ -498,6 +499,7 @@ class VentanaPrincipal:
                 self.menu_procesos.entryconfigure("Meter plata a mi cuenta", state="normal")
                 self.menu_procesos.entryconfigure("Validar tipo de cliente", state="normal")
                 self.menu_procesos.entryconfigure("Modificar direccion", state="normal")
+                messagebox.showinfo("Inicio de sesion", "Inicio de sesion exitoso")
                 self.cambiarFrame(self.framePrincipal)
                 self.cargarFrameCarrito()
                 break  # Sale del bucle si el inicio de sesión fue exitoso
@@ -505,7 +507,6 @@ class VentanaPrincipal:
             except UsuarioNoEncontradoError as e:
                 messagebox.showwarning("Error", "El usuario o la contraseña son incorrectos")
                 break  # Sale del bucle si se encuentra un error en el inicio de sesión
-
             except ValueError:
                 messagebox.showwarning("Error", "El usuario debe ser un numero")
                 break  # Sale del bucle si se encuentra un error en el inicio de sesión
@@ -515,7 +516,6 @@ class VentanaPrincipal:
             if Cliente.crearCuenta(val[0], int(val[1]), val[2]) == "Ya existe una cuenta con ese ID":
                 raise usuarioExistenteError
             messagebox.showinfo("Registro", "Usuario registrado correctamente")
-            """
             self.menu_procesos.entryconfigure("Iniciar sesion", state="disabled")
             self.menu_procesos.entryconfigure("Registrarse", state="disabled")
             self.menu_procesos.entryconfigure("Cerrar sesion", state="normal")
@@ -527,9 +527,8 @@ class VentanaPrincipal:
             self.menu_procesos.entryconfigure("Meter plata a mi cuenta", state="normal")
             self.menu_procesos.entryconfigure("Validar tipo de cliente", state="normal")
             self.menu_procesos.entryconfigure("Modificar direccion", state="normal")
-            """
             self.cambiarFrame(self.framePrincipal)
-        except:
+        except usuarioExistenteError as e:
             messagebox.showwarning("Error", "El usuario ya existe")
 
 # Codigo que produce la ejecucion de la ventana cuando se ejecuta desde este archivo
