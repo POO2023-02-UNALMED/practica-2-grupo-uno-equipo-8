@@ -308,9 +308,9 @@ class VentanaPrincipal:
         self.LabelValidarTipoDes = Label(self.frameValidarTipo, text="Descripcion")
         self.LabelValidarTipo.pack(pady=20)
         self.LabelValidarTipoDes.pack(pady=20)
-        self.comboBoxValidarTipo = ttk.Combobox(self.frameValidarTipo, values = ["Estudiante", "Profesor", "Senior","Empleado"])
+        self.comboBoxValidarTipo = ttk.Combobox(self.frameValidarTipo, values = ["Estudiante", "Profesor", "Senior","Empleado", "Ninguno"])
         self.comboBoxValidarTipo.pack(pady = 10)
-        self.botonValidarTipo = Button(self.frameValidarTipo, text="Establecer")
+        self.botonValidarTipo = Button(self.frameValidarTipo, text="Establecer",command=self.validarTipo)
         self.botonValidarTipo.pack(pady = 10)
         self.LabelValidarTipo.pack()
         
@@ -361,9 +361,13 @@ class VentanaPrincipal:
         self.ffCocinarPersonalizado1 = FieldFrame("Datos del producto", ["Nombre del producto:", "Cantidad a cocinar:"], "Ingreselos Aquí")
         self.ffCocinarPersonalizado1.defRoot(self.frameCocinarPersonalizado)
         self.ffCocinarPersonalizado2 = FieldFrame("Ingredientes necesarios", ["Nombre del ingrediente:", "Cantidad:"], "Ingreselos Aquí")
-        self.ffCocinarPersonalizado2.defRoot(self.ffCocinarPersonalizado1)
-        self.botonTerminarPersonalizado = Button(self.frameCocinarPersonalizado, text="Mandar a Cocinar")
-        self.botonTerminarPersonalizado.pack()
+
+        # Frame para ingredientes de personalizado
+        self.frameIngredientesPersonalizado = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
+        self.frames.append(self.frameIngredientesPersonalizado)
+        self.ffCocinarPersonalizado2.defRoot(self.frameIngredientesPersonalizado)
+
+        #Texto de ejecucion de cocinar producto personalizado
         self.frameCocinarPersonalizado2 = Frame(self.frameCocinarPersonalizado, bd=1, relief=FLAT, padx=1, pady=1)
         self.textEjecCocinarPersonalizado= Text(self.frameCocinarPersonalizado2)
         self.textEjecCocinarPersonalizado.pack(fill=tk.BOTH, expand=True)
@@ -745,6 +749,15 @@ class VentanaPrincipal:
                 messagebox.showinfo("Cambio de direccion", "Direccion cambiada correctamente")
         except CamposVaciosError as e:
             messagebox.showwarning("Error", "Direccion inválida o campo vacio")
+    
+    def validarTipo(self):
+        try:
+            if not Cliente.getSesion().establecerDescuentoPorTipoValido(self.comboBoxValidarTipo.get()):
+                raise CamposVaciosError([self.comboBoxValidarTipo.get()])
+            else:
+                messagebox.showinfo("Validar tipo de cliente", "Tipo de cliente validado correctamente")
+        except CamposVaciosError as e:
+            messagebox.showwarning("Error", "Tipo de cliente inválido o campo vacio")
 
 
 # Codigo que produce la ejecucion de la ventana cuando se ejecuta desde este archivo
