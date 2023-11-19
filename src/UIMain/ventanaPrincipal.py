@@ -25,15 +25,6 @@ class VentanaPrincipal:
         self.root.title("Ventana principal")
         self.root.geometry("1000x800")
 
-        #frameRoot1 frame con los widgets
-        self.frameRoot1 = Frame(self.root)
-        self.frameRoot1.pack()
-        
-
-        #frameRoot2 frame con la informacion de los procesos
-        self.frameRoot2 = Frame(self.root)
-        self.frameRoot2.pack()
-
         self.panaderia = Serializador.cargarPanaderia()
         Cliente.setPanaderia(self.panaderia)
 
@@ -50,14 +41,20 @@ class VentanaPrincipal:
         self.menu_procesos.add_command(label = "Iniciar sesion", command= lambda: self.cambiarFrame(self.frameSesion))
         self.menu_procesos.add_command(label = "Registrarse", command= lambda: self.cambiarFrame(self.frameRegistro))
         self.menu_procesos.add_command(label = "Cerrar sesion", state="disabled",command = self.cerrarSesion)
-        self.menu_procesos.add_command(label = "Ir a comprar", state="disabled",command = lambda: self.cambiarFrame(self.frameComprar))
-        self.menu_procesos.add_command(label = "Ver catalogo de productos y descripcion", state="disabled",command = lambda: self.cambiarFrame(self.frameCatalogo))
+        self.menu_procesos.add_command(label = "Func. Crear Canasta de Compras", state="disabled",command = lambda: self.cambiarFrame(self.frameComprar))
+        self.menu_procesos.add_command(label = "Func. Facturar", state="disabled")
+        self.menu_procesos.add_command(label = "Func. Cocinar", state="disabled")
+        self.menu_procesos.add_command(label = "Func. Conseguir Ingredientes", state="disabled")
+        self.menu_procesos.add_command(label = "Func. Domicilio", state="disabled")
         self.menu_procesos.add_command(label = "Lo mejor de nuestra panaderia", state="disabled",command = lambda: self.cambiarFrame(self.frameRanking))
         self.menu_procesos.add_command(label = "Ver facturas pasadas", state="disabled",command = lambda: self.cambiarFrame(self.frameHistorial))
+        self.menu_procesos.add_command(label = "Modificar datos", state="disabled",command = lambda: self.cambiarFrame(self.frameModificarDatos))
+        """
         self.menu_procesos.add_command(label = "Cambiar contraseña", state="disabled",command = lambda: self.cambiarFrame(self.frameContrasena))
         self.menu_procesos.add_command(label = "Meter plata a mi cuenta", state="disabled",command = lambda: self.cambiarFrame(self.framePlata))
         self.menu_procesos.add_command(label = "Validar tipo de cliente", state="disabled",command = lambda: self.cambiarFrame(self.frameValidarTipo))
         self.menu_procesos.add_command(label = "Modificar direccion", state="disabled",command = lambda: self.cambiarFrame(self.frameDireccion))
+        """
 
         self.menu_principal.add_cascade(label="Procesos y Consultas", menu=self.menu_procesos)
         menu_ayuda = tk.Menu(self.menu_principal, tearoff=0)
@@ -74,7 +71,7 @@ class VentanaPrincipal:
 
 
         # framePrincipal menu principal
-        self.framePrincipal = Frame(self.frameRoot1, bd=1, relief=FLAT, padx=1, pady=1)
+        self.framePrincipal = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
         self.framePrincipal.pack()
         self.frameActual = self.framePrincipal
         self.frames.append(self.framePrincipal)
@@ -88,7 +85,7 @@ class VentanaPrincipal:
 
 
         # frameSesion inicio de sesion
-        self.frameSesion = Frame(self.frameRoot1, bd=1, relief=FLAT, padx=1, pady=1) 
+        self.frameSesion = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1) 
         self.frames.append(self.frameSesion) #agregando a la lista de frames, necesaria para cambiar entre frames metodo cambiarFrame
 
         self.labelTituloInicioSesion = Label(self.frameSesion, text="INICIO DE SESION")
@@ -125,7 +122,7 @@ class VentanaPrincipal:
 
 
         # frameInfo frame con informacion
-        self.frameInfo = Frame(self.frameRoot1, bd=1, relief=FLAT, padx=1, pady=1)
+        self.frameInfo = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
         self.frames.append(self.frameInfo)
         self.labelInformacion = Label(self.frameInfo, text="Informacion aqui")
         self.labelInformacion.pack()
@@ -147,7 +144,7 @@ class VentanaPrincipal:
 
 
         # frameCatalogo Catalogo de opciones disponibles para comprar
-        self.frameCatalogo = Frame(self.frameRoot1, bd=1, relief=FLAT, padx=1, pady=1)
+        self.frameCatalogo = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
         self.LabelCatalogo = Label(self.frameCatalogo, text="Catalogo de productos")
         self.LabelCatalogo.pack()
 
@@ -195,7 +192,7 @@ class VentanaPrincipal:
         self.BotonAtrasCatalogo.pack(pady = 10)
 
         # frameDescripcion Descripcion de los productos
-        self.frameDescripcion = Frame(self.frameRoot1, bd=1, relief=FLAT, padx=1, pady=1)
+        self.frameDescripcion = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
         self.frames.append(self.frameDescripcion)
         self.LabelDescripcion = Label(self.frameDescripcion)
         self.LabelDescripcion.pack(pady = 15)
@@ -205,25 +202,45 @@ class VentanaPrincipal:
         self.LabelDescripcion2.pack(pady = 15)
         self.LabelDescripcion3 = Label(self.frameDescripcion) #En este label va a ir la descripcion del producto
         self.LabelDescripcion3.pack(pady = 15)
-        self.botonAtrasDescripcion = Button(self.frameDescripcion, text = "Volver al catalogo", command= self.volverAtras)
+        self.botonAtrasDescripcion = Button(self.frameDescripcion, text = "Volver al catalogo", command = lambda: self.cambiarFrame(self.frameCatalogo, False))
         self.botonAtrasDescripcion.pack(side="bottom", pady=15)
 
+        self.frameDescripcion2 = Frame(self.frameDescripcion)
+        self.frameDescripcion2.pack(fill = tk.BOTH, expand=True)
+        self.labelfc1 = Label(self.frameDescripcion2, text="Lista de compras y factura")
+
+        
+        # Agregar un Scrollbar
+        scrollbar = Scrollbar(self.frameDescripcion2)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+
+        # Agregar un widget de Texto
+        self.textoDescripcion = Text(self.frameDescripcion2, wrap=tk.WORD, yscrollcommand=scrollbar.set)
+        self.textoDescripcion.pack(fill=tk.BOTH, expand=True)
+        #self.textoDescripcion.insert()
+
         #frameRanking Lo mejor de nuestra panaderia
-        self.frameRanking = Frame(self.frameRoot1, bd=1, relief=FLAT, padx=1, pady=1)
+        self.frameRanking = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
         self.LabelRanking = Label(self.frameRanking, text="Lo mejor de POOBakery")
         self.LabelRanking.pack()
         #usar fieldframe aqui ...
         self.frames.append(self.frameRanking)
                 
         # frameHistorial Historial de facturas
-        self.frameHistorial = Frame(self.frameRoot1, bd=1, relief=FLAT, padx=1, pady=1)
+        self.frameHistorial = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
         self.LabelHistorial = Label(self.frameHistorial, text="Historial de facturas")
         self.LabelHistorial.pack()
         #usar fieldframe aqui ...
         self.frames.append(self.frameHistorial)
         
+
+        self.frameModificarDatos = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
+        self.frames.append(self.frameModificarDatos)
+        self.LabelModificarDatos = Label(self.frameModificarDatos, text="Modificar datos")
+        self.LabelModificarDatos.pack()
+
         # frameContrasena cambiar contraseña
-        self.frameContrasena = Frame(self.frameRoot1, bd=1, relief=FLAT, padx=1, pady=1)
+        self.frameContrasena = Frame(self.frameModificarDatos, bd=1, relief=FLAT, padx=1, pady=1)
         self.LabelContrasena = Label(self.frameContrasena, text="Cambiar contraseña")
         self.LabelContrasenaDes = Label(self.frameContrasena, text="Descripcion")
         self.LabelContrasena.pack(pady=20)
@@ -234,7 +251,7 @@ class VentanaPrincipal:
         self.frames.append(self.frameContrasena)
         
         # framePlata Meter plata a mi cuenta
-        self.framePlata = Frame(self.frameRoot1, bd=1, relief=FLAT, padx=1, pady=1)
+        self.framePlata = Frame(self.frameModificarDatos, bd=1, relief=FLAT, padx=1, pady=1)
         self.LabelPlata = Label(self.framePlata, text="Meter plata")
         self.LabelPlataDes = Label(self.framePlata, text="Descripcion")
         self.LabelPlata.pack(pady=20)
@@ -245,14 +262,14 @@ class VentanaPrincipal:
         self.frames.append(self.framePlata)
         
         # frameValidarTipo Validar tipo de cliente
-        self.frameValidarTipo = Frame(self.frameRoot1, bd=1, relief=FLAT, padx=1, pady=1)
+        self.frameValidarTipo = Frame(self.frameModificarDatos, bd=1, relief=FLAT, padx=1, pady=1)
         self.LabelValidarTipo = Label(self.frameValidarTipo, text="Validar tipo de cliente")
         self.LabelValidarTipo.pack()
         #usar fieldframe aqui ...
         self.frames.append(self.frameValidarTipo)
         
         # frameDireccion Modificar direccion
-        self.frameDireccion = Frame(self.frameRoot1, bd=1, relief=FLAT, padx=1, pady=1)
+        self.frameDireccion = Frame(self.frameModificarDatos, bd=1, relief=FLAT, padx=1, pady=1)
         self.LabelDireccion = Label(self.frameDireccion, text="Cambiar direccion")
         self.LabelDireccionDes = Label(self.frameDireccion, text="Descripcion")
         self.LabelDireccion.pack(pady=20)
@@ -261,6 +278,8 @@ class VentanaPrincipal:
         self.fieldFrameDireccion = FieldFrame("Datos", ["Ciudad", "Direccion específica:"], "Ingrese aqui")
         self.fieldFrameDireccion.defRoot(self.frameDireccion)
         self.frames.append(self.frameDireccion)
+
+        #frame de conseguir ingredientes
 
 
 
@@ -314,14 +333,17 @@ class VentanaPrincipal:
         scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
 
         # Agregar un widget de Texto
-        self.texto_widget = Text(self.root, wrap=tk.WORD, yscrollcommand=scrollbar.set)
-        self.texto_widget.pack(fill=tk.BOTH, expand=True),
+        self.texto_widget = Text(self.frameComprar2, wrap=tk.WORD, yscrollcommand=scrollbar.set)
+        self.texto_widget.pack(fill=tk.BOTH, expand=True)
         for elements, cantidad in Cliente.getSesion().getCanastaOrden().getProductosEnLista().items():
             self.texto_widget.insert(tk.END, "Producto: " + Producto.obtenerObjetoPorIdP(elements).getNombre() + " - Cantidad: " + str(cantidad) + "\n")
         for elements, cantidad in Cliente.getSesion().getCanastaOrden().getIngredientesEnLista().items():
             self.texto_widget.insert(tk.END, "Ingrediente: " + Ingrediente.obtenerObjetoPorIdI(elements).getNombre() + " - Cantidad: " + str(cantidad) + "\n")
         for elements, cantidad in Cliente.getSesion().getCanastaOrden().getKitsEnLista().items():
             self.texto_widget.insert(tk.END, "Kits: " + Producto.obtenerObjetoPorIdP(elements).getNombre() + " - Cantidad: " + str(cantidad) + "\n")
+
+        #Frame funcionalidad 5
+        self.frameComprarI
 
 
 
@@ -468,14 +490,20 @@ class VentanaPrincipal:
         self.menu_procesos.entryconfigure("Iniciar sesion", state="normal")
         self.menu_procesos.entryconfigure("Registrarse", state="normal")
         self.menu_procesos.entryconfigure("Cerrar sesion", state="disabled")
-        self.menu_procesos.entryconfigure("Ir a comprar", state="disabled")
-        self.menu_procesos.entryconfigure("Ver catalogo de productos y descripcion", state="disabled")
+        
+        self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="disabled")
+        self.menu_procesos.entryconfigure("Func. Facturar", state="disabled")
+        self.menu_procesos.entryconfigure("Func. Cocinar", state="disabled")
+        self.menu_procesos.entryconfigure("Func. Conseguir Ingredientes", state="disabled")
+        self.menu_procesos.entryconfigure("Func. Domicilio", state="disabled")
+
         self.menu_procesos.entryconfigure("Lo mejor de nuestra panaderia", state="disabled")
         self.menu_procesos.entryconfigure("Ver facturas pasadas", state="disabled")
-        self.menu_procesos.entryconfigure("Cambiar contraseña", state="disabled")
-        self.menu_procesos.entryconfigure("Meter plata a mi cuenta", state="disabled")
-        self.menu_procesos.entryconfigure("Validar tipo de cliente", state="disabled")
-        self.menu_procesos.entryconfigure("Modificar direccion", state="disabled")
+        self.menu_procesos.entryconfigure("Modificar datos", state="disabled")
+        #self.menu_procesos.entryconfigure("Cambiar contraseña", state="disabled")
+        #self.menu_procesos.entryconfigure("Meter plata a mi cuenta", state="disabled")
+        #self.menu_procesos.entryconfigure("Validar tipo de cliente", state="disabled")
+        #self.menu_procesos.entryconfigure("Modificar direccion", state="disabled")
         self.cambiarFrame(self.framePrincipal)
 
     def iniciarSesion(self, val):
@@ -491,14 +519,20 @@ class VentanaPrincipal:
                 self.menu_procesos.entryconfigure("Iniciar sesion", state="disabled")
                 self.menu_procesos.entryconfigure("Registrarse", state="disabled")
                 self.menu_procesos.entryconfigure("Cerrar sesion", state="normal")
-                self.menu_procesos.entryconfigure("Ir a comprar", state="normal")
-                self.menu_procesos.entryconfigure("Ver catalogo de productos y descripcion", state="normal")
+
+                self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="normal")
+                self.menu_procesos.entryconfigure("Func. Facturar", state="normal")
+                self.menu_procesos.entryconfigure("Func. Cocinar", state="normal")
+                self.menu_procesos.entryconfigure("Func. Conseguir Ingredientes", state="normal")
+                self.menu_procesos.entryconfigure("Func. Domicilio", state="normal")
+    
                 self.menu_procesos.entryconfigure("Lo mejor de nuestra panaderia", state="normal")
                 self.menu_procesos.entryconfigure("Ver facturas pasadas", state="normal")
-                self.menu_procesos.entryconfigure("Cambiar contraseña", state="normal")
-                self.menu_procesos.entryconfigure("Meter plata a mi cuenta", state="normal")
-                self.menu_procesos.entryconfigure("Validar tipo de cliente", state="normal")
-                self.menu_procesos.entryconfigure("Modificar direccion", state="normal")
+                self.menu_procesos.entryconfigure("Modificar datos", state="normal")
+                #self.menu_procesos.entryconfigure("Cambiar contraseña", state="normal")
+                #self.menu_procesos.entryconfigure("Meter plata a mi cuenta", state="normal")
+                #self.menu_procesos.entryconfigure("Validar tipo de cliente", state="normal")
+                #self.menu_procesos.entryconfigure("Modificar direccion", state="normal")
                 messagebox.showinfo("Inicio de sesion", "Inicio de sesion exitoso")
                 self.cambiarFrame(self.framePrincipal)
                 self.cargarFrameCarrito()
@@ -519,14 +553,20 @@ class VentanaPrincipal:
             self.menu_procesos.entryconfigure("Iniciar sesion", state="disabled")
             self.menu_procesos.entryconfigure("Registrarse", state="disabled")
             self.menu_procesos.entryconfigure("Cerrar sesion", state="normal")
-            self.menu_procesos.entryconfigure("Ir a comprar", state="normal")
-            self.menu_procesos.entryconfigure("Ver catalogo de productos y descripcion", state="normal")
+            
+            self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="normal")
+            self.menu_procesos.entryconfigure("Func. Facturar", state="normal")
+            self.menu_procesos.entryconfigure("Func. Cocinar", state="normal")
+            self.menu_procesos.entryconfigure("Func. Conseguir Ingredientes", state="normal")
+            self.menu_procesos.entryconfigure("Func. Domicilio", state="normal")
+
             self.menu_procesos.entryconfigure("Lo mejor de nuestra panaderia", state="normal")
             self.menu_procesos.entryconfigure("Ver facturas pasadas", state="normal")
-            self.menu_procesos.entryconfigure("Cambiar contraseña", state="normal")
-            self.menu_procesos.entryconfigure("Meter plata a mi cuenta", state="normal")
-            self.menu_procesos.entryconfigure("Validar tipo de cliente", state="normal")
-            self.menu_procesos.entryconfigure("Modificar direccion", state="normal")
+            self.menu_procesos.entryconfigure("Modificar datos", state="normal")
+            #self.menu_procesos.entryconfigure("Cambiar contraseña", state="normal")
+            #self.menu_procesos.entryconfigure("Meter plata a mi cuenta", state="normal")
+            #self.menu_procesos.entryconfigure("Validar tipo de cliente", state="normal")
+            #self.menu_procesos.entryconfigure("Modificar direccion", state="normal")
             self.cambiarFrame(self.framePrincipal)
         except usuarioExistenteError as e:
             messagebox.showwarning("Error", "El usuario ya existe")
