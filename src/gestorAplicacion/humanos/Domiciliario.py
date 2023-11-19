@@ -1,6 +1,6 @@
-from humanos.Catastrofe import Catastrofe
+from gestorAplicacion.humanos.Catastrofe import Catastrofe
 from gestorAplicacion.comida.Ingrediente import Ingrediente
-from humanos.Trabajador import Trabajador
+from gestorAplicacion.humanos.Trabajador import Trabajador
 from gestorAplicacion.comida.ComidaDefault import ComidaDefault
 
 class Domiciliario(Trabajador, ComidaDefault):

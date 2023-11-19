@@ -1,6 +1,7 @@
 import sys
 import os
 
+"""
 # Obtener la ruta al directorio del script actual (donde está Panaderia.py)
 ruta_actual = os.path.dirname(os.path.abspath(__file__))
 
@@ -9,13 +10,13 @@ ruta_raiz_proyecto = os.path.dirname(ruta_actual)
 
 # Agregar la ruta raíz del proyecto al sys.path
 sys.path.append(ruta_raiz_proyecto)
-
+"""
 # Ahora puedes importar Ingrediente desde Panaderia
-from comida.Ingrediente import Ingrediente
-from comida.Producto import Producto
-from humanos.Cocinero import Cocinero
-from gestion.Inventario import Inventario
-from gestion.Canasta import Canasta
+from ..comida.Ingrediente import Ingrediente
+from ..comida.Producto import Producto
+from ..humanos.Cocinero import Cocinero
+from ..gestion.Inventario import Inventario
+from ..gestion.Canasta import Canasta
 from random import shuffle
 
 class Panaderia():
@@ -245,7 +246,7 @@ class Panaderia():
     def domiciliarioAleatorio(self):
         
         listaprovicional = self._domiciliarios.copy()
-        listaprovicional.shuffle()
+        shuffle(listaprovicional)
         elegido = listaprovicional[0]
         return elegido 
     

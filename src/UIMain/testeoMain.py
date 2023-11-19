@@ -1,3 +1,7 @@
+import os
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from gestorAplicacion.gestion.Panaderia import Panaderia
 from gestorAplicacion.comida.Ingrediente import Ingrediente
 from gestorAplicacion.comida.Producto import Producto
@@ -14,7 +18,6 @@ class SerializationTest:
         panaderia = Serializador.cargarPanaderia()
         Cliente.setPanaderia(panaderia)
         print("panaderia cargada")
-
         """
         Ingrediente.crearIngrediente("leche")
         Ingrediente.crearIngrediente("harina")
@@ -28,14 +31,14 @@ class SerializationTest:
         Ingrediente.crearIngrediente("queso")
         Ingrediente.crearIngrediente("milo")
         Ingrediente.crearIngrediente("miga de galleta")
+
         """
-
-        #print(Ingrediente.crearIngrediente("meme"))
-        #Producto.crearProducto("marmota")
-
+        print(Ingrediente.crearIngrediente("meme"))
+        Producto.crearProductoPersonalizado("marmota", {"meme": 1, "carnita": 1, "hormiga": 1, "azucar": 1, "mantequilla": 1})
+        """
         print("ingredientes creados")
 
-
+        
         ingredientes_bunuelo = {
             "harina": 2,
             "huevos": 2,
@@ -69,20 +72,20 @@ class SerializationTest:
             "azucar": 1,
             "mantequilla": 1
         }
-        """
+        
         Producto.crearProductoPersonalizado("bunuelo", ingredientes_bunuelo)
         Producto.crearProductoPersonalizado("rollos de canela", ingredientes_rollos_canela)
         Producto.crearProductoPersonalizado("brownie", ingredientes_brownie)
         Producto.crearProductoPersonalizado("torta de milo", ingredientes_torta_milo)
         Producto.crearProductoPersonalizado("cheesecake", ingredientes_cheesecake)
-        """
+        
         for i in Ingrediente._baseDatosIngredientes:
             print(i.getId() , i.getNombre(), i.getPrecioDeCompra(), i.getPrecioDeVenta())
 
         for i in Producto.baseDatosProductos:
             print(i.getId() , i.getNombre(), i.getCosto(), i.getIngredientes())
 
-        """
+        
         print("productos creados")
         
         cliente1 = Cliente()
@@ -118,7 +121,7 @@ class SerializationTest:
         }
         
         Cliente.getSesion().crearCanastaNueva()
-        """
+        
         cliente1 = Cliente.inicioSesionId(202)
         Cliente.inicioSesionContrasena(cliente1, "qwerty")
         print("Cliente en sesion: " + Cliente.getSesion().getNombre())
@@ -154,14 +157,15 @@ class SerializationTest:
         
         print("Elementos personalizados añadidos correctamente a la canasta")
         #panaderia.cocinar(ingredientes_cocinar)
-    
+        """
         for i in Ingrediente._baseDatosIngredientes:
             print(i.getId() , i.getNombre(), i.getPrecioDeCompra(), i.getPrecioDeVenta())
 
         for i in Producto.baseDatosProductos:
             print(i.getId() , i.getNombre(), i.getCosto(), i.getIngredientes())
         
-        a.enviarOrdenCanasta()
+        #a.enviarOrdenCanasta()
+        
         #Serializador.guardarPanaderia(panaderia)
         print("panaderia guardada")
 

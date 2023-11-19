@@ -1,4 +1,3 @@
-from gestorAplicacion.comida.Ingrediente import Ingrediente
 from gestorAplicacion.comida.ComidaDefault import ComidaDefault
 from gestorAplicacion.comida.Producto import Producto
 from gestorAplicacion.comida.ProductoCaliente import ProductoCaliente
@@ -304,6 +303,7 @@ class Canasta:
     
 
     def generarCostoDeOrden(self):
+        from gestorAplicacion.comida.Ingrediente import Ingrediente
         costo_canasta = 0.0
         descuento_canasta = 0.0
 
@@ -329,6 +329,7 @@ class Canasta:
         self._costoTrasDescuentoEnLista = costo_canasta
 
     def recibir_orden(self, objeto_entrante, cantidad, receta):
+        from gestorAplicacion.comida.Ingrediente import Ingrediente
         self._estado_orden = False
 
         if int(cantidad) < 0:

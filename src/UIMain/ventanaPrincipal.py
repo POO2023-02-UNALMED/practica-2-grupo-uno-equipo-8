@@ -6,6 +6,11 @@ from FieldFrame import FieldFrame
 
 from ErrorAplicacion import CamposVaciosError, UsuarioNoEncontradoError
 
+import os
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from gestorAplicacion.humanos.Cliente import Cliente
+
 #Esta clase la cree yo (Richard), diganme si van a hacer algun cambio o si tienen alguna sugerencia
 #Los errores los esta manejando samuel
 
@@ -160,7 +165,7 @@ class VentanaPrincipal:
         self.opcionesCantidad = [1,2,3,4,5,6,7,8,9,10]
         self.comboboxfc1_2 = ttk.Combobox(self.frameComprar1, values = self.opcionesCantidad)
         self.comboboxfc1_2.pack(pady = 10)
-        self.botonfc1 = Button(self.frameComprar1, text="Agregar a la canasta")
+        self.botonfc1 = Button(self.frameComprar1, text="Agregar a la canasta", command= self.registrarPedidoCanasta)
         self.botonfc1.pack(pady = 10)
 
         self.frameComprar2 = Frame(self.frameComprar)
@@ -413,7 +418,13 @@ class VentanaPrincipal:
         self.LabelDescripcion2.config(text = "Calificacion de nuestros clientes: "+calificacion)
         self.LabelDescripcion3.config(text = descripcion)
 
-        
+    def registrarPedidoCanasta(self):
+        producto = self.comboboxfc1.get()
+        cantidad = self.comboboxfc1_2.get()
+        self.texto_widget.insert(tk.END, "Producto: " + producto + " Cantidad: " + cantidad + "\n")
+        self.comboboxfc1.delete(0, 'end')
+        self.comboboxfc1_2.delete(0, 'end')
+        Cliente.getSesion().getCanastaOrden().recibir_orden(producto, cantidad, False)
 
 # Codigo que produce la ejecucion de la ventana cuando se ejecuta desde este archivo
 def main():

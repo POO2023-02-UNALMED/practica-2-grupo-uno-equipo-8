@@ -1,6 +1,6 @@
 import random
-from comida.Ingrediente import Ingrediente
-from comida.ComidaDefault import ComidaDefault
+
+from gestorAplicacion.comida.ComidaDefault import ComidaDefault
 
 class Producto(ComidaDefault):
     topMasVendidos = []
@@ -16,7 +16,7 @@ class Producto(ComidaDefault):
 
         if id is None:
             Producto.baseDatosProductos.append(self)
-        self.id = id if id is not None else str(Producto.obtener_proximo_id())
+        self.id = id if id is not None else str(ComidaDefault.obtener_proximo_id())
         self.procesosDeCocina = []
 
     # Getter y Setter para el atributo 'nombre'
@@ -76,15 +76,17 @@ class Producto(ComidaDefault):
         return Producto(newProducto.getNombre(),newProducto.getIngredientes(), newProducto.getId(), newProducto.getCosto(), newProducto.getVecesVendido())
 
     def crearProductoPersonalizado(Nnombre, ingredientes):
+        from gestorAplicacion.comida.Ingrediente import Ingrediente
         for ingrediente, cantidad in ingredientes.items():
-            if not ComidaDefault.verificacionExistenciaPorNombreI(ingrediente):
+            if not Ingrediente.verificacionExistenciaPorNombreI(ingrediente):
                 Ingrediente(ingrediente)
         return Producto(Nnombre, ingredientes)
 
     def calcularCosto(self):
+        from gestorAplicacion.comida.Ingrediente import Ingrediente
         costo = 0
         for ingrediente, cantidad in self.ingredientes.items():
-            costo += Producto.obtenerObjetoPorNombreI(ingrediente).getPrecioDeVenta() * cantidad
+            costo += Ingrediente.obtenerObjetoPorNombreI(ingrediente).getPrecioDeVenta() * cantidad
         return costo * ComidaDefault.tarifaGanancias
     
     @staticmethod

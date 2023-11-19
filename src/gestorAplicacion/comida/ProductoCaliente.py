@@ -1,6 +1,6 @@
 from random import randint, sample
 from gestorAplicacion.comida.Producto import Producto
-from gestorAplicacion.comida.Producto import Ingrediente
+
 import random
 
 class ProductoCaliente(Producto):
@@ -28,6 +28,7 @@ class ProductoCaliente(Producto):
 
     @classmethod
     def crearProductoPersonalizado(cls, Nnombre, ingredientes):
+        from gestorAplicacion.comida.Ingrediente import Ingrediente
         for nombreIngrediente, cantidad in ingredientes.items():
             if not Ingrediente.verificacionExistenciaPorNombreI(nombreIngrediente):
                 Ingrediente(nombreIngrediente)

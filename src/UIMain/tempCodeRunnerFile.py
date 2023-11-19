@@ -1,1 +1,1 @@
-
+xt="Hola cliente, bienvenido a su canasta de compras, use el comboBox para ordenar, recuerde que e
