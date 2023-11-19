@@ -44,7 +44,7 @@ class VentanaPrincipal:
         self.menu_procesos.add_command(label = "Func. Crear Canasta de Compras", state="disabled",command = lambda: self.cambiarFrame(self.frameComprar))
         self.menu_procesos.add_command(label = "Func. Facturar", state="disabled")
         self.menu_procesos.add_command(label = "Func. Cocinar", state="disabled")
-        self.menu_procesos.add_command(label = "Func. Conseguir Ingredientes", state="disabled")
+        self.menu_procesos.add_command(label = "Func. Conseguir Ingredientes", command=lambda:self.cambiarFrame(self.frameComprarIngredientes), state="disabled")
         self.menu_procesos.add_command(label = "Func. Domicilio", state="disabled")
         self.menu_procesos.add_command(label = "Lo mejor de nuestra panaderia", state="disabled",command = lambda: self.cambiarFrame(self.frameRanking))
         self.menu_procesos.add_command(label = "Ver facturas pasadas", state="disabled",command = lambda: self.cambiarFrame(self.frameHistorial))
@@ -134,7 +134,7 @@ class VentanaPrincipal:
         self.frames.append(self.frameComprar)
         tk.Grid.rowconfigure(self.frameComprar,0, weight=1)
         tk.Grid.columnconfigure(self.frameComprar,0, weight=1)
-       # tk.Grid.columnconfigure(self.frameComprar,1, weight=1)
+        # tk.Grid.columnconfigure(self.frameComprar,1, weight=1)
         tk.Grid.rowconfigure(self.frameComprar, 1, weight = 1)
 
 
@@ -237,12 +237,17 @@ class VentanaPrincipal:
         self.frameModificarDatos = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
         self.frames.append(self.frameModificarDatos)
         self.LabelModificarDatos = Label(self.frameModificarDatos, text="Modificar datos")
-        self.LabelModificarDatos.pack()
-
-
+        self.LabelModificarDatos.grid(row=0, column=0, columnspan=2)
+        
+        tk.Grid.rowconfigure(self.frameModificarDatos, 0, weight=1)
+        tk.Grid.rowconfigure(self.frameModificarDatos, 1, weight=1)
+        tk.Grid.rowconfigure(self.frameModificarDatos, 2, weight=1)
+        tk.Grid.columnconfigure(self.frameModificarDatos, 0, weight=1)
+        tk.Grid.columnconfigure(self.frameModificarDatos, 1, weight=1)        
 
         # frameContrasena cambiar contraseña
         self.frameContrasena = Frame(self.frameModificarDatos, bd=1, relief=FLAT, padx=1, pady=1)
+        self.frameContrasena.grid(row=1, column=0, sticky="nsew")
         self.LabelContrasena = Label(self.frameContrasena, text="Cambiar contraseña")
         self.LabelContrasenaDes = Label(self.frameContrasena, text="Descripcion")
         self.LabelContrasena.pack(pady=20)
@@ -250,10 +255,10 @@ class VentanaPrincipal:
         #usar fieldframe aqui ...
         self.fieldFrameContrasena = FieldFrame("Cambio", ["Contraseña nueva:"], "Ingrese aqui") #Ver ejemplo de uso en FieldFrame.py
         self.fieldFrameContrasena.defRoot(self.frameContrasena)
-        self.frames.append(self.frameContrasena)
         
         # framePlata Meter plata a mi cuenta
         self.framePlata = Frame(self.frameModificarDatos, bd=1, relief=FLAT, padx=1, pady=1)
+        self.framePlata.grid(row=1, column=1, sticky="nsew")
         self.LabelPlata = Label(self.framePlata, text="Meter plata")
         self.LabelPlataDes = Label(self.framePlata, text="Descripcion")
         self.LabelPlata.pack(pady=20)
@@ -265,13 +270,22 @@ class VentanaPrincipal:
         
         # frameValidarTipo Validar tipo de cliente
         self.frameValidarTipo = Frame(self.frameModificarDatos, bd=1, relief=FLAT, padx=1, pady=1)
+        self.frameValidarTipo.grid(row=2, column=0, sticky="nsew")
         self.LabelValidarTipo = Label(self.frameValidarTipo, text="Validar tipo de cliente")
+        self.LabelValidarTipoDes = Label(self.frameValidarTipo, text="Descripcion")
+        self.LabelValidarTipo.pack(pady=20)
+        self.LabelValidarTipoDes.pack(pady=20)
+        self.comboBoxValidarTipo = ttk.Combobox(self.frameValidarTipo, values = ["Estudiante", "Profesor", "Senior","Empleado"])
+        self.comboBoxValidarTipo.pack(pady = 10)
+        self.botonValidarTipo = Button(self.frameValidarTipo, text="Establecer")
+        self.botonValidarTipo.pack(pady = 10)
         self.LabelValidarTipo.pack()
         #usar fieldframe aqui ...
         self.frames.append(self.frameValidarTipo)
         
         # frameDireccion Modificar direccion
         self.frameDireccion = Frame(self.frameModificarDatos, bd=1, relief=FLAT, padx=1, pady=1)
+        self.frameDireccion.grid(row=2, column=1, sticky="nsew")
         self.LabelDireccion = Label(self.frameDireccion, text="Cambiar direccion")
         self.LabelDireccionDes = Label(self.frameDireccion, text="Descripcion")
         self.LabelDireccion.pack(pady=20)
@@ -281,8 +295,32 @@ class VentanaPrincipal:
         self.fieldFrameDireccion.defRoot(self.frameDireccion)
         self.frames.append(self.frameDireccion)
 
-        #frame de conseguir ingredientes
+        #Frame funcionalidad 5
+        
+        self.frameComprarIngredientes = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
+        self.frames.append(self.frameComprarIngredientes)
+        self.tituloComprarIngredientes = Label(self.frameComprarIngredientes, text="COMPRAR INGREDIENTES")
+        self.descipComprarIngredientes = Label(self.frameComprarIngredientes, text="DESCRIPCION")
+        self.tituloComprarIngredientes.pack(pady = 5)
+        self.descipComprarIngredientes.pack(pady = 5)
+        self.labelComprarIngredientes = Label(self.frameComprarIngredientes, text="Elija un producto")
+        self.labelComprarIngredientes.pack(pady = 5)
+        
+        #Creando el comboBox
+        self.opcionesCompra = [] 
+        for ingrediente in Ingrediente._baseDatosIngredientes:
+            self.opcionesCompra.append(ingrediente.getNombre())
+        
+        self.comboboxComprarIngredientes = ttk.Combobox(self.frameComprarIngredientes, values = self.opcionesCompra)
+        self.comboboxComprarIngredientes.pack(pady = 10)
 
+        #Implementaion del field frame
+
+        self.ffComprarIngredientes = FieldFrame("Valores", ["Cantidad a comprar:"], "Ingrese aquí")
+        self.ffComprarIngredientes.defRoot(self.frameComprarIngredientes)
+
+        self.botonComprarIngredientes = Button(self.frameComprarIngredientes, text="Comprar")
+        self.botonComprarIngredientes.pack(pady = 5)
 
 
     def cargarFrameCarrito(self):
@@ -344,8 +382,12 @@ class VentanaPrincipal:
         for elements, cantidad in Cliente.getSesion().getCanastaOrden().getKitsEnLista().items():
             self.texto_widget.insert(tk.END, "Kits: " + Producto.obtenerObjetoPorIdP(elements).getNombre() + " - Cantidad: " + str(cantidad) + "\n")
 
-        #Frame funcionalidad 5
-        self.frameComprarI
+        # Tag para centrar texto
+        self.texto_widget.tag_configure("center", justify="center")
+
+        # Aplicar el tag al texto
+        self.texto_widget.tag_add("center", "1.0", "end")
+
 
 
 
@@ -478,36 +520,42 @@ class VentanaPrincipal:
         self.fotoDescripcion.config(image = foto)
         self.LabelDescripcion2.config(text = "Calificacion de nuestros clientes: "+calificacion)
         self.LabelDescripcion3.config(text = descripcion)
+        self.textoDescripcion.delete(1.0, tk.END)
         nutrientes = (
-            " _______________________________________________________ \n"
-            f"|{'Producto: ' + nombre.center(48 - len(nombre))} |\n"
+            " _______________________________________________________\n"
+            f"|"+centrar("Producto: "+nombre)+"|\n"
             "| Porcion: 30 g                                         |\n"
-            "|_______________________________________________________| \n"
+            "|_______________________________________________________|\n"
             "| Informacion nutricional por porcion                   |\n"
-            "|______________________ ________ _______________________| \n"
-            "| Energia              | 140 kcal| 7%% del valor diario  |\n"
             "|______________________ ________ _______________________|\n"
-            "| Grasa total          | 6 g     | 9%% del valor diario  |\n"
-            "| _ Grasa saturada     | 3 g     | 15%% del valor diario |\n"
+            "| Energia              | 140 kcal| 7% del valor diario  |\n"
+            "|______________________ ________ _______________________|\n"
+            "| Grasa total          | 6 g     | 9% del valor diario  |\n"
+            "| _ Grasa saturada     | 3 g     | 15% del valor diario |\n"
             "| _ Grasa trans        | 0 g     |                      |\n"
-            "|______________________ ________ _______________________| \n"
-            "| Colesterol           | 0 mg    | 0%% del valor diario  |\n"
-            "|______________________ ________ _______________________| \n"
-            "| Sodio                | 75 mg   | 3%% del valor diario  |\n"
-            "|______________________ ________ _______________________| \n"
-            "| Carbohidratos totales| 20 g    | 7%% del valor diario  |\n"
-            "| _ Fibra dietetica    | 1 g     | 4%% del valor diario  |\n"
+            "|______________________ ________ _______________________|\n"
+            "| Colesterol           | 0 mg    | 0% del valor diario  |\n"
+            "|______________________ ________ _______________________|\n"
+            "| Sodio                | 75 mg   | 3% del valor diario  |\n"
+            "|______________________ ________ _______________________|\n"
+            "| Carbohidratos totales| 20 g    | 7% del valor diario  |\n"
+            "| _ Fibra dietetica    | 1 g     | 4% del valor diario  |\n"
             "| _ Azucares           | 10 g    |                      |\n"
-            "|______________________ ________ _______________________| \n"
+            "|______________________ ________ _______________________|\n"
             "| Proteina             | 2 g     |                      |\n"
-            "|______________________ ________ _______________________| \n"
-            "| Vitamina A           | 0%% del valor diario            |\n"
-            "| Vitamina C           | 0%% del valor diario            |\n"
-            "| Calcio               | 2%% del valor diario            |\n"
-            "| Hierro               | 6%% del valor diario            |\n"
-            "|_______________________________________________________| \n"
+            "|______________________ ________ _______________________|\n"
+            "| Vitamina A           | 0% del valor diario            |\n"
+            "| Vitamina C           | 0% del valor diario            |\n"
+            "| Calcio               | 2% del valor diario            |\n"
+            "| Hierro               | 6% del valor diario            |\n"
+            "|_______________________________________________________|\n"
         )
-        self.textoDesccripcion.insert(Tk.end, nutrientes)
+        self.textoDescripcion.insert(tk.END, nutrientes)
+        # Configurar el tag para centrar el texto
+        self.textoDescripcion.tag_configure("center", justify="center")
+
+        # Aplicar el tag al texto
+        self.textoDescripcion.tag_add("center", "1.0", "end")
 
     def registrarPedidoCanasta(self):
         producto = self.comboboxfc1.get()
