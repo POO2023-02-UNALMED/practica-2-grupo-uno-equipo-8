@@ -27,7 +27,6 @@ class FieldFrame(Frame):
                 p.delete(0, END)
 
         def adicionValida():
-            
             entriesValues = []
             for l in self.entradas:
                 entriesValues.append(l.get())
@@ -39,6 +38,9 @@ class FieldFrame(Frame):
                 mensaje = f"Por favor, complete los campos: {len(e.campos_faltantes)}"
                 messagebox.showwarning("Campos Vacíos", mensaje)
                 eliminar()
+
+            if self.funcionAsociada:
+                self.funcionAsociada(self.valores)
 
         for k in criterios:
             cont = criterios.index(k)

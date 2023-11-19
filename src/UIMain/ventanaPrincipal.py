@@ -27,10 +27,6 @@ class VentanaPrincipal:
 
         self.panaderia = Serializador.cargarPanaderia()
         Cliente.setPanaderia(self.panaderia)
-        cliente1 = Cliente.inicioSesionId(202)
-        Cliente.inicioSesionContrasena(cliente1, "qwerty")
-        print(Cliente.getSesion().getCanastaOrden().getProductosEnLista())
-        print(Producto.obtenerObjetoPorIdP("13").getNombre())
 
         #Menu superior
         self.menu_principal = tk.Menu(self.root)
@@ -40,21 +36,21 @@ class VentanaPrincipal:
         menu_archivo.add_command(label="Salir", command=self.salir)
         self.menu_principal.add_cascade(label="Archivo", menu=menu_archivo)
 
-        menu_procesos = tk.Menu(self.menu_principal, tearoff=0)
-        menu_procesos.add_command(label = "Ventana principal", command = lambda: self.cambiarFrame(self.framePrincipal))
-        menu_procesos.add_command(label = "Iniciar sesion", command= lambda: self.cambiarFrame(self.frameSesion))
-        menu_procesos.add_command(label = "Registrarse", command= lambda: self.cambiarFrame(self.frameRegistro))
-        menu_procesos.add_command(label = "Cerrar sesion")
-        menu_procesos.add_command(label = "Ir a comprar", command = lambda: self.cambiarFrame(self.frameComprar))
-        menu_procesos.add_command(label = "Ver catalogo de productos y descripcion", command = lambda: self.cambiarFrame(self.frameCatalogo))
-        menu_procesos.add_command(label = "Lo mejor de nuestra panaderia", command = lambda: self.cambiarFrame(self.frameRanking))
-        menu_procesos.add_command(label = "Ver facturas pasadas", command = lambda: self.cambiarFrame(self.frameHistorial))
-        menu_procesos.add_command(label = "Cambiar contraseña", command = lambda: self.cambiarFrame(self.frameContrasena))
-        menu_procesos.add_command(label = "Meter plata a mi cuenta", command = lambda: self.cambiarFrame(self.framePlata))
-        menu_procesos.add_command(label = "Validar tipo de cliente", command = lambda: self.cambiarFrame(self.frameValidarTipo))
-        menu_procesos.add_command(label = "Modificar direccion", command = lambda: self.cambiarFrame(self.frameDireccion))
+        self.menu_procesos = tk.Menu(self.menu_principal, tearoff=0)
+        self.menu_procesos.add_command(label = "Ventana principal", command = lambda: self.cambiarFrame(self.framePrincipal))
+        self.menu_procesos.add_command(label = "Iniciar sesion", command= lambda: self.cambiarFrame(self.frameSesion))
+        self.menu_procesos.add_command(label = "Registrarse", command= lambda: self.cambiarFrame(self.frameRegistro))
+        self.menu_procesos.add_command(label = "Cerrar sesion", state="disabled",command = self.cerrarSesion)
+        self.menu_procesos.add_command(label = "Ir a comprar", state="disabled",command = lambda: self.cambiarFrame(self.frameComprar))
+        self.menu_procesos.add_command(label = "Ver catalogo de productos y descripcion", state="disabled",command = lambda: self.cambiarFrame(self.frameCatalogo))
+        self.menu_procesos.add_command(label = "Lo mejor de nuestra panaderia", state="disabled",command = lambda: self.cambiarFrame(self.frameRanking))
+        self.menu_procesos.add_command(label = "Ver facturas pasadas", state="disabled",command = lambda: self.cambiarFrame(self.frameHistorial))
+        self.menu_procesos.add_command(label = "Cambiar contraseña", state="disabled",command = lambda: self.cambiarFrame(self.frameContrasena))
+        self.menu_procesos.add_command(label = "Meter plata a mi cuenta", state="disabled",command = lambda: self.cambiarFrame(self.framePlata))
+        self.menu_procesos.add_command(label = "Validar tipo de cliente", state="disabled",command = lambda: self.cambiarFrame(self.frameValidarTipo))
+        self.menu_procesos.add_command(label = "Modificar direccion", state="disabled",command = lambda: self.cambiarFrame(self.frameDireccion))
 
-        self.menu_principal.add_cascade(label="Procesos y Consultas", menu=menu_procesos)
+        self.menu_principal.add_cascade(label="Procesos y Consultas", menu=self.menu_procesos)
         menu_ayuda = tk.Menu(self.menu_principal, tearoff=0)
         menu_ayuda.add_command(label="Acerca de", command=self.mostrar_autores)
         self.menu_principal.add_cascade(label="Ayuda", menu=menu_ayuda)
@@ -65,6 +61,8 @@ class VentanaPrincipal:
         self.frames = [] #lista de todos los frames necesaria para el metodo cambiarFrame
 
         # Creacion de los frames:
+
+
 
         # framePrincipal menu principal
         self.framePrincipal = Frame(
@@ -77,57 +75,43 @@ class VentanaPrincipal:
         self.imagen_1tk = tk.PhotoImage(file='src/resources/logoBienvenida.png')
         self.labelBienvenida = Label(self.framePrincipal, image = self.imagen_1tk)
         self.labelBienvenida.pack()
-        
+
+
+
+
         # frameSesion inicio de sesion
-        self.frameSesion = Frame( #Esto esta pendiente de ser adaptado con fieldFrames
-        self.root, bd=1, relief=FLAT, padx=1, pady=1) 
+        self.frameSesion = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1) 
         self.frames.append(self.frameSesion) #agregando a la lista de frames, necesaria para cambiar entre frames metodo cambiarFrame
-        self.root.title("Inicio de Sesión")
 
-        self.label_usuario = Label(self.frameSesion, text="Usuario:")
-        self.label_usuario.pack(pady=10)
+        self.labelTituloInicioSesion = Label(self.frameSesion, text="INICIO DE SESION")
+        self.labelTituloInicioSesion.pack(pady=20)
+        
+        self.descripTituloInicioSesion = Label(self.frameSesion, text="Descripcion")
+        self.descripTituloInicioSesion.pack(pady=20)
 
-        self.entry_usuario = Entry(self.frameSesion)
-        self.entry_usuario.pack(pady=10)
-
-        self.label_contrasena = Label(self.frameSesion, text="Contraseña:")
-        self.label_contrasena.pack(pady=10)
-
-        self.entry_contrasena = Entry(self.frameSesion, show="*")
-        self.entry_contrasena.pack(pady=10)
-
-        self.boton_iniciar_sesion = Button(self.frameSesion, text="Iniciar Sesión", command = self.iniciar_sesion)
-        self.boton_iniciar_sesion.pack(pady=10)
+        self.fieldFrameInicioSesion = FieldFrame("Datos Pedidos", ["Id:", "Contraseña:"], "Ingreselos Aquí")
+        self.fieldFrameInicioSesion.defRoot(self.frameSesion)
+        self.fieldFrameInicioSesion.defFunc(self.iniciarSesion)
 
         frameActual = self.frameSesion
+
+
 
         # frameRegistro registro
         self.frameRegistro = Frame( #Esto esta pendiente de ser adaptado con fieldFrames
         self.root, bd=1, relief=FLAT, padx=1, pady=1)
         self.frames.append(self.frameRegistro)
 
-        self.root.title("Registro")
+        self.labelTituloRegistro = Label(self.frameRegistro, text="REGISTRO")
+        self.labelTituloRegistro.pack(pady=20)
+        
+        self.descripRegistro = Label(self.frameRegistro, text="Descripcion")
+        self.descripRegistro.pack(pady=20)
 
-        self.label_RegistroUsuario = Label(self.frameRegistro, text="Usuario:")
-        self.label_RegistroUsuario.pack(pady=10)
+        self.fieldRegistro = FieldFrame("Datos Pedidos", ["Nombre:", "Id:", "Contraseña:"], "Ingreselos Aquí")
+        self.fieldRegistro.defRoot(self.frameRegistro)
 
-        self.entry_RegistroUsuario = Entry(self.frameRegistro)
-        self.entry_RegistroUsuario.pack(pady=10)
 
-        self.label_RegistroIdentificacion = Label(self.frameRegistro, text="Identificacion: ")
-        self.label_RegistroIdentificacion.pack(pady=10)
-
-        self.entry_RegistroIdentificacion = Entry(self.frameRegistro)
-        self.entry_RegistroIdentificacion.pack(pady=10)
-
-        self.label_RegistroContrasena = Label(self.frameRegistro, text="Contraseña:")
-        self.label_RegistroContrasena.pack(pady=10)
-
-        self.entry_RegistroContrasena = Entry(self.frameRegistro, show="*")
-        self.entry_RegistroContrasena.pack(pady=10)
-
-        self.boton_Registro = Button(self.frameRegistro, text="Registrarse", command = self.registrarse)
-        self.boton_Registro.pack(pady=10)
 
         # frameInfo frame con informacion
         self.frameInfo = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
@@ -144,61 +128,11 @@ class VentanaPrincipal:
         tk.Grid.columnconfigure(self.frameComprar,0, weight=6)
         tk.Grid.columnconfigure(self.frameComprar,1, weight=1)
 
-        #framep1 = Frame(frame, bd = 5, relief=FLAT, padx = 2, pady = 2, bg = "white").grid(row =0 , column = 0)
-        #framep2 = Frame(frame, bd = 5, relief=FLAT, padx = 2, pady = 2, bg = "white").grid(row =0 , column = 1)
-        self.frameComprar1 = Frame(self.frameComprar)
-        self.frameComprar1.grid(row =0 , column = 0, padx = 1, pady=1, sticky="nsew")
-        self.labelfc1 = Label(self.frameComprar1, text="Hola cliente, bienvenido a su canasta de compras, use el comboBox para ordenar, recuerde que en el menu procesos y consultas puede ver un catalogo mas completo de los productos que puede ordenar", wraplength=300)
-        self.labelfc1.pack(pady=30)
 
-        #Label para el primer comboBox
-        self.labelfc1_2 = Label(self.frameComprar1, text="Elija un producto")
-        self.labelfc1_2.pack(pady = 5)
-        
-        #Creando el primer comboBox
-        self.opcionesCompra = [] #IMPORTANTE despues de configurar serializacion colocar lista aqui
-        for producto in Producto.baseDatosProductos:
-            self.opcionesCompra.append(producto.getNombre())
-        for ingrediente in Ingrediente._baseDatosIngredientes:
-            self.opcionesCompra.append(ingrediente.getNombre())
-        
-        self.comboboxfc1 = ttk.Combobox(self.frameComprar1, values = self.opcionesCompra)
-        self.comboboxfc1.pack(pady = 10)
 
-        #Label para el segundo comboBo
-        self.labelfc1_3 = Label(self.frameComprar1, text="Elija una cantidad")
-        self.labelfc1_3.pack(pady = 5)
-        
-        self.botonIrCatalogo = tk.Button(self.frameComprar1, text="Ir al catalogo", command = lambda: self.cambiarFrame(self.frameCatalogo))
-        self.botonIrCatalogo.pack(side="bottom", pady=50)
+        #El frame del carrito lo volví una funcion
 
-        self.botonCocinar = tk.Button(self.frameComprar1, text="Cocinar producto personalizado")
-        self.botonCocinar.pack(side="bottom", pady=10)
 
-        #credando el segundo comboBox
-        self.opcionesCantidad = [1,2,3,4,5,6,7,8,9,10]
-        self.comboboxfc1_2 = ttk.Combobox(self.frameComprar1, values = self.opcionesCantidad)
-        self.comboboxfc1_2.pack(pady = 10)
-        self.botonfc1 = Button(self.frameComprar1, text="Agregar a la canasta", command= self.registrarPedidoCanasta)
-        self.botonfc1.pack(pady = 10)
-
-        self.frameComprar2 = Frame(self.frameComprar)
-        self.frameComprar2.grid(row =0 , column = 1, padx = 1, pady=1, sticky="nsew")
-        self.labelfc1 = Label(self.frameComprar2, text="Lista de compras y factura")
-
-        # Agregar un Scrollbar
-        scrollbar = Scrollbar(self.frameComprar2)
-        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
-
-        # Agregar un widget de Texto
-        self.texto_widget = Text(self.frameComprar2, wrap=tk.WORD, yscrollcommand=scrollbar.set, width = 60)
-        self.texto_widget.pack(fill=tk.Y, expand=True),
-        for elements, cantidad in Cliente.getSesion().getCanastaOrden().getProductosEnLista().items():
-            self.texto_widget.insert(tk.END, "Producto: " + Producto.obtenerObjetoPorIdP(elements).getNombre() + " - Cantidad: " + str(cantidad) + "\n")
-        for elements, cantidad in Cliente.getSesion().getCanastaOrden().getIngredientesEnLista().items():
-            self.texto_widget.insert(tk.END, "Ingrediente: " + Ingrediente.obtenerObjetoPorIdI(elements).getNombre() + " - Cantidad: " + str(cantidad) + "\n")
-        for elements, cantidad in Cliente.getSesion().getCanastaOrden().getKitsEnLista().items():
-            self.texto_widget.insert(tk.END, "Kits: " + Producto.obtenerObjetoPorIdP(elements).getNombre() + " - Cantidad: " + str(cantidad) + "\n")
 
         # frameCatalogo Catalogo de opciones disponibles para comprar
         self.frameCatalogo = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
@@ -283,17 +217,23 @@ class VentanaPrincipal:
         # frameContrasena cambiar contraseña
         self.frameContrasena = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
         self.LabelContrasena = Label(self.frameContrasena, text="Cambiar contraseña")
-        self.LabelContrasena.pack()
+        self.LabelContrasenaDes = Label(self.frameContrasena, text="Descripcion")
+        self.LabelContrasena.pack(pady=20)
+        self.LabelContrasenaDes.pack(pady=20)
         #usar fieldframe aqui ...
-        self.fieldFrameContrasena = FieldFrame("Cambio", ["Contraseña nueva:", "hola"], "Ingrese aqui") #Ver ejemplo de uso en FieldFrame.py
+        self.fieldFrameContrasena = FieldFrame("Cambio", ["Contraseña nueva:"], "Ingrese aqui") #Ver ejemplo de uso en FieldFrame.py
         self.fieldFrameContrasena.defRoot(self.frameContrasena)
         self.frames.append(self.frameContrasena)
         
         # framePlata Meter plata a mi cuenta
         self.framePlata = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
         self.LabelPlata = Label(self.framePlata, text="Meter plata")
-        self.LabelPlata.pack()
+        self.LabelPlataDes = Label(self.framePlata, text="Descripcion")
+        self.LabelPlata.pack(pady=20)
+        self.LabelPlataDes.pack(pady=20)
         #usar fieldframe aqui ...
+        self.fieldFramePlata = FieldFrame("Valor", ["Cantidad a ingresar:"], "Ingrese aqui")
+        self.fieldFramePlata.defRoot(self.framePlata)
         self.frames.append(self.framePlata)
         
         # frameValidarTipo Validar tipo de cliente
@@ -306,10 +246,75 @@ class VentanaPrincipal:
         # frameDireccion Modificar direccion
         self.frameDireccion = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
         self.LabelDireccion = Label(self.frameDireccion, text="Cambiar direccion")
-        self.LabelDireccion.pack()
+        self.LabelDireccionDes = Label(self.frameDireccion, text="Descripcion")
+        self.LabelDireccion.pack(pady=20)
+        self.LabelDireccionDes.pack(pady=20)
         #usar fieldframe aqui ...
+        self.fieldFrameDireccion = FieldFrame("Datos", ["Ciudad", "Direccion específica:"], "Ingrese aqui")
+        self.fieldFrameDireccion.defRoot(self.frameDireccion)
         self.frames.append(self.frameDireccion)
+
+
+
+    def cargarFrameCarrito(self):
+        #framep1 = Frame(frame, bd = 5, relief=FLAT, padx = 2, pady = 2, bg = "white").grid(row =0 , column = 0)
+        #framep2 = Frame(frame, bd = 5, relief=FLAT, padx = 2, pady = 2, bg = "white").grid(row =0 , column = 1)
+        self.frameComprar1 = Frame(self.frameComprar)
+        self.frameComprar1.grid(row =0 , column = 0, padx = 1, pady=1, sticky="nsew")
+        self.labelfc1 = Label(self.frameComprar1, text="Hola cliente, bienvenido a su canasta de compras, use el comboBox para ordenar, recuerde que en el menu procesos y consultas puede ver un catalogo mas completo de los productos que puede ordenar", wraplength=300)
+        self.labelfc1.pack(pady=30)
+
+        #Label para el primer comboBox
+        self.labelfc1_2 = Label(self.frameComprar1, text="Elija un producto")
+        self.labelfc1_2.pack(pady = 5)
         
+        #Creando el primer comboBox
+        self.opcionesCompra = [] #IMPORTANTE despues de configurar serializacion colocar lista aqui
+        for producto in Producto.baseDatosProductos:
+            self.opcionesCompra.append(producto.getNombre())
+        for ingrediente in Ingrediente._baseDatosIngredientes:
+            self.opcionesCompra.append(ingrediente.getNombre())
+        
+        self.comboboxfc1 = ttk.Combobox(self.frameComprar1, values = self.opcionesCompra)
+        self.comboboxfc1.pack(pady = 10)
+
+        #Label para el segundo comboBo
+        self.labelfc1_3 = Label(self.frameComprar1, text="Elija una cantidad")
+        self.labelfc1_3.pack(pady = 5)
+        
+        self.botonIrCatalogo = tk.Button(self.frameComprar1, text="Ir al catalogo", command = lambda: self.cambiarFrame(self.frameCatalogo))
+        self.botonIrCatalogo.pack(side="bottom", pady=50)
+
+        self.botonCocinar = tk.Button(self.frameComprar1, text="Cocinar producto personalizado")
+        self.botonCocinar.pack(side="bottom", pady=10)
+
+        #credando el segundo comboBox
+        self.opcionesCantidad = [1,2,3,4,5,6,7,8,9,10]
+        self.comboboxfc1_2 = ttk.Combobox(self.frameComprar1, values = self.opcionesCantidad)
+        self.comboboxfc1_2.pack(pady = 10)
+        self.botonfc1 = Button(self.frameComprar1, text="Agregar a la canasta", command= self.registrarPedidoCanasta)
+        self.botonfc1.pack(pady = 10)
+
+        self.frameComprar2 = Frame(self.frameComprar)
+        self.frameComprar2.grid(row =0 , column = 1, padx = 1, pady=1, sticky="nsew")
+        self.labelfc1 = Label(self.frameComprar2, text="Lista de compras y factura")
+
+        # Agregar un Scrollbar
+        scrollbar = Scrollbar(self.frameComprar2)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+
+        # Agregar un widget de Texto
+        self.texto_widget = Text(self.frameComprar2, wrap=tk.WORD, yscrollcommand=scrollbar.set, width = 60)
+        self.texto_widget.pack(fill=tk.Y, expand=True),
+        for elements, cantidad in Cliente.getSesion().getCanastaOrden().getProductosEnLista().items():
+            self.texto_widget.insert(tk.END, "Producto: " + Producto.obtenerObjetoPorIdP(elements).getNombre() + " - Cantidad: " + str(cantidad) + "\n")
+        for elements, cantidad in Cliente.getSesion().getCanastaOrden().getIngredientesEnLista().items():
+            self.texto_widget.insert(tk.END, "Ingrediente: " + Ingrediente.obtenerObjetoPorIdI(elements).getNombre() + " - Cantidad: " + str(cantidad) + "\n")
+        for elements, cantidad in Cliente.getSesion().getCanastaOrden().getKitsEnLista().items():
+            self.texto_widget.insert(tk.END, "Kits: " + Producto.obtenerObjetoPorIdP(elements).getNombre() + " - Cantidad: " + str(cantidad) + "\n")
+
+
+
         #Metodos necesiarios para la interfaz de usuario
     def verificar_campos_llenos(self, campos):  # Asegúrate de pasar 'self' como primer argumento
         campos_vacios = [campo for campo in campos if len(campo) == 0]
@@ -400,7 +405,7 @@ class VentanaPrincipal:
         self.root.destroy()
 
     def cambiarFrame(self, frame, guardarComoFrameAnterior = True):
-        if Cliente.getSesion() == None:
+        #if Cliente.getSesion() == None:
             if guardarComoFrameAnterior == True:
                 self.frameAnterior = self.frameActual
 
@@ -447,6 +452,45 @@ class VentanaPrincipal:
         self.comboboxfc1.delete(0, 'end')
         self.comboboxfc1_2.delete(0, 'end')
         Cliente.getSesion().getCanastaOrden().recibir_orden(producto, cantidad, False)
+        
+    def cerrarSesion(self):
+        Cliente.setSesion(None)
+        self.menu_procesos.entryconfigure("Iniciar sesion", state="normal")
+        self.menu_procesos.entryconfigure("Registrarse", state="normal")
+        self.menu_procesos.entryconfigure("Cerrar sesion", state="disabled")
+        self.menu_procesos.entryconfigure("Ir a comprar", state="disabled")
+        self.menu_procesos.entryconfigure("Ver catalogo de productos y descripcion", state="disabled")
+        self.menu_procesos.entryconfigure("Lo mejor de nuestra panaderia", state="disabled")
+        self.menu_procesos.entryconfigure("Ver facturas pasadas", state="disabled")
+        self.menu_procesos.entryconfigure("Cambiar contraseña", state="disabled")
+        self.menu_procesos.entryconfigure("Meter plata a mi cuenta", state="disabled")
+        self.menu_procesos.entryconfigure("Validar tipo de cliente", state="disabled")
+        self.menu_procesos.entryconfigure("Modificar direccion", state="disabled")
+        self.cambiarFrame(self.framePrincipal)
+
+    def iniciarSesion(self,val):
+        try:
+            cliente1 = Cliente.inicioSesionId(int(val[0]))
+            if Cliente.inicioSesionContrasena(cliente1, val[1])=="Contraseña incorrecta": raise Exception
+            messagebox.showinfo("Inicio de sesion", "Sesion iniciada correctamente")
+
+            self.menu_procesos.entryconfigure("Iniciar sesion", state="disabled")
+            self.menu_procesos.entryconfigure("Registrarse", state="disabled")
+            self.menu_procesos.entryconfigure("Cerrar sesion", state="normal")
+            self.menu_procesos.entryconfigure("Ir a comprar", state="normal")
+            self.menu_procesos.entryconfigure("Ver catalogo de productos y descripcion", state="normal")
+            self.menu_procesos.entryconfigure("Lo mejor de nuestra panaderia", state="normal")
+            self.menu_procesos.entryconfigure("Ver facturas pasadas", state="normal")
+            self.menu_procesos.entryconfigure("Cambiar contraseña", state="normal")
+            self.menu_procesos.entryconfigure("Meter plata a mi cuenta", state="normal")
+            self.menu_procesos.entryconfigure("Validar tipo de cliente", state="normal")
+            self.menu_procesos.entryconfigure("Modificar direccion", state="normal")
+            self.cambiarFrame(self.framePrincipal)
+            self.cargarFrameCarrito()
+
+
+        except:
+            messagebox.showwarning("Error", "El usuario o la contraseña son incorrectos")
 
 # Codigo que produce la ejecucion de la ventana cuando se ejecuta desde este archivo
 def main():
