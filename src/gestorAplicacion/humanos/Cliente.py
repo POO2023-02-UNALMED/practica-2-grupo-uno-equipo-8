@@ -367,6 +367,8 @@ class Cliente:
 
     @classmethod
     def inicioSesionContrasena(cls,cliente, contrasena):
+        if not isinstance(cliente, int) or cliente <= 0:
+            raise ValueError("El identificador del cliente debe ser un entero positivo")
         if cliente.getContrasena() == contrasena:
             cls.setSesion(cliente)
             return "Inicio de sesión exitoso"

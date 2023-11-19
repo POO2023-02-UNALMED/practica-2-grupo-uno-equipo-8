@@ -468,29 +468,38 @@ class VentanaPrincipal:
         self.menu_procesos.entryconfigure("Modificar direccion", state="disabled")
         self.cambiarFrame(self.framePrincipal)
 
-    def iniciarSesion(self,val):
-        try:
-            cliente1 = Cliente.inicioSesionId(int(val[0]))
-            if Cliente.inicioSesionContrasena(cliente1, val[1])=="Contraseña incorrecta": raise Exception
-            messagebox.showinfo("Inicio de sesion", "Sesion iniciada correctamente")
+    def iniciarSesion(self, val):
+        while True:
+            try:
+                cliente1 = Cliente.inicioSesionId(int(val[0]))
+                if cliente1 is None:
+                    raise UsuarioNoEncontradoError(val[0])
 
-            self.menu_procesos.entryconfigure("Iniciar sesion", state="disabled")
-            self.menu_procesos.entryconfigure("Registrarse", state="disabled")
-            self.menu_procesos.entryconfigure("Cerrar sesion", state="normal")
-            self.menu_procesos.entryconfigure("Ir a comprar", state="normal")
-            self.menu_procesos.entryconfigure("Ver catalogo de productos y descripcion", state="normal")
-            self.menu_procesos.entryconfigure("Lo mejor de nuestra panaderia", state="normal")
-            self.menu_procesos.entryconfigure("Ver facturas pasadas", state="normal")
-            self.menu_procesos.entryconfigure("Cambiar contraseña", state="normal")
-            self.menu_procesos.entryconfigure("Meter plata a mi cuenta", state="normal")
-            self.menu_procesos.entryconfigure("Validar tipo de cliente", state="normal")
-            self.menu_procesos.entryconfigure("Modificar direccion", state="normal")
-            self.cambiarFrame(self.framePrincipal)
-            self.cargarFrameCarrito()
+                if Cliente.inicioSesionContrasena(cliente1, val[1]) == "Contraseña incorrecta":
+                    raise UsuarioNoEncontradoError(val[0])
 
+                self.menu_procesos.entryconfigure("Iniciar sesion", state="disabled")
+                self.menu_procesos.entryconfigure("Registrarse", state="disabled")
+                self.menu_procesos.entryconfigure("Cerrar sesion", state="normal")
+                self.menu_procesos.entryconfigure("Ir a comprar", state="normal")
+                self.menu_procesos.entryconfigure("Ver catalogo de productos y descripcion", state="normal")
+                self.menu_procesos.entryconfigure("Lo mejor de nuestra panaderia", state="normal")
+                self.menu_procesos.entryconfigure("Ver facturas pasadas", state="normal")
+                self.menu_procesos.entryconfigure("Cambiar contraseña", state="normal")
+                self.menu_procesos.entryconfigure("Meter plata a mi cuenta", state="normal")
+                self.menu_procesos.entryconfigure("Validar tipo de cliente", state="normal")
+                self.menu_procesos.entryconfigure("Modificar direccion", state="normal")
+                self.cambiarFrame(self.framePrincipal)
+                self.cargarFrameCarrito()
+                break  # Sale del bucle si el inicio de sesión fue exitoso
 
-        except:
-            messagebox.showwarning("Error", "El usuario o la contraseña son incorrectos")
+            except UsuarioNoEncontradoError as e:
+                messagebox.showwarning("Error", "El usuario o la contraseña son incorrectos")
+                break  # Sale del bucle si se encuentra un error en el inicio de sesión
+            except ValueError:
+                messagebox.showwarning("Error", "El usuario debe ser un numero")
+                break  # Sale del bucle si se encuentra un error en el inicio de sesión
+
 
 # Codigo que produce la ejecucion de la ventana cuando se ejecuta desde este archivo
 def main():

@@ -146,6 +146,10 @@ except ProductoNoEncontradoError as e:
 class CanastaVaciaError(ErrorTipoB):
     def __init__(self, message="La canasta está vacía"):
         super().__init__(message)
+
+class UsuarioExistente(ErrorTipoB):
+    def __init__(self, message="El usuario ya existe"):
+        super().__init__(message)
         
 """"
 def verificar_canasta_vacia(canasta):
