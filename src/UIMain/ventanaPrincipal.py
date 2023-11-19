@@ -138,8 +138,9 @@ class VentanaPrincipal:
         # framePreguntarDomicilio preguntar al cliente si deseaDomicilio
         self.framePreguntarDomicilio = Frame(self.root, bd = 1, relief=FLAT, pady = 1)
         self.frames.append(self.framePreguntarDomicilio)
-        #self.imagenPreguntarDomicilio = Label(self.framePreguntarDomicilio)
-        #self.imagenPreguntarDomicilio.pack()
+        self.imagenfpd = tk.PhotoImage(file="src/resources/ratonDomicilio.png")
+        self.imagenPreguntarDomicilio = Label(self.framePreguntarDomicilio, image = self.imagenfpd)
+        self.imagenPreguntarDomicilio.pack()
         self.labelPreguntarDomicilio = Label(self.framePreguntarDomicilio, text="Desea que le entreguemos su pedido a domicilio? Haga click abajo si asi lo desea")
         self.labelPreguntarDomicilio.pack()
         self.checkButtonFramePreguntarDomicilio = ttk.Checkbutton(self.framePreguntarDomicilio, text="Pedido a domicilio") # Logica Domicilio que cuando el checkButton este activado se envie a domicilio
@@ -356,16 +357,12 @@ class VentanaPrincipal:
         self.botonCocinar.pack(pady = 5)
 
         #Frame CocinarPersonalizado 
+
         self.frameCocinarPersonalizado = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
         self.frames.append(self.frameCocinarPersonalizado)
         self.ffCocinarPersonalizado1 = FieldFrame("Datos del producto", ["Nombre del producto:", "Cantidad a cocinar:"], "Ingreselos Aquí")
         self.ffCocinarPersonalizado1.defRoot(self.frameCocinarPersonalizado)
-        self.ffCocinarPersonalizado2 = FieldFrame("Ingredientes necesarios", ["Nombre del ingrediente:", "Cantidad:"], "Ingreselos Aquí")
-
-        # Frame para ingredientes de personalizado
-        self.frameIngredientesPersonalizado = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
-        self.frames.append(self.frameIngredientesPersonalizado)
-        self.ffCocinarPersonalizado2.defRoot(self.frameIngredientesPersonalizado)
+        self.ffCocinarPersonalizado1.defFunc(self.cambioAIngredientes)
 
         #Texto de ejecucion de cocinar producto personalizado
         self.frameCocinarPersonalizado2 = Frame(self.frameCocinarPersonalizado, bd=1, relief=FLAT, padx=1, pady=1)
@@ -749,7 +746,7 @@ class VentanaPrincipal:
                 messagebox.showinfo("Cambio de direccion", "Direccion cambiada correctamente")
         except CamposVaciosError as e:
             messagebox.showwarning("Error", "Direccion inválida o campo vacio")
-    
+
     def validarTipo(self):
         try:
             if not Cliente.getSesion().establecerDescuentoPorTipoValido(self.comboBoxValidarTipo.get()):
@@ -759,6 +756,15 @@ class VentanaPrincipal:
         except CamposVaciosError as e:
             messagebox.showwarning("Error", "Tipo de cliente inválido o campo vacio")
 
+    def cambioAIngredientes(self,val):
+        
+        # Frame para ingredientes de personalizado
+        self.frameIngredientesPersonalizado = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
+        self.frames.append(self.frameIngredientesPersonalizado)
+        self.ffCocinarPersonalizado2 = FieldFrame("Ingredientes necesarios", ["Nombre del ingrediente:", "Cantidad:"], "Ingreselos Aquí")
+        self.ffCocinarPersonalizado2.defRoot(self.frameIngredientesPersonalizado)
+
+        self.cambiarFrame(self.frameIngredientesPersonalizado)
 
 # Codigo que produce la ejecucion de la ventana cuando se ejecuta desde este archivo
 def main():
