@@ -72,7 +72,7 @@ class Domiciliario(Trabajador, ComidaDefault):
             #GestionDomicilioCliente.estadoDomicilio(x)
             return x
 
-    def conseguirIngredientes(self, listIngredientes):
+    def conseguirIngredientes(self, listIngredientes, text = None):
         valorcompra = 0
 
         Ingrediente.organizarTopMasVendidos()

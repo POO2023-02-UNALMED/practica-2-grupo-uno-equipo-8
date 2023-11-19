@@ -5,6 +5,8 @@ from ..humanos.Cocinero import Cocinero
 from ..gestion.Inventario import Inventario
 from ..gestion.Canasta import Canasta
 from random import shuffle
+from tkinter import Text
+import tkinter as tk
 
 class Panaderia():
 
@@ -202,7 +204,7 @@ class Panaderia():
             self._dinero = 10000000
             return self._enQuiebra
     
-    def conseguirPrestamo(self, valorNecesitado):
+    def conseguirPrestamo(self, valorNecesitado, text = None):
         
         if self._valorDeudas == 0:
 
@@ -216,12 +218,30 @@ class Panaderia():
             while self._enQuiebra == True:
                 
                 #GestionConseguirIngredientes.lecturaQuiebra(self._enQuiebra) #Crear estas lecturas
+
+                if self._enQuiebra == True:
+                    text.config(state=tk.NORMAL)
+                    text.insert("La panadería no tenía dinero para realizar su pedido y ha entrado en quiebra :( , pero una franquicia más grande la ha comprado :D , podremos proseguir con su pedido")
+                    text.config(state=tk.DISABLED)
+                else:
+                    text.config(state=tk.NORMAL)
+                    text.insert("La panadería no tenía dinero para realizar su pedido :( , pero ha pedido un prestamo y ya puede comprar lo que necesita para preparar su pedido :D")
+                    text.config(state=tk.DISABLED)
+
                 self.saldarDeudas()
 
             self._dinero += valorNecesitado
             self._valorDeudas = valorNecesitado
 
         #GestionConseguirIngredientes.lecturaQuiebra(self._enQuiebra) #Crear estas lecturas
+        if self._enQuiebra == True:
+            text.config(state=tk.NORMAL)
+            text.insert("La panadería no tenía dinero para realizar su pedido y ha entrado en quiebra :( , pero una franquicia más grande la ha comprado :D , podremos proseguir con su pedido")
+            text.config(state=tk.DISABLED)
+        else:
+            text.config(state=tk.NORMAL)
+            text.insert("La panadería no tenía dinero para realizar su pedido :( , pero ha pedido un prestamo y ya puede comprar lo que necesita para preparar su pedido :D")
+            text.config(state=tk.DISABLED)
 
     def cocineroAleatorio(self):
         
@@ -244,13 +264,30 @@ class Panaderia():
         elegido = listaprovicional[0]
         return elegido
     
-    def comprarIngredientes(self, listIngredientes):
+    def comprarIngredientes(self, listIngredientes, text=None):
 
         elegido = self.domiciliarioAleatorio()
         #GestionConseguirIngredientes.lecturaCompra(elegido.isRobado()) #Recordar hacer este lector
+        if elegido.isRobado() == True:
+            text.config(state=tk.NORMAL)
+            text.insert("Se ha enviado a comprar mas ingredientes, por favor espere a que se compren correctamente")
+            text.config(state=tk.DISABLED)
+        else:
+            text.config(state=tk.NORMAL)
+            text.insert("Estamos en proceso de conseguir los ingredientes, lamentamos los inconvenientes")
+            text.config(state=tk.DISABLED)
 
         x = elegido.conseguirIngredientes(listIngredientes)
         #GestionConseguirIngredientes.lecturaRobo(x)
+        if x == True:
+            text.config(state=tk.NORMAL)
+            text.insert("Se ha enviado a comprar mas ingredientes, por favor espere a que se compren correctamente")
+            text.config(state=tk.DISABLED)
+        else:
+            text.config(state=tk.NORMAL)
+            text.insert("Estamos en proceso de conseguir los ingredientes, lamentamos los inconvenientes")
+            text.config(state=tk.DISABLED)
+
 
         while(x == True):
 

@@ -375,7 +375,11 @@ class Cliente:
         else:
             return "Contraseña incorrecta"
 
-    def crearCuenta(self,nombre, id, contrasena):
+    @classmethod
+    def crearCuenta(cls,nombre, id, contrasena):
+        for cliente in Cliente._panaderia.getClientes():
+            if cliente.getId() == id:
+                return "Ya existe una cuenta con ese ID"
         cliente = Cliente(nombre, id, contrasena)
         Cliente._panaderia._clientes.append(cliente)
         Cliente.setSesion(cliente)
