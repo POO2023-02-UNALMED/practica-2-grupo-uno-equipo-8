@@ -156,7 +156,12 @@ class VentanaPrincipal:
         self.labelfc1_2.pack(pady = 5)
         
         #Creando el primer comboBox
-        self.opcionesCompra = ["Pandequeso", "Bonice", "Manzana podrida"] #IMPORTANTE despues de configurar serializacion colocar lista aqui
+        self.opcionesCompra = [] #IMPORTANTE despues de configurar serializacion colocar lista aqui
+        for producto in Producto.baseDatosProductos:
+            self.opcionesCompra.append(producto.getNombre())
+        for ingrediente in Ingrediente._baseDatosIngredientes:
+            self.opcionesCompra.append(ingrediente.getNombre())
+        
         self.comboboxfc1 = ttk.Combobox(self.frameComprar1, values = self.opcionesCompra)
         self.comboboxfc1.pack(pady = 10)
 
@@ -395,15 +400,16 @@ class VentanaPrincipal:
         self.root.destroy()
 
     def cambiarFrame(self, frame, guardarComoFrameAnterior = True):
-        if guardarComoFrameAnterior == True:
-            self.frameAnterior = self.frameActual
+        if Cliente.getSesion() == None:
+            if guardarComoFrameAnterior == True:
+                self.frameAnterior = self.frameActual
 
-        for f in self.frames:
-            if f == frame:
-                f.pack(padx = 5, pady = 5, fill = "both", expand=True)
-                self.frameActual = frame
-            else:
-                f.pack_forget()
+            for f in self.frames:
+                if f == frame:
+                    f.pack(padx = 5, pady = 5, fill = "both", expand=True)
+                    self.frameActual = frame
+                else:
+                    f.pack_forget()
     
     def volverAtras(self):
         self.cambiarFrame(self.frameAnterior)

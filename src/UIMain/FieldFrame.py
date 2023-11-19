@@ -10,7 +10,7 @@ class FieldFrame(Frame):
     # podria pasar una lista ["string", "int"] esto indicara el tipo de valor que se puede ingresar en cada casilla, esto sirve para los errores, y el ultimo parametro que acepta es una lista
     # la cual contiene strings con el nombre de las etiquetas que desea inhabilitadas
 
-    def __init__(self, tituloCriterios, criterios, tituloValores, valores = None, habilitado = None ):
+    def __init__(self, tituloCriterios, criterios, tituloValores, valores = None, habilitado = None):
         
         self.valores = []
         self.funcionAsociada = None

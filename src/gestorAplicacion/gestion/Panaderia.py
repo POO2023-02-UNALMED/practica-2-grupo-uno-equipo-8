@@ -1,16 +1,3 @@
-import sys
-import os
-
-"""
-# Obtener la ruta al directorio del script actual (donde está Panaderia.py)
-ruta_actual = os.path.dirname(os.path.abspath(__file__))
-
-# Obtener la ruta al directorio raíz del proyecto (un nivel arriba)
-ruta_raiz_proyecto = os.path.dirname(ruta_actual)
-
-# Agregar la ruta raíz del proyecto al sys.path
-sys.path.append(ruta_raiz_proyecto)
-"""
 # Ahora puedes importar Ingrediente desde Panaderia
 from ..comida.Ingrediente import Ingrediente
 from ..comida.Producto import Producto

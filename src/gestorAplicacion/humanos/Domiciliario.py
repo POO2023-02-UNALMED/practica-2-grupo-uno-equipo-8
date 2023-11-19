@@ -4,8 +4,8 @@ from gestorAplicacion.humanos.Trabajador import Trabajador
 from gestorAplicacion.comida.ComidaDefault import ComidaDefault
 
 class Domiciliario(Trabajador, ComidaDefault):
-    def __init__(self, nombre="", panaderia=None, habilidad=None, calificacion=None, dineroEnMano=None, licencia=None):
-        super().__init__(panaderia, nombre, habilidad, calificacion, dineroEnMano)
+    def __init__(self, nombre="", panaderia=None, habilidad=None, calificacion=None, dineroEnMano=0, licencia=None):
+        super().__init__(panaderia, nombre, calificacion, dineroEnMano)
         self.licencia = False if licencia is None else licencia
         self.ocupado = False
         self.canasta = None
@@ -146,7 +146,7 @@ class Domiciliario(Trabajador, ComidaDefault):
                 ladron = Catastrofe()
                 postRobo = ladron.robarComprador(self)
 
-                if postRobo.getRobado() == False:
+                if postRobo.isRobado() == False:
                     return True
                 
             for ingredienteNombre, cantidad in listIngredientes.items():
@@ -156,14 +156,16 @@ class Domiciliario(Trabajador, ComidaDefault):
                     ingrdt = Ingrediente.crearIngrediente(ingredienteNombre)
                     self.getPanaderia().getInventario().agregarIngrediente(ingrdt)
             
-            self.dineroEnMano -= valorcompra
+            x = self.dinero_en_mano - valorcompra
+            self.dinero_en_mano = x  
             return False
         
         else:
 
             self.panaderia.conseguirPrestamo(valorcompra)
-            self.dineroEnMano += valorcompra  
-            dinero = self.panaderia.getPanaderia()
+            x = self.dinero_en_mano + valorcompra
+            self.dinero_en_mano = x  
+            dinero = self.panaderia.getDinero()
             self.panaderia.setDinero((dinero-valorcompra))
 
             if self.robado == True:
@@ -171,7 +173,7 @@ class Domiciliario(Trabajador, ComidaDefault):
                 ladron = Catastrofe()
                 postRobo = ladron.robarComprador(self)
 
-                if postRobo.getRobado() == False:
+                if postRobo.isRobado() == False:
                     return True
                 
             for ingredienteNombre, cantidad in listIngredientes.items():
@@ -181,5 +183,6 @@ class Domiciliario(Trabajador, ComidaDefault):
                     ingrdt = Ingrediente.crearIngrediente(ingredienteNombre)
                     self.getPanaderia().getInventario().agregarIngrediente(ingrdt)
             
-            self.dineroEnMano -= valorcompra
+            x = self.dinero_en_mano - valorcompra
+            self.dinero_en_mano = x
             return False

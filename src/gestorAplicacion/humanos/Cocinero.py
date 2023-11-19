@@ -13,7 +13,7 @@ class Cocinero(Domiciliario):
     _procesosDeProductosCocinados = []
     _fallosCocinando= 0
     
-    def __init__(self, nombre="",especialidad="" , panaderia=None,habilidad=0.0, calificacion=0.0, dineroEnMano=0.0):
+    def __init__(self, nombre="",especialidad="" , panaderia=None,habilidad=0.0, calificacion=0.0, dineroEnMano=0.):
         super().__init__(nombre,panaderia, habilidad, calificacion, dineroEnMano)
         self._especialidad = especialidad
         self._fallado = False
@@ -97,9 +97,7 @@ class Cocinero(Domiciliario):
     def detenerCoccion(self, producto, cantidades):
         ingredientesUsados = producto.getIngredientes()
         for ingUsado, cantidad in ingredientesUsados.items():
-            print(ingUsado)
             ingredienteUsado = self._panaderia.getInventario().ingredientePorNombreBuscar(ingUsado)
-            print(ingredienteUsado)
             self._panaderia.getInventario().restarIngrediente(ingredienteUsado, cantidad * cantidades)
 
     def repararCoccion(self, producto):
@@ -110,9 +108,7 @@ class Cocinero(Domiciliario):
         ingredientesUsados = producto.getIngredientes()
         for ingUsado, cantidad in ingredientesUsados.items():
             ingredienteUsado = self._panaderia.getInventario().ingredientePorNombreBuscar(ingUsado)
-            print(ingredienteUsado)
             self._panaderia.getInventario().restarIngrediente(ingredienteUsado, cantidad)
-
 
     def procesoCocinar(self, producto):
         # Obtiene la lista de procesos de cocina necesarios para el producto.

@@ -9,6 +9,7 @@ from gestorAplicacion.humanos.Cliente import Cliente
 from gestorAplicacion.humanos.Domiciliario import Domiciliario
 from gestorAplicacion.humanos.Cocinero import Cocinero
 from gestorAplicacion.comida.ComidaDefault import ComidaDefault
+from gestorAplicacion.gestion.Inventario import Inventario
 from baseDatos.Serializador import Serializador
 
 class SerializationTest:
@@ -32,10 +33,10 @@ class SerializationTest:
         Ingrediente.crearIngrediente("milo")
         Ingrediente.crearIngrediente("miga de galleta")
 
-        """
-        print(Ingrediente.crearIngrediente("meme"))
-        Producto.crearProductoPersonalizado("marmota", {"meme": 1, "carnita": 1, "hormiga": 1, "azucar": 1, "mantequilla": 1})
-        """
+        
+        #print(Ingrediente.crearIngrediente("meme"))
+        #Producto.crearProductoPersonalizado("marmota", {"meme": 1, "carnita": 1, "hormiga": 1, "azucar": 1, "mantequilla": 1})
+        
         print("ingredientes creados")
 
         
@@ -166,7 +167,11 @@ class SerializationTest:
         
         #a.enviarOrdenCanasta()
         panaderia.cocinar(ingredientes_cocinar)
-        
+        for i in panaderia.getInventario()._invIngredientes:
+            print(i.getNombre())
+        for i in panaderia.getInventario()._invProductos:
+            print(i.getNombre())
+
         #Serializador.guardarPanaderia(panaderia)
         print("panaderia guardada")
 

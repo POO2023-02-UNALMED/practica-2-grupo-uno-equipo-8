@@ -383,7 +383,6 @@ class Canasta:
             else:
                 ProductoCaliente.crearProductoPersonalizado(objeto_entrante, ingredientes_necesarios)
         except Exception as e:
-            print("Error al crear el producto personalizado: " + str(e))
             return False
 
         if Producto.verificarExistenciaPorNombreP(objeto_entrante):

@@ -83,7 +83,6 @@ class Inventario:
         return None
     
     def ingredientePorNombreBuscar(self,nombre):
-        print(self._invIngredientes)
         for ingrediente in self._invIngredientes:
             if ingrediente.getNombre() == nombre:
                 return ingrediente
