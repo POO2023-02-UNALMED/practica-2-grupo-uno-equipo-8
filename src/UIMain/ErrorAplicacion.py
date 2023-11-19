@@ -161,9 +161,9 @@ except CanastaVaciaError as e:
     print("Error:", e)
 """#Este metodo o una logica parecida debe ir en la clase de la ventana
 
-class AccionSinInicioSesionError(ErrorTipoB):
-    def __init__(self, message="Debes iniciar sesión para realizar esta acción"):
-        super().__init__(message)
+#class AccionSinInicioSesionError(ErrorTipoB):
+#    def __init__(self, message="Debes iniciar sesión para realizar esta acción"):
+#        super().__init__(message)
         
 """"
 def realizar_accion(self):
