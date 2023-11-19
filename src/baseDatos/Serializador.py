@@ -64,7 +64,6 @@ class Serializador:
         Panaderia.setCanastaDelDia(pickle.load(file))
         Ingrediente.setBaseDatosIngredientes(pickle.load(file))
         ComidaDefault.setContador(int.from_bytes(file.read(4), byteorder='big'))
-        print(ComidaDefault.getContador())
 
         Ingrediente.setTopMasVendidos(pickle.load(file))
         Producto.setBaseDatosProductos(pickle.load(file))

@@ -5,14 +5,6 @@ from tkinter import PhotoImage
 from tkinter import messagebox
 from ventanaPrincipal import VentanaPrincipal
 
-import os
-
-# Obtener el directorio del script actual
-script_directory = os.path.dirname(os.path.abspath(__file__))
-
-# Cambiar el directorio de trabajo al directorio del script
-os.chdir(script_directory)
-
 class VentanaInicio:
     def __init__(self, master):
         self.master = master
@@ -70,7 +62,7 @@ class VentanaInicio:
         self.button_ingreso.pack(side=tk.BOTTOM, pady=40)
 
         self.indice_imagen_actual = 0
-        self.imagenes = [PhotoImage(file=f"../resources/imagen{i+1}.png").subsample(1) for i in range(5)]
+        self.imagenes = [PhotoImage(file=f"src/resources/imagen{i+1}.png").subsample(1) for i in range(5)]
 
         self.label_imagen = tk.Label(self.frame_abajo_izquierda, bg="#F7EBF3", width=400, height=300)
         self.label_imagen.pack(fill='x', expand=True, pady=10, side=tk.BOTTOM)
@@ -93,7 +85,7 @@ class VentanaInicio:
 
         # Imágenes
         self.rutas_imagenes_desarrollador = [
-            [f"../resources/desarrollador{desarrollador + 1}{i + 1}.png" for i in range(4)] for desarrollador in range(5)
+            [f"src/resources/desarrollador{desarrollador + 1}{i + 1}.png" for i in range(4)] for desarrollador in range(5)
         ]
 
         # Lista para almacenar objetos PhotoImage
