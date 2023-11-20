@@ -253,7 +253,7 @@ class Inventario:
                     for producto1 in self._invProductos:
                         if producto1.getId() == producto:
                             self._invProductos.remove(producto1)
-                            producto_obtenido = Producto.obtenerObjetoPorId(producto)
+                            producto_obtenido = Producto.obtenerObjetoPorIdP(producto)
                             producto_obtenido.setVecesVendido(producto_obtenido.getVecesVendido() + 1)
                             Producto.organizarTopMasVendidos()
                             break
@@ -263,7 +263,7 @@ class Inventario:
                     for producto1 in self._invProductos:
                         if producto1.getId() == producto.getId():
                             self._invProductos.remove(producto1)
-                            producto_obtenido = Producto.obtenerObjetoPorId(producto.getId())
+                            producto_obtenido = Producto.obtenerObjetoPorIdP(producto.getId())
                             producto_obtenido.setVecesVendido(producto_obtenido.getVecesVendido() + 1)
                             Producto.organizarTopMasVendidos()
                             break

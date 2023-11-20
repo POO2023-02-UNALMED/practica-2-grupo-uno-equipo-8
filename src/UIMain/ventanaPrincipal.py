@@ -889,6 +889,12 @@ class VentanaPrincipal:
                         self.menu_procesos.entryconfigure("Func. Cocinar", state="normal")
                         self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="normal")
                         self.menu_procesos.entryconfigure("Func. Domicilio", state="normal")
+                    else:
+                        self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="normal")
+                        self.menu_procesos.entryconfigure("Func. Facturar", state="normal")
+                        self.menu_procesos.entryconfigure("Func. Cocinar", state="normal")
+                        self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="normal")
+                        self.menu_procesos.entryconfigure("Func. Domicilio", state="normal")
             else:
                 canasta=cliente.getCanastaOrden()
                 if (canasta is None) or (canasta.getProductosEnLista()=={} and canasta.getIngredientesEnLista()=={} and canasta.getKitsEnLista()=={}):
