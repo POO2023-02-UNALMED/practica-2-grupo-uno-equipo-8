@@ -19,7 +19,7 @@ class SerializationTest:
         panaderia = Serializador.cargarPanaderia()
         Cliente.setPanaderia(panaderia)
         print("panaderia cargada")
-        """
+        
         Ingrediente.crearIngrediente("leche")
         Ingrediente.crearIngrediente("harina")
         Ingrediente.crearIngrediente("azucar")
@@ -112,7 +112,7 @@ class SerializationTest:
             print(i.getNombre())
 
         print("cocineros creados")
-        """
+    
         ingredientes_cocinar = {
             "13": 2,
             "14": 6,
@@ -120,7 +120,7 @@ class SerializationTest:
             "16": 5,
             "17": 3
         }
-        """
+        
         Cliente.getSesion().crearCanastaNueva()
         
         cliente1 = Cliente.inicioSesionId(202)
@@ -158,7 +158,7 @@ class SerializationTest:
         
         print("Elementos personalizados añadidos correctamente a la canasta")
         #panaderia.cocinar(ingredientes_cocinar)
-        """
+        
         for i in Ingrediente._baseDatosIngredientes:
             print(i.getId() , i.getNombre(), i.getPrecioDeCompra(), i.getPrecioDeVenta())
 
@@ -166,7 +166,7 @@ class SerializationTest:
             print(i.getId() , i.getNombre(), i.getCosto(), i.getIngredientes())
         
         #a.enviarOrdenCanasta()
-        panaderia.cocinar(ingredientes_cocinar)
+        #panaderia.cocinar(ingredientes_cocinar)
         for i in panaderia.getInventario()._invIngredientes:
             print(i.getNombre())
         for i in panaderia.getInventario()._invProductos:

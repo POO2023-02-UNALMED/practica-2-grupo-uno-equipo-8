@@ -842,7 +842,7 @@ class VentanaPrincipal:
             self.menu_procesos.entryconfigure("Modificar datos", state="normal")
 
             cliente=Cliente.getSesion()
-            if Cliente.getSesion().getId()=="202":
+            if Cliente.getSesion().getId()==202:
                 self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="normal")
                 self.menu_procesos.entryconfigure("Func. Facturar", state="normal")
                 self.menu_procesos.entryconfigure("Func. Cocinar", state="normal")
