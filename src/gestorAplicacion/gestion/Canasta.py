@@ -467,9 +467,9 @@ class Canasta:
         ingredientes_cocinados = Cliente.getSesion().getPanaderia().agregarIngredientesACanasta(self._ingredientesEnLista)
         kits_cocinados = Cliente.getSesion().getPanaderia().agregarKitsACanasta(self._kitsEnLista)
 
-        self.gestionAgregarP(productos_cocinados)
-        self.gestionAgregarI(ingredientes_cocinados)
-        self.gestionAgregarK(kits_cocinados)
+        self._productos.append(productos_cocinados)
+        self._ingredientes.append(ingredientes_cocinados)
+        self._kits.append(kits_cocinados)
 
 class DescuentoProducto(Enum):
     """

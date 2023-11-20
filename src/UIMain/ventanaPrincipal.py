@@ -1,3 +1,4 @@
+import time
 from tkinter import *
 import tkinter as tk
 from tkinter import messagebox
@@ -29,6 +30,9 @@ class VentanaPrincipal:
 
         #Listas exclusivas para la funcionalidad 5
         self.diccionarioFuncionalidad5 = {}
+
+        # Diccionario para la funcionalidad 4
+        self.diccionarioFuncionalidad4 = {}
 
         self.panaderia = Serializador.cargarPanaderia()
         Cliente.setPanaderia(self.panaderia)
@@ -332,7 +336,7 @@ class VentanaPrincipal:
         self.fieldFrameDireccion.defRoot(self.frameDireccion)
         self.fieldFrameDireccion.defFunc(self.cambiarDireccion)
 
-        # Frame funcionalidad 4 (FrameCocinar)
+        # FrameCocinar Frame funcionalidad 4 
         
         self.frameCocinar = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
         self.frames.append(self.frameCocinar)
@@ -354,6 +358,7 @@ class VentanaPrincipal:
         #Implementaion del field frame
         self.ffCocinar = FieldFrame("Elija la cantidad", ["Cantidad a comprar:"], "Ingrese aquí")
         self.ffCocinar.defRoot(self.frameCocinar)
+        #self.ffCocinar.defFunc()
 
         #Boton para cocinar
         self.botonCocinar = Button(self.frameCocinar, text="Cocinar")
@@ -639,7 +644,13 @@ class VentanaPrincipal:
         self.descipCocinar1 = Label(self.frameCocinar1, text="Se procede a cocinar los productos añadidos a su canasta, por favor continue el proceso dandole al botón Cocinar")
 
         def procesoDeCocina():
-            Cliente.getSesion().getCanastaOrden().enviarOrdenCanasta(self.textEjecCocinar1)
+            self.menu_procesos.entryconfigure("Func. Cocinar", state="disabled")
+            self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="normal")
+            self.textEjecCocinar1.config(state=tk.NORMAL)
+            messagebox.showinfo("Información", "Parece que faltan ingredientes para cocinar sus productos, se accede a conseguir ingredientes")
+            self.cargarFrameIngredientesDesdeClienteNormal()
+            
+            self.textEjecCocinar1.config(state=tk.DISABLED) #recuerden no dar con
 
         self.tituloCocinar1.pack(pady = 5)
         self.descipCocinar1.pack(pady = 5)
@@ -647,11 +658,33 @@ class VentanaPrincipal:
         self.botonCocinar1.pack(pady = 5)
 
         self.textEjecCocinar1 = Text(self.frameCocinar1)
-        #self.textEjecCocinar1.config(state=tk.DISABLED)
+        self.textEjecCocinar1.config(state=tk.DISABLED)
         self.textEjecCocinar1.pack(fill=tk.BOTH, expand=True)
 
+    def cargarFrameIngredientesDesdeClienteNormal(self):
+        self.frameIngredientes1 = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
+        self.frames.append(self.frameIngredientes1)
+        self.cambiarFrame(self.frameIngredientes1)
+        self.tituloIngredientes1 = Label(self.frameIngredientes1, text="COMPRAR INGREDIENTES")
+        self.descipIngredientes1 = Label(self.frameIngredientes1, text="Se procede a comprar los ingredientes añadidos a su canasta, por favor continue el proceso dandole al botón Comprar Ingredientes")
 
-        print("f")
+        def ejecucionComprarIngredientes():
+            self.textEjecIngredientes1.config(state=tk.NORMAL)
+            Cliente.getSesion().getCanastaOrden().enviarOrdenCanasta(self.textEjecIngredientes1)
+            self.textEjecIngredientes1.config(state=tk.DISABLED)
+            time.sleep(3)
+            messagebox.showinfo("Información", "Ingredientes comprados, se procede a cocinar")
+            self.chequeoDeEstados()
+            self.cambiarFrame(self.frameCocinar1)
+
+        self.tituloIngredientes1.pack(pady = 5)
+        self.descipIngredientes1.pack(pady = 5)
+        self.botonIngredientes1 = Button(self.frameIngredientes1, text="Comprar Ingredientes", command=ejecucionComprarIngredientes)
+        self.botonIngredientes1.pack(pady = 5)
+        
+        self.textEjecIngredientes1 = Text(self.frameIngredientes1)
+        self.textEjecIngredientes1.config(state=tk.DISABLED)
+        self.textEjecIngredientes1.pack(fill=tk.BOTH, expand=True)
 
     #Metodos necesiarios para la interfaz de usuario
     def verificar_campos_llenos(self, campos):  # Asegúrate de pasar 'self' como primer argumento
@@ -865,7 +898,7 @@ class VentanaPrincipal:
                     messagebox.showinfo("Info", "Ha comenzado un proceso de compra, continue con el proceso de compra, al finalizar se desbloquearan el resto de opciones")
                     self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="disabled")
                     self.menu_procesos.entryconfigure("Func. Facturar", state="disabled")
-                    self.menu_procesos.entryconfigure("Func. Cocinar", state="disabled")
+                    self.menu_procesos.entryconfigure("Func. Cocinar", state="normal")
                     self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="disabled")
                     self.menu_procesos.entryconfigure("Func. Domicilio", state="disabled")
                 else:
@@ -970,6 +1003,49 @@ class VentanaPrincipal:
     def meterPlata(self, val):
         Cliente.getSesion().setPresupuesto(Cliente.getSesion().getPresupuesto() + int(val[0]))
         messagebox.showinfo("Meter plata", "Plata ingresada correctamente")
+
+    # Métodos funcionalidad 4
+    
+    def valoresDiccionarioCocina(self, values):
+
+        try:
+            if self.comboboxCocinar.get() == None or self.comboboxCocinar.get() == "":
+                raise CamposVaciosError(self.comboboxCocinar.get())
+            elif not (Producto.verificarExistenciaPorNombreP(self.comboboxCocinar.get())):
+                raise ProductoNoEncontradoError(self.comboboxCocinar.get())
+            elif not self.esNumero(values[0]):
+                raise ValueError()
+            elif int(values[0]) < 0 or 15 < int(values[0]) or int(values[0]) == 0:
+                raise CantidadInvalidaError(int(values[0]))
+            else:
+                if not (Producto.obtenerObjetoPorNombreP(self.comboboxCocinar.get()).getId() in self.diccionarioFuncionalidad4):
+                    self.diccionarioFuncionalidad4[Producto.obtenerObjetoPorNombreP(self.comboboxCocinar.get()).getId()] = int(values[0])
+                else:
+                    
+                    if int(self.diccionarioFuncionalidad4[Producto.obtenerObjetoPorNombreP(self.comboboxCocinar.get()).getId()]) + int(values[0]) <= 15:
+                        self.diccionarioFuncionalidad4[Producto.obtenerObjetoPorNombreP(self.comboboxCocinar.get()).getId()] = int(self.diccionarioFuncionalidad4[Producto.obtenerObjetoPorNombreP(self.comboboxCocinar.get()).getId()]) + int(values[0])
+                    else:
+                        raise CantidadInvalidaError(int(self.diccionarioFuncionalidad4[Producto.obtenerObjetoPorNombreP(self.comboboxCocinar.get()).getId()]) + int(values[0]))
+
+                self.textEjecCocinar.config(state=tk.NORMAL)
+                self.textEjecCocinar.delete(1.0, tk.END)
+                for ingredienteNombre, cantidad in self.diccionarioFuncionalidad4.items():
+                    self.textEjecCocinar.insert(tk.END, "Ingrediente: " + Producto.obtenerObjetoPorIdP(ingredienteNombre).getNombre() + " - Cantidad: " + str(cantidad) + "\n")
+                self.textEjecCocinar.config(state=tk.DISABLED)
+                
+                self.comboboxCocinar.delete(0, "end")
+                self.textEjecCocinar.tag_configure("center", justify="center")
+                self.textEjecCocinar.tag_add("center", "1.0", "end")
+
+        except CamposVaciosError as e:
+            messagebox.showwarning("Error", "Completa los campos vacíos")
+        except ProductoNoEncontradoError as e:
+            messagebox.showwarning("Error", "El ingrediente ingresado no existe")
+        except ValueError:
+            messagebox.showwarning("Error", "La cantidad debe ser un entero")
+        except CantidadInvalidaError as e:
+            messagebox.showwarning("Error", "Debes ingresar una cantidad no negativa, menor a 50 y diferente de 0")
+
 
     # Métodos para la funcionalidad 5
 
