@@ -4,6 +4,16 @@ from gestorAplicacion.gestion.Canasta import Canasta
 
 class Trabajador(ABC):
     def __init__(self, panaderia, nombre="John Doe", calificacion=0, dinero_en_mano=0, salario=1000):
+        """
+        Inicializa un objeto Trabajador con los siguientes atributos:
+
+        Args:
+            panaderia (Panaderia): La panadería a la que pertenece el trabajador.
+            nombre (str, optional): El nombre del trabajador. Por defecto es "John Doe".
+            calificacion (int, optional): La calificación del trabajador. Por defecto es 0.
+            dinero_en_mano (int, optional): La cantidad de dinero en mano del trabajador. Por defecto es 0.
+            salario (int, optional): El salario del trabajador. Por defecto es 1000.
+        """
         self.nombre = nombre
         self.habilidad = random.randint(9, 19)  # 9 <= habilidad <= 19
         self.calificacion = calificacion
@@ -16,10 +26,26 @@ class Trabajador(ABC):
 
     @abstractmethod
     def laborParticular(self, canasta: Canasta):
+        """
+        Realiza una labor particular con la canasta especificada.
+
+        Parámetros:
+        - canasta: La canasta con la que se realizará la labor.
+
+        """
         pass
 
     @abstractmethod
     def conseguirIngredientes(self, listingredientes):
+        """
+        Método que permite al trabajador conseguir los ingredientes necesarios.
+
+        Parámetros:
+        - listingredientes (list): Lista de ingredientes necesarios.
+
+        Retorna:
+        - None
+        """
         pass
 
 

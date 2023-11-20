@@ -13,8 +13,19 @@ class Cocinero(Domiciliario):
     _procesosDeProductosCocinados = []
     _fallosCocinando= 0
     
-    def __init__(self, nombre="",especialidad="" , panaderia=None,habilidad=0.0, calificacion=0.0, dineroEnMano=0.):
-        super().__init__(nombre,panaderia, habilidad, calificacion, dineroEnMano)
+    def __init__(self, nombre="", especialidad="", panaderia=None, habilidad=0.0, calificacion=0.0, dineroEnMano=0.):
+        """
+        Inicializa un objeto Cocinero con los siguientes atributos:
+
+        Args:
+            nombre (str, opcional): El nombre del cocinero. Por defecto es una cadena vacía.
+            especialidad (str, opcional): La especialidad del cocinero. Por defecto es una cadena vacía.
+            panaderia (Panaderia, opcional): La panadería a la que pertenece el cocinero. Por defecto es None.
+            habilidad (float, opcional): La habilidad del cocinero. Por defecto es 0.0.
+            calificacion (float, opcional): La calificación del cocinero. Por defecto es 0.0.
+            dineroEnMano (float, opcional): La cantidad de dinero en mano del cocinero. Por defecto es 0.0.
+        """
+        super().__init__(nombre, panaderia, habilidad, calificacion, dineroEnMano)
         self._especialidad = especialidad
         self._fallado = False
         self._trabajo = False
@@ -24,6 +35,8 @@ class Cocinero(Domiciliario):
         self._panaderia = panaderia
         if self._panaderia is not None:
             self._panaderia.getCocineros().append(self)
+
+#getters y setters
 
     def getEspecialidad(self):
         return self._especialidad
@@ -78,10 +91,30 @@ class Cocinero(Domiciliario):
         cls._fallosCocinando = fallosCocinando
 
     def ingredientesCocinero(self, ingredientesNecesarios):
+        """
+        Devuelve una lista de ingredientes faltantes necesarios para cocinar.
+
+        Parámetros:
+        - ingredientesNecesarios: una lista de ingredientes necesarios para cocinar.
+
+        Retorna:
+        - ingrFaltantes: una lista de ingredientes faltantes necesarios para cocinar.
+        """
         ingrFaltantes = self._panaderia.getInventario().revisarCantidadIngredientes(ingredientesNecesarios)
         return ingrFaltantes
 
     def cocineroIdeal(self, proceso):
+        """
+        Devuelve el cocinero ideal para un proceso de cocina dado.
+
+        Parámetros:
+        - proceso: El proceso de cocina para el cual se busca el cocinero ideal.
+
+        Retorna:
+        - El cocinero ideal para el proceso dado, si existe.
+        - Si no existe un cocinero ideal, se contrata un nuevo cocinero con una especialidad aleatoria y se retorna.
+
+        """
         chefRandom = self.nombres[randint(0, 5)]
         ideal = None
         listaCocineros = self._panaderia.getCocineros()
@@ -95,22 +128,53 @@ class Cocinero(Domiciliario):
         return idealNew
 
     def detenerCoccion(self, producto, cantidades):
+        """
+        Detiene la cocción de un producto y resta los ingredientes utilizados en la cantidad especificada.
+
+        Parámetros:
+        - producto: El producto cuya cocción se va a detener.
+        - cantidades: La cantidad de veces que se va a detener la cocción del producto.
+
+        """
         ingredientesUsados = producto.getIngredientes()
         for ingUsado, cantidad in ingredientesUsados.items():
             ingredienteUsado = self._panaderia.getInventario().ingredientePorNombreBuscar(ingUsado)
             self._panaderia.getInventario().restarIngrediente(ingredienteUsado, cantidad * cantidades)
 
     def repararCoccion(self, producto):
+        """
+        Repara la cocción de un producto dado comprando los ingredientes utilizados.
+
+        Parámetros:
+        - producto: El producto cuya cocción se va a reparar.
+
+        """
         ingredientesUsados = producto.getIngredientes()
         self._panaderia.comprarIngredientes(ingredientesUsados)
 
     def detenerCoccion2(self, producto):
+        """
+        Detiene la cocción de un producto y resta los ingredientes utilizados de la panadería.
+
+        Parámetros:
+        - producto: El producto cuya cocción se desea detener.
+
+        """
         ingredientesUsados = producto.getIngredientes()
         for ingUsado, cantidad in ingredientesUsados.items():
             ingredienteUsado = self._panaderia.getInventario().ingredientePorNombreBuscar(ingUsado)
             self._panaderia.getInventario().restarIngrediente(ingredienteUsado, cantidad)
 
     def procesoCocinar(self, producto):
+        """
+        Realiza el proceso de cocinar un producto.
+
+        Args:
+            producto (Producto): El producto a cocinar.
+
+        Returns:
+            bool: False si todos los procesos se completaron con éxito.
+        """
         # Obtiene la lista de procesos de cocina necesarios para el producto.
         procesosProducto = producto.seleccionProcesosDeCocina()
 
@@ -159,6 +223,15 @@ class Cocinero(Domiciliario):
 
     @staticmethod
     def unirMapasIngredientesId(listaDeMapas):
+        """
+        Une varios mapas de ingredientes en uno solo, acumulando los valores de las claves comunes.
+
+        Args:
+            listaDeMapas (list): Una lista de diccionarios que representan los mapas de ingredientes.
+
+        Returns:
+            dict: Un diccionario que contiene la acumulación de los valores de las claves comunes en los mapas de ingredientes.
+        """
         mapaAcumulativo = {}
         for mapa in listaDeMapas:
             for clave, valor in mapa.items():
@@ -167,6 +240,17 @@ class Cocinero(Domiciliario):
     
     @staticmethod
     def multiplicarValoresEnMapa(mapa, multiplicador):
+        """
+        Multiplica los valores en un mapa por un multiplicador dado.
+
+        Args:
+            mapa (dict): El mapa con los ingredientes y sus valores originales.
+            multiplicador (int): El valor por el cual se multiplicarán los valores en el mapa.
+
+        Returns:
+            dict: Un nuevo mapa con los valores multiplicados.
+
+        """
         nuevoMapa = {}
         
         for ingredienteId, valorOriginal in mapa.items():
@@ -176,6 +260,16 @@ class Cocinero(Domiciliario):
         return nuevoMapa
 
     def laborParticular(self, canastaTrabajar):
+        """
+        Realiza la labor particular del cocinero con una canasta de trabajo.
+
+        Args:
+            canastaTrabajar (Canasta): La canasta de trabajo que contiene los productos a cocinar.
+
+        Returns:
+            bool: True si se completó la labor correctamente, False si hubo ingredientes faltantes.
+
+        """
         productos = canastaTrabajar.getProductosEnLista()
         listaDeMapas = []
 
