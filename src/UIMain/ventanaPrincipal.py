@@ -438,6 +438,8 @@ class VentanaPrincipal:
 
     # frameComprar
     def cargarFrameCarrito(self):
+        if Cliente.getSesion().getCanastaOrden() is None:
+            Cliente.getSesion().crearCanastaNueva()
         self.frameComprar1 = Frame(self.frameComprar)
         self.frameComprar1.pack()
         self.labelfc1 = Label(self.frameComprar1, text="CREAR CANASTA DE COMPRAS", wraplength=300)
@@ -649,55 +651,6 @@ class VentanaPrincipal:
         # return usuario in self.lista_de_usuarios
         return False  # Aquí devolverías True si el usuario existe y False si no existe
 
-    def iniciar_sesion(self):
-        while True:
-            usuario = self.entry_usuario.get()
-            contrasena = self.entry_contrasena.get()
-
-            try:
-                campos = [usuario, contrasena]
-                self.verificar_campos_llenos(campos)
-                # Aquí podrías validar si el usuario y la contraseña son correctos antes de cambiar el frame
-                # Agregar lógica para verificar la existencia del usuario
-                if not self.verificar_existencia_usuario(usuario):
-                    raise UsuarioNoEncontradoError(usuario)
-                
-                self.cambiarFrame(self.framePrincipal)
-                break  # Sale del bucle si los campos son válidos y el usuario existe
-            except CamposVaciosError as e:
-                mensaje = f"Por favor, complete los campos: {len(e.campos_faltantes)} usuario y/o contraseña"
-                messagebox.showwarning("Campos Vacíos", mensaje)
-                self.entry_usuario.delete(0, 'end')
-                self.entry_contrasena.delete(0, 'end')
-                break  # Sale del bucle para permitir al usuario reintentar el inicio de sesión
-            except UsuarioNoEncontradoError as e:
-                messagebox.showwarning("Usuario no encontrado", f"El usuario '{e.usuario}' no fue encontrado.")
-                self.entry_usuario.delete(0, 'end')
-                self.entry_contrasena.delete(0, 'end')
-                break  # Sale del bucle para permitir al usuario reintentar el inicio de sesión
-        
-    def registrarse(self):
-        while True:
-            usuario = self.entry_RegistroUsuario.get()
-            contrasena = self.entry_RegistroContrasena.get()
-            identificacion = self.entry_RegistroIdentificacion.get()
-
-            try:
-                campos = [usuario, contrasena, identificacion]
-                self.verificar_campos_llenos(campos)
-                # Aquí podrías validar si el usuario y la contraseña son correctos antes de cambiar el frame
-                # Agregar lógica para verificar la existencia del usuario
-                if not self.verificar_existencia_usuario(usuario):
-                    raise UsuarioNoEncontradoError(usuario)
-                
-                self.cambiarFrame(self.framePrincipal)
-                break  # Sale del bucle si los campos son válidos y el usuario existe
-            except CamposVaciosError as e:
-                mensaje = f"Por favor, complete los campos: {len(e.campos_faltantes)} usuario y/o contraseña y/o identificacion"
-                messagebox.showwarning("Campos Vacíos", mensaje)
-                self.entry_usuario.delete(0, 'end')
-                self.entry_contrasena.delete(0, 'end')
-                break
     
     def mostrar_info(self):
         
@@ -854,18 +807,7 @@ class VentanaPrincipal:
 
     def cerrarSesion(self):
         Cliente.setSesion(None)
-        self.menu_procesos.entryconfigure("Iniciar sesion", state="normal")
-        self.menu_procesos.entryconfigure("Registrarse", state="normal")
-        self.menu_procesos.entryconfigure("Cerrar sesion", state="disabled")
-        
-        self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="disabled")
-        self.menu_procesos.entryconfigure("Func. Facturar", state="disabled")
-        self.menu_procesos.entryconfigure("Func. Cocinar", state="disabled")
-        self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="disabled")
-        self.menu_procesos.entryconfigure("Func. Domicilio", state="disabled")
-
-        self.menu_procesos.entryconfigure("Lo mejor de nuestra panaderia", state="disabled")
-        self.menu_procesos.entryconfigure("Modificar datos", state="disabled")
+        self.chequeoDeEstados()
         self.cambiarFrame(self.framePrincipal)
 
     def iniciarSesion(self, val):
@@ -877,25 +819,10 @@ class VentanaPrincipal:
 
                 if Cliente.inicioSesionContrasena(cliente1, val[1]) == "Contraseña incorrecta":
                     raise UsuarioNoEncontradoError(int(val[0]))
-
-                if Cliente.getSesion().getId()=="202":
-                    self.menu_procesos.entryconfigure("Iniciar sesion", state="disabled")
-                    self.menu_procesos.entryconfigure("Registrarse", state="disabled")
-                    self.menu_procesos.entryconfigure("Cerrar sesion", state="normal")
-
-                    self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="normal")
-                    self.menu_procesos.entryconfigure("Func. Facturar", state="normal")
-                    self.menu_procesos.entryconfigure("Func. Cocinar", state="normal")
-                    self.menu_procesos.entryconfigure("Func. Conseguir Ingredientes", state="normal")
-                    self.menu_procesos.entryconfigure("Func. Domicilio", state="normal")
-        
-                    self.menu_procesos.entryconfigure("Lo mejor de nuestra panaderia", state="normal")
-
-                    self.menu_procesos.entryconfigure("Modificar datos", state="normal")
-                else:
-                    if not Cliente.getSesion().getCanastaEnOrden().getPagada():
-                        self
+                
+                self.chequeoDeEstados()
                 messagebox.showinfo("Inicio de sesion", "Inicio de sesion exitoso")
+                
                 self.cambiarFrame(self.framePrincipal)
                 self.cargarFrameCarrito()
                 break  # Sale del bucle si el inicio de sesión fue exitoso
@@ -906,9 +833,55 @@ class VentanaPrincipal:
             except ValueError:
                 messagebox.showwarning("Error", "El usuario debe ser un numero")
                 break  # Sale del bucle si se encuentra un error en el inicio de sesión
-    def checkeoDeEstados(self):
-        if Cliente.getSesion().getId()=="202":
-            print("f")
+    def chequeoDeEstados(self):
+        if Cliente.getSesion() is not None:
+            self.menu_procesos.entryconfigure("Iniciar sesion", state="disabled")
+            self.menu_procesos.entryconfigure("Registrarse", state="disabled")
+            self.menu_procesos.entryconfigure("Cerrar sesion", state="normal")
+            self.menu_procesos.entryconfigure("Lo mejor de nuestra panaderia", state="normal")
+            self.menu_procesos.entryconfigure("Modificar datos", state="normal")
+
+            cliente=Cliente.getSesion()
+            if Cliente.getSesion().getId()=="202":
+                self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="normal")
+                self.menu_procesos.entryconfigure("Func. Facturar", state="normal")
+                self.menu_procesos.entryconfigure("Func. Cocinar", state="normal")
+                self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="normal")
+                self.menu_procesos.entryconfigure("Func. Domicilio", state="normal")
+            else:
+                canasta=cliente.getCanastaOrden()
+                if (canasta is None) or (canasta.getProductosEnLista()=={} and canasta.getIngredientesEnLista()=={} and canasta.getKitsEnLista()=={}):
+                    self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="normal")
+                    self.menu_procesos.entryconfigure("Func. Facturar", state="disabled")
+                    self.menu_procesos.entryconfigure("Func. Cocinar", state="disabled")
+                    self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="disabled")
+                    self.menu_procesos.entryconfigure("Func. Domicilio", state="disabled")
+
+                elif canasta.getPagada() and not canasta.getCocinada():
+                    self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="disabled")
+                    self.menu_procesos.entryconfigure("Func. Facturar", state="disabled")
+                    self.menu_procesos.entryconfigure("Func. Cocinar", state="normal", command=self.cargarFrameCocinarDesdeClienteNormal)
+                    self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="disabled")
+                    self.menu_procesos.entryconfigure("Func. Domicilio", state="disabled")
+
+                elif canasta.getCocinada() and not canasta.getEntregada():
+                    self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="disabled")
+                    self.menu_procesos.entryconfigure("Func. Facturar", state="disabled")
+                    self.menu_procesos.entryconfigure("Func. Cocinar", state="disabled")
+                    self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="disabled")
+                    self.menu_procesos.entryconfigure("Func. Domicilio", state="normal")
+        else:
+            self.menu_procesos.entryconfigure("Iniciar sesion", state="normal")
+            self.menu_procesos.entryconfigure("Registrarse", state="normal")
+            self.menu_procesos.entryconfigure("Cerrar sesion", state="disabled")
+            self.menu_procesos.entryconfigure("Func. Facturar", state="disabled")
+            self.menu_procesos.entryconfigure("Func. Cocinar", state="disabled")
+            self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="disabled")
+            self.menu_procesos.entryconfigure("Func. Domicilio", state="disabled")
+            self.menu_procesos.entryconfigure("Lo mejor de nuestra panaderia", state="disabled")
+            self.menu_procesos.entryconfigure("Modificar datos", state="disabled")
+
+
     def registrarUsuario(self,val):
         try:
             if Cliente.crearCuenta(val[0], int(val[1]), val[2]) == "Ya existe una cuenta con ese ID":

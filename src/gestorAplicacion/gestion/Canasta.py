@@ -9,7 +9,7 @@ import random
 class Canasta:
 
     #Constructores Canasta
-    def __init__(self, productos=None, ingredientes=None, kits=None, productosEnLista=None, ingredientesEnLista=None, kitsEnLista=None, identificador="", itemsTotalesEnCanasta=0, itemsTotalesEnLista=0, costoTotalEnLista=0.0, costoTrasDescuentoEnLista=0.0, descuentoEnLista=0.0, calificacion=0.0, comentario="", pagada=False, estadoOrden=False):
+    def __init__(self, productos=None, ingredientes=None, kits=None, productosEnLista=None, ingredientesEnLista=None, kitsEnLista=None, identificador="", itemsTotalesEnCanasta=0, itemsTotalesEnLista=0, costoTotalEnLista=0.0, costoTrasDescuentoEnLista=0.0, descuentoEnLista=0.0, calificacion=0.0, comentario="", pagada=False, cocinada=False, entregada=False):
         """
         Inicializa una instancia de la clase Canasta.
 
@@ -64,7 +64,8 @@ class Canasta:
         self._calificacion = calificacion
         self._comentario = comentario
         self._pagada = pagada
-        self._estadoOrden = estadoOrden
+        self._cocinada = cocinada
+        self._entregada = entregada
 
     # Getters
     def getProductosEnLista(self):
@@ -113,7 +114,10 @@ class Canasta:
         return self._pagada
 
     def getEstadoOrden(self):
-        return self._estadoOrden
+        return self._cocinada
+    
+    def getEntregada(self):
+        return self._entregada
 
     # Setters
     def setProductosEnLista(self, productosEnLista):
@@ -162,7 +166,10 @@ class Canasta:
         self._pagada = pagada
 
     def setEstadoOrden(self, estadoOrden):
-        self._estadoOrden = estadoOrden
+        self._cocinada = estadoOrden
+
+    def setEntregada(self, entregada):
+        self._entregada = entregada
 
 
     # Metodos que gestionan correctamente la modificacion de los maps
