@@ -1,7 +1,7 @@
 from UIMain import Texto
 import datetime
 
-from src.gestorAplicacion.comida import Ingrediente, Producto
+from gestorAplicacion.comida import Ingrediente, Producto
 
 class Recibo:
     totalFacturas = 0
