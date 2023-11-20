@@ -47,7 +47,7 @@ class VentanaPrincipal:
         self.menu_procesos.add_command(label = "Registrarse", command= lambda: self.cambiarFrame(self.frameRegistro))
         self.menu_procesos.add_command(label = "Cerrar sesion", state="disabled",command = self.cerrarSesion)
         self.menu_procesos.add_command(label = "Func. Crear Canasta de Compras", state="disabled",command = lambda: self.cambiarFrame(self.frameComprar))
-        self.menu_procesos.add_command(label = "Func. Facturar", state="disabled")
+        self.menu_procesos.add_command(label = "Func. Facturar", state="disabled", command=lambda: self.cambiarFrame(self.frameFacturacion))
         self.menu_procesos.add_command(label = "Func. Cocinar",command=lambda:self.cambiarFrame(self.frameCocinar), state="disabled")
         self.menu_procesos.add_command(label = "Func. Ingredientes e inventario", command=lambda:self.cambiarFrame(self.frameComprarIngredientes), state="disabled")
         self.menu_procesos.add_command(label = "Func. Domicilio", state="disabled")
@@ -795,6 +795,7 @@ class VentanaPrincipal:
 
                 # Aplicar el tag al texto
                 self.texto_widget.tag_add("center", "1.0", "end")
+                self.chequeoDeEstados()
 
         except CamposVaciosError as e:
             messagebox.showwarning("Error", "Completa los campos vacios")
@@ -822,7 +823,6 @@ class VentanaPrincipal:
                 
                 self.chequeoDeEstados()
                 messagebox.showinfo("Inicio de sesion", "Inicio de sesion exitoso")
-                
                 self.cambiarFrame(self.framePrincipal)
                 self.cargarFrameCarrito()
                 break  # Sale del bucle si el inicio de sesión fue exitoso
@@ -843,16 +843,47 @@ class VentanaPrincipal:
 
             cliente=Cliente.getSesion()
             if Cliente.getSesion().getId()==202:
-                self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="normal")
-                self.menu_procesos.entryconfigure("Func. Facturar", state="normal")
-                self.menu_procesos.entryconfigure("Func. Cocinar", state="normal")
-                self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="normal")
-                self.menu_procesos.entryconfigure("Func. Domicilio", state="normal")
+                canasta=cliente.getCanastaOrden()
+                if canasta.getPagada():
+                    messagebox.showinfo("Info", "Ha comenzado un proceso de compra, continue con el proceso de compra, al finalizar se desbloquearan el resto de opciones")
+                    self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="disabled")
+                    self.menu_procesos.entryconfigure("Func. Facturar", state="disabled")
+                    self.menu_procesos.entryconfigure("Func. Cocinar", state="disabled")
+                    self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="disabled")
+                    self.menu_procesos.entryconfigure("Func. Domicilio", state="disabled")
+                else:
+                    if canasta.getPagada() and not canasta.getCocinada():
+                        self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="disabled")
+                        self.menu_procesos.entryconfigure("Func. Facturar", state="disabled")
+                        self.menu_procesos.entryconfigure("Func. Cocinar", state="normal", command=self.cargarFrameCocinarDesdeClienteNormal)
+                        self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="disabled")
+                        self.menu_procesos.entryconfigure("Func. Domicilio", state="disabled")
+
+                    elif canasta.getCocinada() and not canasta.getEntregada():
+                        self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="disabled")
+                        self.menu_procesos.entryconfigure("Func. Facturar", state="disabled")
+                        self.menu_procesos.entryconfigure("Func. Cocinar", state="disabled")
+                        self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="disabled")
+                        self.menu_procesos.entryconfigure("Func. Domicilio", state="normal")
+
+                    elif canasta.getEntregada():
+                        self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="normal")
+                        self.menu_procesos.entryconfigure("Func. Facturar", state="normal")
+                        self.menu_procesos.entryconfigure("Func. Cocinar", state="normal")
+                        self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="normal")
+                        self.menu_procesos.entryconfigure("Func. Domicilio", state="normal")
             else:
                 canasta=cliente.getCanastaOrden()
                 if (canasta is None) or (canasta.getProductosEnLista()=={} and canasta.getIngredientesEnLista()=={} and canasta.getKitsEnLista()=={}):
                     self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="normal")
                     self.menu_procesos.entryconfigure("Func. Facturar", state="disabled")
+                    self.menu_procesos.entryconfigure("Func. Cocinar", state="disabled")
+                    self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="disabled")
+                    self.menu_procesos.entryconfigure("Func. Domicilio", state="disabled")
+
+                elif (not canasta.getPagada()) and (not(canasta.getProductosEnLista()=={} and canasta.getIngredientesEnLista()=={} and canasta.getKitsEnLista()=={})):
+                    self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="normal")
+                    self.menu_procesos.entryconfigure("Func. Facturar", state="normal")
                     self.menu_procesos.entryconfigure("Func. Cocinar", state="disabled")
                     self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="disabled")
                     self.menu_procesos.entryconfigure("Func. Domicilio", state="disabled")
@@ -870,6 +901,12 @@ class VentanaPrincipal:
                     self.menu_procesos.entryconfigure("Func. Cocinar", state="disabled")
                     self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="disabled")
                     self.menu_procesos.entryconfigure("Func. Domicilio", state="normal")
+                elif canasta.getEntregada():
+                    self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="normal")
+                    self.menu_procesos.entryconfigure("Func. Facturar", state="normal")
+                    self.menu_procesos.entryconfigure("Func. Cocinar", state="disabled")
+                    self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="disabled")
+                    self.menu_procesos.entryconfigure("Func. Domicilio", state="disabled")
         else:
             self.menu_procesos.entryconfigure("Iniciar sesion", state="normal")
             self.menu_procesos.entryconfigure("Registrarse", state="normal")
