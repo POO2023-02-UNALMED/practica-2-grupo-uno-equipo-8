@@ -6,6 +6,27 @@ class Recibo:
     formato = "%d/%m/%Y"
 
     def __init__(self, cliente, canasta, domiciliario):
+        """
+        Inicializa una instancia de la clase Recibo.
+
+        Parámetros:
+        - cliente: El objeto Cliente asociado al recibo.
+        - canasta: El objeto Canasta asociado al recibo.
+        - domiciliario: El objeto Domiciliario asociado al recibo.
+
+        Atributos:
+        - cliente: El objeto Cliente asociado al recibo.
+        - idRecibo: El identificador único del recibo.
+        - subtotal: El costo total de la canasta sin descuento.
+        - total: El costo total de la canasta con descuento aplicado.
+        - descuento: El valor del descuento aplicado al total.
+        - fecha: La fecha y hora en que se creó el recibo.
+        - pagado: Un indicador booleano que indica si el recibo ha sido pagado o no.
+        - canasta: El objeto Canasta asociado al recibo.
+        - costoDomicilio: El costo del domicilio asociado al recibo.
+        - factura: Una lista que contiene los elementos de la factura.
+
+        """
         Recibo.totalFacturas += 1
         self.cliente = cliente
         self.idRecibo = Recibo.totalFacturas
@@ -17,6 +38,8 @@ class Recibo:
         self.canasta = canasta
         self.costoDomicilio = domiciliario.getCostoDomicilio()
         self.factura = []
+
+#getters y setters
 
     def getCostoDomicilio(self):
         return self.costoDomicilio

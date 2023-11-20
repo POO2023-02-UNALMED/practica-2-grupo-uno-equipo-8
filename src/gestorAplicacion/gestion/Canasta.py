@@ -9,7 +9,28 @@ import random
 class Canasta:
 
     #Constructores Canasta
-    def __init__(self, productos = None, ingredientes = None, kits = None, productosEnLista = None, ingredientesEnLista = None, kitsEnLista = None, identificador= "", itemsTotalesEnCanasta = 0, itemsTotalesEnLista = 0, costoTotalEnLista = 0.0, costoTrasDescuentoEnLista = 0.0, descuentoEnLista = 0.0, calificacion = 0.0, comentario = "", pagada = False, estadoOrden=False):
+    def __init__(self, productos=None, ingredientes=None, kits=None, productosEnLista=None, ingredientesEnLista=None, kitsEnLista=None, identificador="", itemsTotalesEnCanasta=0, itemsTotalesEnLista=0, costoTotalEnLista=0.0, costoTrasDescuentoEnLista=0.0, descuentoEnLista=0.0, calificacion=0.0, comentario="", pagada=False, estadoOrden=False):
+        """
+        Inicializa una instancia de la clase Canasta.
+
+        Args:
+            productos (list, optional): Lista de productos en la canasta. Defaults to None.
+            ingredientes (list, optional): Lista de ingredientes en la canasta. Defaults to None.
+            kits (list, optional): Lista de kits en la canasta. Defaults to None.
+            productosEnLista (dict, optional): Diccionario que mapea productos a su cantidad en la lista. Defaults to None.
+            ingredientesEnLista (dict, optional): Diccionario que mapea ingredientes a su cantidad en la lista. Defaults to None.
+            kitsEnLista (dict, optional): Diccionario que mapea kits a su cantidad en la lista. Defaults to None.
+            identificador (str, optional): Identificador de la canasta. Defaults to "".
+            itemsTotalesEnCanasta (int, optional): Número total de items en la canasta. Defaults to 0.
+            itemsTotalesEnLista (int, optional): Número total de items en la lista. Defaults to 0.
+            costoTotalEnLista (float, optional): Costo total de los items en la lista. Defaults to 0.0.
+            costoTrasDescuentoEnLista (float, optional): Costo total de los items en la lista después del descuento. Defaults to 0.0.
+            descuentoEnLista (float, optional): Descuento aplicado a los items en la lista. Defaults to 0.0.
+            calificacion (float, optional): Calificación de la canasta. Defaults to 0.0.
+            comentario (str, optional): Comentario sobre la canasta. Defaults to "".
+            pagada (bool, optional): Indica si la canasta ha sido pagada. Defaults to False.
+            estadoOrden (bool, optional): Indica el estado de la orden asociada a la canasta. Defaults to False.
+        """
         if productos == None:
             productos = []
 
@@ -21,7 +42,7 @@ class Canasta:
 
         if productosEnLista == None:
             productosEnLista = {}
-        
+
         if ingredientesEnLista == None:
             ingredientesEnLista = {}
 
@@ -275,6 +296,16 @@ class Canasta:
 
     @staticmethod
     def cuponProductos(producto, cnt):
+        """
+        Calcula el descuento aplicable a un producto en función de la cantidad y si está en oferta.
+
+        Parámetros:
+        - producto: El objeto Producto al que se le aplicará el descuento.
+        - cnt: La cantidad de productos del mismo tipo en la canasta.
+
+        Retorna:
+        - El multiplicador de descuento a aplicar al precio del producto.
+        """
         multiplicador_descuento = 1.0
 
         # Si la cantidad cumple los requisitos se le aplica el descuento del enum
@@ -294,6 +325,14 @@ class Canasta:
     
 
     def generarCostoDeOrden(self):
+        """
+        Calcula el costo total de la orden en la canasta, teniendo en cuenta los productos, ingredientes y kits agregados.
+        El costo se calcula sumando el costo de cada producto y multiplicándolo por la cantidad correspondiente.
+        Si hay descuentos aplicables, se calcula el descuento y se actualiza el costo total y el costo tras descuento.
+
+        Returns:
+            None
+        """
         from gestorAplicacion.comida.Ingrediente import Ingrediente
         costo_canasta = 0.0
         descuento_canasta = 0.0
@@ -320,6 +359,18 @@ class Canasta:
         self._costoTrasDescuentoEnLista = costo_canasta
 
     def recibir_orden(self, objeto_entrante, cantidad, receta):
+        """
+        Recibe una orden para agregar o restar un objeto a la canasta.
+
+        Parámetros:
+        - objeto_entrante: El objeto que se desea agregar o restar a la canasta.
+        - cantidad: La cantidad del objeto que se desea agregar o restar.
+        - receta: Un valor booleano que indica si el objeto es un ingrediente de una receta.
+
+        Retorna:
+        - Un mensaje indicando si se ha agregado o restado la cantidad del objeto a la canasta, o si no se ha podido realizar el proceso.
+
+        """
         from gestorAplicacion.comida.Ingrediente import Ingrediente
         self._estado_orden = False
 
@@ -367,6 +418,19 @@ class Canasta:
     
 
     def recibirOrdenPersonalizada(self, objeto_entrante, ingredientes_necesarios, cantidad, receta):
+        """
+        Recibe una orden personalizada y la procesa en la canasta.
+
+        Parámetros:
+        - objeto_entrante: El objeto que se desea agregar a la canasta.
+        - ingredientes_necesarios: Los ingredientes necesarios para crear el objeto personalizado.
+        - cantidad: La cantidad del objeto que se desea agregar a la canasta.
+        - receta: Un indicador booleano que especifica si se debe seguir una receta para crear el objeto personalizado.
+
+        Retorna:
+        - True si el objeto se agrega correctamente a la canasta.
+        - False si ocurre algún error durante el proceso de agregar el objeto a la canasta.
+        """
         try:
             random_num = random.randint(1, 2)
             if random_num == 1:
@@ -386,6 +450,11 @@ class Canasta:
             return False
 
     def enviarOrdenCanasta(self):
+        """
+        Envía una orden de canasta, agregando los productos, ingredientes y kits a la canasta del cliente.
+
+        :return: None
+        """
         from gestorAplicacion.humanos.Cliente import Cliente
         productos_cocinados = Cliente.getSesion().getPanaderia().agregarProductosACanasta(self._productosEnLista)
         ingredientes_cocinados = Cliente.getSesion().getPanaderia().agregarIngredientesACanasta(self._ingredientesEnLista)
@@ -396,6 +465,14 @@ class Canasta:
         self.gestionAgregarK(kits_cocinados)
 
 class DescuentoProducto(Enum):
+    """
+    Enumeración que representa los descuentos aplicables a los productos de la canasta.
+
+    Atributos:
+        producto (str): El nombre del producto al que se aplica el descuento.
+        valor (float): El valor del descuento aplicado al producto.
+    """
+
     PRODUCTO_A = ("rollos de canela", 0.1)
     PRODUCTO_B = ("bunuelo", 0.1)
     PRODUCTO_C = ("brownie", 0.1)
@@ -407,12 +484,33 @@ class DescuentoProducto(Enum):
         self.valor = valor
 
     def get_producto(self):
+        """
+        Obtiene el nombre del producto al que se aplica el descuento.
+
+        Returns:
+            str: El nombre del producto.
+        """
         return self.producto
 
     def get_valor(self):
+        """
+        Obtiene el valor del descuento aplicado al producto.
+
+        Returns:
+            float: El valor del descuento.
+        """
         return self.valor
 
 class DescuentoPorCantidad(Enum):
+    """
+    Enumeración que representa los descuentos por cantidad en una canasta.
+
+    Atributos:
+        TRES (DescuentoPorCantidad): Descuento del 5% para una cantidad de 3 productos.
+        CINCO (DescuentoPorCantidad): Descuento del 10% para una cantidad de 5 productos.
+        OCHO (DescuentoPorCantidad): Descuento del 15% para una cantidad de 8 productos.
+    """
+
     TRES = 0.05
     CINCO = 0.1
     OCHO = 0.15
@@ -421,4 +519,10 @@ class DescuentoPorCantidad(Enum):
         self.valor = valor
 
     def get_valor(self):
+        """
+        Devuelve el valor del descuento.
+
+        Returns:
+            float: Valor del descuento.
+        """
         return self.valor
