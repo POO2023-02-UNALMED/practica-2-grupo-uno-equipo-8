@@ -4,7 +4,7 @@ from tkinter import ttk
 from gestorAplicacion.humanos.Cocinero import Cocinero
 import time
 
-from src.gestorAplicacion.humanos import Catastrofe
+from gestorAplicacion.humanos import Catastrofe
 
 class GestionCocinar:
     

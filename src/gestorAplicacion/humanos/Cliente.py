@@ -3,7 +3,7 @@ from gestorAplicacion.gestion.Panaderia import Panaderia
 from random import randint as random
 from enum import Enum
 
-from src.UIMain.GestionCocinar import GestionCocinar
+from UIMain.GestionCocinar import GestionCocinar
 
 class Cliente:
     _sesion = None  # Variable de clase para almacenar la sesión del cliente

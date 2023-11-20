@@ -9,6 +9,8 @@ from ErrorAplicacion import CamposVaciosError, CantidadInvalidaError, ProductoNo
 import os
 import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+
 from gestorAplicacion.humanos.Cliente import Cliente
 from gestorAplicacion.comida.Producto import Producto
 from gestorAplicacion.comida.Ingrediente import Ingrediente
@@ -546,7 +548,16 @@ class VentanaPrincipal:
         self.varFactura = ""
         self.textoFacturacion.insert(1.0, self.varFactura)
 
-        #Metodos necesiarios para la interfaz de usuario
+    def cargarFrameCocinarDesdeClienteNormal(self):
+        self.cambiarFrame(self.frameCocinar)
+        self.descipCocina.config(text="Se cocinaran los productos de su canasta")
+        self.comboboxCocinar.pack_forget()
+        self.ffCocinar.pack_forget()
+        self.botonCocinar.configure(command=Cliente.getSesion().getCanastaEnOrden().enviarOrdenCanasta())
+
+        print("f")
+
+    #Metodos necesiarios para la interfaz de usuario
     def verificar_campos_llenos(self, campos):  # Asegúrate de pasar 'self' como primer argumento
         campos_vacios = [campo for campo in campos if len(campo) == 0]
         if campos_vacios:
@@ -788,19 +799,23 @@ class VentanaPrincipal:
                 if Cliente.inicioSesionContrasena(cliente1, val[1]) == "Contraseña incorrecta":
                     raise UsuarioNoEncontradoError(int(val[0]))
 
-                self.menu_procesos.entryconfigure("Iniciar sesion", state="disabled")
-                self.menu_procesos.entryconfigure("Registrarse", state="disabled")
-                self.menu_procesos.entryconfigure("Cerrar sesion", state="normal")
+                if Cliente.getSesion().getId()=="202":
+                    self.menu_procesos.entryconfigure("Iniciar sesion", state="disabled")
+                    self.menu_procesos.entryconfigure("Registrarse", state="disabled")
+                    self.menu_procesos.entryconfigure("Cerrar sesion", state="normal")
 
-                self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="normal")
-                self.menu_procesos.entryconfigure("Func. Facturar", state="normal")
-                self.menu_procesos.entryconfigure("Func. Cocinar", state="normal")
-                self.menu_procesos.entryconfigure("Func. Conseguir Ingredientes", state="normal")
-                self.menu_procesos.entryconfigure("Func. Domicilio", state="normal")
-    
-                self.menu_procesos.entryconfigure("Lo mejor de nuestra panaderia", state="normal")
+                    self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="normal")
+                    self.menu_procesos.entryconfigure("Func. Facturar", state="normal")
+                    self.menu_procesos.entryconfigure("Func. Cocinar", state="normal")
+                    self.menu_procesos.entryconfigure("Func. Conseguir Ingredientes", state="normal")
+                    self.menu_procesos.entryconfigure("Func. Domicilio", state="normal")
+        
+                    self.menu_procesos.entryconfigure("Lo mejor de nuestra panaderia", state="normal")
 
-                self.menu_procesos.entryconfigure("Modificar datos", state="normal")
+                    self.menu_procesos.entryconfigure("Modificar datos", state="normal")
+                else:
+                    if not Cliente.getSesion().getCanastaEnOrden().getPagada():
+                        self
                 messagebox.showinfo("Inicio de sesion", "Inicio de sesion exitoso")
                 self.cambiarFrame(self.framePrincipal)
                 self.cargarFrameCarrito()
@@ -812,7 +827,9 @@ class VentanaPrincipal:
             except ValueError:
                 messagebox.showwarning("Error", "El usuario debe ser un numero")
                 break  # Sale del bucle si se encuentra un error en el inicio de sesión
-
+    def checkeoDeEstados(self):
+        if Cliente.getSesion().getId()=="202":
+            print("f")
     def registrarUsuario(self,val):
         try:
             if Cliente.crearCuenta(val[0], int(val[1]), val[2]) == "Ya existe una cuenta con ese ID":
