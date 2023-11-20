@@ -6,16 +6,18 @@ from tkinter import ttk
 from FieldFrame import FieldFrame
 from Texto import centrar
 from ErrorAplicacion import CamposVaciosError, CantidadInvalidaError, ProductoNoEncontradoError, UsuarioNoEncontradoError, usuarioExistenteError
-
 import os
 import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 
+from gestorAplicacion.gestion.Canasta import Canasta
 from gestorAplicacion.humanos.Cliente import Cliente
 from gestorAplicacion.comida.Producto import Producto
 from gestorAplicacion.comida.Ingrediente import Ingrediente
 from baseDatos.Serializador import Serializador
+from gestorAplicacion.gestion.Recibo import Recibo
+from UIMain.GestionCocinar import GestionCocinar
 
 #Esta clase la cree yo (Richard), diganme si van a hacer algun cambio o si tienen alguna sugerencia
 #Los errores los esta manejando samuel
@@ -267,8 +269,8 @@ class VentanaPrincipal:
         # frameFacturasPasadas
         self.frameFacturasPasadas = Frame(self.root, padx= 2, pady= 2)
         self.frames.append(self.frameFacturasPasadas)
-        self.fotofp1 = PhotoImage(file="src/resources/ratonFactura.png")
-        self.fotoFacturasPasadas = Label(self.frameFacturasPasadas, image = self.fotofp1)
+        self.fotoRatonFactura = PhotoImage(file="src/resources/ratonFactura.png")
+        self.fotoFacturasPasadas = Label(self.frameFacturasPasadas, image = self.fotoRatonFactura)
         self.fotoFacturasPasadas.pack(pady = 10)
         self.labelFPasadas = Label(self.frameFacturasPasadas, text="Sus facturas pasadas")
         self.labelFPasadas.pack(pady=10)
@@ -358,10 +360,10 @@ class VentanaPrincipal:
         #Implementaion del field frame
         self.ffCocinar = FieldFrame("Elija la cantidad", ["Cantidad a comprar:"], "Ingrese aquí")
         self.ffCocinar.defRoot(self.frameCocinar)
-        #self.ffCocinar.defFunc()
+        self.ffCocinar.defFunc(self.valoresDiccionarioCocina)
 
         #Boton para cocinar
-        self.botonCocinar = Button(self.frameCocinar, text="Cocinar")
+        self.botonCocinar = Button(self.frameCocinar, text="Cocinar", command= self.ejecucionCocinarProductos)
         self.botonCocinar.pack(pady = 5)
 
         #Frame CocinarPersonalizado 
@@ -381,7 +383,7 @@ class VentanaPrincipal:
         self.frameCocinarPersonalizado2.pack(fill=tk.BOTH, expand=True)
 
         #Boton para cocinar Porducto personalizado
-        self.botonCocinarProductoPersonalizado = Button(self.frameCocinar, text="Cocinar producto personalizado", command=lambda: self.cambiarFrame(self.frameCocinarPersonalizado))
+        self.botonCocinarProductoPersonalizado = Button(self.frameCocinar, text="Cocinar producto personalizado") #Añadir comando aqui
         self.botonCocinarProductoPersonalizado.pack()
         
         #Frame de resultados de la ejecuion de Cocinar
@@ -608,8 +610,12 @@ class VentanaPrincipal:
     def cargarFrameFacturacion(self):
         Cliente.getSesion().getCanastaOrden().setPagada(True)
         self.chequeoDeEstados()
-        self.fotoff1 = PhotoImage(file="src/resources/ratonFactura.png")
-        self.fotoFacturacion = Label(self.frameFacturacion, image = self.fotoff1)
+        #No borrar esas lineas, las comenté para que no te aparezca la alerta
+        
+        #Creacion de la factura
+        self.facturaTemp = Recibo(Cliente.getSesion(), Cliente.getSesion().getCanastaOrden(), Cliente.getSesion().getDomiciliario())
+        
+        self.fotoFacturacion = Label(self.frameFacturacion, image = self.fotoRatonFactura)
         self.fotoFacturacion.pack(pady = 5)
         self.LabelFacturacion = Label(self.frameFacturacion, text="Su factura")
         self.LabelFacturacion.pack(pady=5)
@@ -633,7 +639,7 @@ class VentanaPrincipal:
 
         # Implementacion logica widget de texto
         self.textoFacturacion.delete(1.0, "end")
-        self.varFactura = ""
+        self.varFactura = self.facturaTemp.imprimir_factura()
         self.textoFacturacion.insert(1.0, self.varFactura)
 
     def cargarFrameCocinarDesdeClienteNormal(self):
@@ -646,20 +652,20 @@ class VentanaPrincipal:
         def procesoDeCocina():
             self.menu_procesos.entryconfigure("Func. Cocinar", state="disabled")
             self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="normal")
-            self.textEjecCocinar1.config(state=tk.NORMAL)
+            #self.textEjecCocinar1.config(state=tk.NORMAL)
             messagebox.showinfo("Información", "Parece que faltan ingredientes para cocinar sus productos, se accede a conseguir ingredientes")
-            self.cargarFrameIngredientesDesdeClienteNormal()
-            
-            self.textEjecCocinar1.config(state=tk.DISABLED) #recuerden no dar con
+            self.cargarFrameIngredientesDesdeClienteNormal()#voy
+            GestionCocinar.barraProgresoDeTodos(self.frameCocinar1) #mateo hace commit porfa
+            #self.textEjecCocinar1.config(state=tk.DISABLED) 
 
         self.tituloCocinar1.pack(pady = 5)
         self.descipCocinar1.pack(pady = 5)
         self.botonCocinar1 = Button(self.frameCocinar1, text="Cocinar", command=procesoDeCocina)
         self.botonCocinar1.pack(pady = 5)
 
-        self.textEjecCocinar1 = Text(self.frameCocinar1)
-        self.textEjecCocinar1.config(state=tk.DISABLED)
-        self.textEjecCocinar1.pack(fill=tk.BOTH, expand=True)
+        #self.textEjecCocinar1 = Text(self.frameCocinar1)
+        #self.textEjecCocinar1.config(state=tk.DISABLED)
+        #self.textEjecCocinar1.pack(fill=tk.BOTH, expand=True)
 
     def cargarFrameIngredientesDesdeClienteNormal(self):
         self.frameIngredientes1 = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
@@ -1030,7 +1036,7 @@ class VentanaPrincipal:
                 self.textEjecCocinar.config(state=tk.NORMAL)
                 self.textEjecCocinar.delete(1.0, tk.END)
                 for ingredienteNombre, cantidad in self.diccionarioFuncionalidad4.items():
-                    self.textEjecCocinar.insert(tk.END, "Ingrediente: " + Producto.obtenerObjetoPorIdP(ingredienteNombre).getNombre() + " - Cantidad: " + str(cantidad) + "\n")
+                    self.textEjecCocinar.insert(tk.END, "Produco: " + Producto.obtenerObjetoPorIdP(ingredienteNombre).getNombre() + " - Cantidad: " + str(cantidad) + "\n")
                 self.textEjecCocinar.config(state=tk.DISABLED)
                 
                 self.comboboxCocinar.delete(0, "end")
@@ -1040,12 +1046,16 @@ class VentanaPrincipal:
         except CamposVaciosError as e:
             messagebox.showwarning("Error", "Completa los campos vacíos")
         except ProductoNoEncontradoError as e:
-            messagebox.showwarning("Error", "El ingrediente ingresado no existe")
+            messagebox.showwarning("Error", "El producto ingresado no existe")
         except ValueError:
             messagebox.showwarning("Error", "La cantidad debe ser un entero")
         except CantidadInvalidaError as e:
-            messagebox.showwarning("Error", "Debes ingresar una cantidad no negativa, menor a 50 y diferente de 0")
+            messagebox.showwarning("Error", "Debes ingresar una cantidad no negativa, menor o igual a 15 y diferente de 0")
 
+    def ejecucionCocinarProductos(self):
+        
+        Cliente.getSesion().getPanaderia().cocinar(self.diccionarioFuncionalidad4, self.textEjecCocinar)
+        self.diccionarioFuncionalidad4 = {}
 
     # Métodos para la funcionalidad 5
 

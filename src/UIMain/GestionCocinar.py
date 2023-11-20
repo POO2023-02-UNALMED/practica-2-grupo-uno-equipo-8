@@ -9,44 +9,43 @@ from gestorAplicacion.humanos import Catastrofe
 class GestionCocinar:
     
     @staticmethod
-    def barraProgresoDeTodos(ventanaPrincipal):
+    def barraProgresoDeTodos(frame_principal):
         listaDeListas = Cocinero.getProcesosDeProductosCocinados()
         fallos = Cocinero.getFallosCocinando()
+        print(fallos)
+        print(listaDeListas)
         if fallos != 0:
             numero_random = Random.randint(0, 4)
-            mensaje_fallo = "Perdón su pedido tartará un poco más porque" , Catastrofe.fallos_cocina[numero_random]
-            # Crear un widget Label para mostrar el mensaje de fallo en el field frame ventanaPrincipal
-            label_fallo = tk.Label(ventanaPrincipal, text=mensaje_fallo)
-            label_fallo.pack()  # Agregar el widget Label al field frame ventanaPrincipal
-            ventanaPrincipal.update()  # Actualizar la ventana para que se muestre el mensaje
+            mensaje_fallo = f"Perdón su pedido tartará un poco más porque {Catastrofe.fallos_cocina[numero_random]}"
+            
+            label_fallo = tk.Label(frame_principal, text=mensaje_fallo)
+            label_fallo.pack()
+            frame_principal.update()
             
             time.sleep(2)
-            label_fallo.destroy()  # Eliminar el mensaje de fallo después de 2 segundos
+            label_fallo.destroy()
+            
             for lista in listaDeListas:
-                GestionCocinar.barrasCocinando(lista, len(lista), ventanaPrincipal)
+                GestionCocinar.barrasCocinando(lista, len(lista), frame_principal)
         else:
             for lista in listaDeListas:
-                GestionCocinar.barrasCocinando(lista, len(lista), ventanaPrincipal)
-        
+                GestionCocinar.barrasCocinando(lista, len(lista), frame_principal)
     
     @staticmethod
-    def barrasCocinando(proceso_cook, longitud, ventana_principal):
-        # Crea una variable de control para la barra de progreso
+    def barrasCocinando(proceso_cook, longitud, frame_principal):
         progreso_var = tk.DoubleVar()
 
-        # Crea la barra de progreso y etiqueta en la ventana principal
-        barra_progreso = ttk.Progressbar(ventana_principal, variable=progreso_var, length=200, mode="determinate", maximum=longitud)
+        barra_progreso = ttk.Progressbar(frame_principal, variable=progreso_var, length=200, mode="determinate", maximum=longitud)
         barra_progreso.pack(pady=20)
 
-        etiqueta_proceso = tk.Label(ventana_principal, text="")
+        etiqueta_proceso = tk.Label(frame_principal, text="")
         etiqueta_proceso.pack(pady=5)
 
-        # Función para actualizar la barra de progreso y la etiqueta
         def actualizar_progreso(valor):
             if valor < longitud:
                 progreso_var.set(valor)
                 etiqueta_proceso.config(text=proceso_cook[valor])
-                ventana_principal.after(1000, lambda: actualizar_progreso(valor + 1))
+                frame_principal.after(1000, lambda: actualizar_progreso(valor + 1))
             else:
                 barra_progreso.destroy()
                 etiqueta_proceso.destroy()

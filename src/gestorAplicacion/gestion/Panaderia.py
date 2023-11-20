@@ -222,7 +222,6 @@ class Panaderia():
 
                 if self._enQuiebra == True:
                     text.config(state=tk.NORMAL)
-                    time.sleep(0.7)
                     text.insert(tk.END, "La panadería no tenía dinero para realizar su pedido y ha entrado en quiebra :( , pero una franquicia más grande la ha comprado :D , podremos proseguir con su pedido" + "\n")
                     text.config(state=tk.DISABLED)
                     text.tag_configure("center", justify="center")
@@ -230,7 +229,6 @@ class Panaderia():
 
                 else:
                     text.config(state=tk.NORMAL)
-                    time.sleep(0.7)
                     text.insert(tk.END, "La panadería no tenía dinero para realizar su pedido :( , pero ha pedido un prestamo y ya puede comprar lo que necesita para preparar su pedido :D" + "\n")
                     text.config(state=tk.DISABLED)
                     text.tag_configure("center", justify="center")
@@ -244,7 +242,6 @@ class Panaderia():
         #GestionConseguirIngredientes.lecturaQuiebra(self._enQuiebra) #Crear estas lecturas
         if self._enQuiebra == True:
             text.config(state=tk.NORMAL)
-            time.sleep(0.7)
             text.insert(tk.END, "La panadería no tenía dinero para realizar su pedido y ha entrado en quiebra :( , pero una franquicia más grande la ha comprado :D , podremos proseguir con su pedido" + "\n")
             text.config(state=tk.DISABLED)
             text.tag_configure("center", justify="center")
@@ -252,7 +249,6 @@ class Panaderia():
 
         else:
             text.config(state=tk.NORMAL)
-            time.sleep(0.7)
             text.insert(tk.END, "La panadería no tenía dinero para realizar su pedido :( , pero ha pedido un prestamo y ya puede comprar lo que necesita para preparar su pedido :D" + "\n")
             text.config(state=tk.DISABLED)
             text.tag_configure("center", justify="center")
@@ -286,7 +282,6 @@ class Panaderia():
         #GestionConseguirIngredientes.lecturaCompra(elegido.isRobado()) #Recordar hacer este lector
         if elegido.isRobado() == True:
             text.config(state=tk.NORMAL)
-            time.sleep(0.7)
             text.insert(tk.END, "Se ha enviado a comprar mas ingredientes, por favor espere a que se compren correctamente" + "\n")
             text.config(state=tk.DISABLED)
             text.tag_configure("center", justify="center")
@@ -294,7 +289,6 @@ class Panaderia():
 
         else:
             text.config(state=tk.NORMAL)
-            time.sleep(0.7)
             text.insert(tk.END, "Estamos en proceso de conseguir los ingredientes, lamentamos los inconvenientes" + "\n")
             text.config(state=tk.DISABLED)
             text.tag_configure("center", justify="center")
@@ -304,7 +298,6 @@ class Panaderia():
         #GestionConseguirIngredientes.lecturaRobo(x)
         if x == True:
             text.config(state=tk.NORMAL)
-            time.sleep(0.7)
             text.insert(tk.END, "Han robado al trabajador que iba por los ingredientes, pedimos disculpas por el atraso, enviaremos a alguien mas por la compra" + "\n")
             text.config(state=tk.DISABLED)
             text.tag_configure("center", justify="center")
@@ -312,7 +305,6 @@ class Panaderia():
 
         else:
             text.config(state=tk.NORMAL)
-            time.sleep(0.7)
             text.insert(tk.END, "El trabajador ha regresado con los ingredientes!!" + "\n")
             text.config(state=tk.DISABLED)
             text.tag_configure("center", justify="center")
@@ -324,7 +316,6 @@ class Panaderia():
             #GestionConseguirIngredientes.lecturaCompra(elegido.isRobado()) #Recordar hacer este lector
             if elegido.isRobado() == True:
                 text.config(state=tk.NORMAL)
-                time.sleep(0.7)
                 text.insert(tk.END, "Se ha enviado a comprar mas ingredientes, por favor espere a que se compren correctamente" + "\n")
                 text.config(state=tk.DISABLED)
                 text.tag_configure("center", justify="center")
@@ -332,7 +323,6 @@ class Panaderia():
 
             else:
                 text.config(state=tk.NORMAL)
-                time.sleep(0.7)
                 text.insert(tk.END, "Estamos en proceso de conseguir los ingredientes, lamentamos los inconvenientes" + "\n")
                 text.config(state=tk.DISABLED)
                 text.tag_configure("center", justify="center")
@@ -340,7 +330,6 @@ class Panaderia():
 
             if x == True:
                 text.config(state=tk.NORMAL)
-                time.sleep(0.7)
                 text.insert(tk.END, "Han robado al trabajador que iba por los ingredientes, pedimos disculpas por el atraso, enviaremos a alguien mas por la compra" + "\n")
                 text.config(state=tk.DISABLED)
                 text.tag_configure("center", justify="center")
@@ -348,7 +337,6 @@ class Panaderia():
 
             else:
                 text.config(state=tk.NORMAL)
-                time.sleep(0.7)
                 text.insert(tk.END, "El trabajador ha regresado con los ingredientes!!" + "\n")
                 text.config(state=tk.DISABLED)
                 text.tag_configure("center", justify="center")

@@ -6,11 +6,31 @@ from enum import Enum
 from UIMain.GestionCocinar import GestionCocinar
 #from UIMain.GestionDomicilioCliente import GestionDomicilioCliente
 
+class DescuentoPorTipo(Enum):
+    """
+    Enumeración que representa los tipos de descuento disponibles para un cliente.
+    """
+
+    ESTUDIANTE = 0.1
+    PROFESOR = 0.1
+    NINGUNO = 0
+    SENIOR = 0.2
+    EMPLEADO = 0.3
+
+    def get_valor(self):
+        """
+        Devuelve el valor del descuento para el tipo de cliente.
+
+        Returns:
+            float: El valor del descuento.
+        """
+        return self.value
+
 class Cliente:
     _sesion = None  # Variable de clase para almacenar la sesión del cliente
     _panaderia = None  # Variable de clase para almacenar la panadería asociada
 
-    def __init__(self, nombre="", id=0, contrasena="", direccion=None, tipoDescuento=None, presupuesto=0):
+    def __init__(self, nombre="", id=0, contrasena="", direccion=None, tipoDescuento=DescuentoPorTipo.NINGUNO, presupuesto=0):
         """
         Constructor de la clase Cliente.
 
@@ -36,7 +56,7 @@ class Cliente:
         self._recibos = []  # Lista para almacenar recibos de pago del cliente
         self._domiciliario = None  # Domiciliario asignado al cliente para entregas
 
-#getters y setters
+    #getters y setters
 
     def setNombre(self, nombre):
         self._nombre = nombre
@@ -606,22 +626,23 @@ class Cliente:
             """
             return self.value
 
-    class DescuentoPorTipo(Enum):
-        """
-        Enumeración que representa los tipos de descuento disponibles para un cliente.
-        """
-
-        ESTUDIANTE = 0.1
-        PROFESOR = 0.1
-        NINGUNO = 0
-        SENIOR = 0.2
-        EMPLEADO = 0.3
-
-        def get_valor(self):
-            """
-            Devuelve el valor del descuento para el tipo de cliente.
-
-            Returns:
-                float: El valor del descuento.
-            """
-            return self.value
+#tuve que mover esta clase para que se cargara antes de cliente att Richard
+#    class DescuentoPorTipo(Enum):
+#        """
+#        Enumeración que representa los tipos de descuento disponibles para un cliente.
+#        """
+#
+#        ESTUDIANTE = 0.1
+#        PROFESOR = 0.1
+#        NINGUNO = 0
+#        SENIOR = 0.2
+#        EMPLEADO = 0.3
+#
+#        def get_valor(self):
+#            """
+#            Devuelve el valor del descuento para el tipo de cliente.
+#
+#            Returns:
+#                float: El valor del descuento.
+#            """
+#            return self.value

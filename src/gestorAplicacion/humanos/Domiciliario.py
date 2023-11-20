@@ -95,7 +95,6 @@ class Domiciliario(Trabajador, ComidaDefault):
                         topp = True
 
                         text.config(state=tk.NORMAL)
-                        time.sleep(0.7)
                         text.insert(tk.END, f"El ingrediente {ingredienteNombre} está en el top mas vendido por tanto su máximo en el inventario es de 40 unidades, sin embargo se cobró 100000 más a la compra para poder ampliar el inventario y comprar {cantidad} unidades\n")
                         text.config(state=tk.DISABLED)
 
@@ -111,7 +110,6 @@ class Domiciliario(Trabajador, ComidaDefault):
                             topp = True
 
                             text.config(state=tk.NORMAL)
-                            time.sleep(0.7)
                             text.insert(tk.END, f"El ingrediente {ingredienteNombre} está en el top mas vendido por tanto su máximo en el inventario es de 40 unidades y se prioriza comprar el doble, como había suficiente espacio en el inventario se comprpó {cantidad * 2} unidades\n")
                             text.config(state=tk.DISABLED)
 
@@ -125,7 +123,6 @@ class Domiciliario(Trabajador, ComidaDefault):
                             topp = True
 
                             text.config(state=tk.NORMAL)
-                            time.sleep(0.7)
                             text.insert(tk.END, f"El ingrediente {ingredienteNombre} está en el top mas vendido por tanto su máximo en el inventario es de 40 unidades y se prioriza comprar el doble, sin embargo esta vez no había suficiente espacio en el inventario para adquirir el doble así que se compró {40 - self.panaderia.getInventario().verificarCantidadIngredientePorNombre(ingredienteNombre)} unidades para completar 40 unidades en el inventario\n")
                             text.config(state=tk.DISABLED)
             
@@ -137,7 +134,6 @@ class Domiciliario(Trabajador, ComidaDefault):
                     topp = True
 
                     text.config(state=tk.NORMAL)
-                    time.sleep(0.7)
                     text.insert(tk.END, f"El ingrediente {ingredienteNombre} no está en el top mas vendido por tanto su máximo en el inventario es de 20 unidades, sin embargo se cobró 50000 más a la compra para poder ampliar el inventario y comprar {cantidad} unidades\n")
                     text.config(state=tk.DISABLED)
 
@@ -148,7 +144,6 @@ class Domiciliario(Trabajador, ComidaDefault):
                         valorcompra = valorcompra + ((Ingrediente.obtenerObjetoPorNombreI(ingredienteNombre).getPrecioDeCompra()) * (cantidad))
 
                         text.config(state=tk.NORMAL)
-                        time.sleep(0.7)
                         text.insert(tk.END, f"El ingrediente {ingredienteNombre} no está en el top mas vendido por tanto su máximo en el inventario es de 20 unidades, como había suficiente espacio en el inventario se compró {cantidad} unidades\n")
                         text.config(state=tk.DISABLED)
 
@@ -161,7 +156,6 @@ class Domiciliario(Trabajador, ComidaDefault):
                         valorcompra = valorcompra + ((Ingrediente.obtenerObjetoPorNombreI(ingredienteNombre).getPrecioDeCompra()) * (cantidad))
                         
                         text.config(state=tk.NORMAL)
-                        time.sleep(0.7)
                         text.insert(tk.END, f"El ingrediente {ingredienteNombre} no está en el top mas vendido por tanto su máximo en el inventario es de 20 unidades, como no había suficiente espacio en el inventario se compró {20 - self.panaderia.getInventario().verificarCantidadIngredientePorNombre(ingredienteNombre)} unidades para completar 20 unidades \n")
                         text.config(state=tk.DISABLED)
             
@@ -190,9 +184,12 @@ class Domiciliario(Trabajador, ComidaDefault):
                     self.getPanaderia().getInventario().agregarIngrediente(ingrdt)
                 
                 text.config(state=tk.NORMAL)
-                time.sleep(0.7)
                 text.insert(tk.END, f"Se han comprado {cantidad} unidades de {ingredienteNombre}\n")
                 text.config(state=tk.DISABLED)
+
+            text.config(state=tk.NORMAL)
+            text.insert(tk.END, f"El valor total de la compra fue {valorcompra}\n")
+            text.config(state=tk.DISABLED)
             
             x = self.dinero_en_mano - valorcompra
             self.dinero_en_mano = x  
@@ -222,12 +219,10 @@ class Domiciliario(Trabajador, ComidaDefault):
                     self.getPanaderia().getInventario().agregarIngrediente(ingrdt)
                 
                 text.config(state=tk.NORMAL)
-                time.sleep(0.7)
                 text.insert(tk.END, f"Se han comprado {cantidad} unidades de {ingredienteNombre}\n")
                 text.config(state=tk.DISABLED)
             
             text.config(state=tk.NORMAL)
-            time.sleep(0.7)
             text.insert(tk.END, f"El valor total de la compra fue {valorcompra}\n")
             text.config(state=tk.DISABLED)
 
