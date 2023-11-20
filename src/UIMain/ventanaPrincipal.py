@@ -16,7 +16,7 @@ from gestorAplicacion.humanos.Cliente import Cliente
 from gestorAplicacion.comida.Producto import Producto
 from gestorAplicacion.comida.Ingrediente import Ingrediente
 from baseDatos.Serializador import Serializador
-from gestorAplicacion.gestion.Recibo import Recibo
+#from gestorAplicacion.gestion.Recibo import Recibo
 from UIMain.GestionCocinar import GestionCocinar
 
 #Esta clase la cree yo (Richard), diganme si van a hacer algun cambio o si tienen alguna sugerencia
@@ -366,24 +366,8 @@ class VentanaPrincipal:
         self.botonCocinar = Button(self.frameCocinar, text="Cocinar", command= self.ejecucionCocinarProductos)
         self.botonCocinar.pack(pady = 5)
 
-        #Frame CocinarPersonalizado 
-
-        self.frameCocinarPersonalizado = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
-        self.frames.append(self.frameCocinarPersonalizado)
-        self.ffCocinarPersonalizado1 = FieldFrame("Datos del producto", ["Nombre del producto:", "Cantidad a cocinar:"], "Ingreselos Aquí")
-        self.ffCocinarPersonalizado1.defRoot(self.frameCocinarPersonalizado)
-        self.ffCocinarPersonalizado1.defFunc(self.cambioAIngredientes)
-        self.botonVolverPersonalizado = Button(self.frameCocinarPersonalizado, text="Volver Atras", command=lambda: self.cambiarFrame(self.frameCocinar))
-        self.botonVolverPersonalizado.pack()
-
-        #Texto de ejecucion de cocinar producto personalizado
-        self.frameCocinarPersonalizado2 = Frame(self.frameCocinarPersonalizado, bd=1, relief=FLAT, padx=1, pady=1)
-        self.textEjecCocinarPersonalizado= Text(self.frameCocinarPersonalizado2)
-        self.textEjecCocinarPersonalizado.pack(fill=tk.BOTH, expand=True)
-        self.frameCocinarPersonalizado2.pack(fill=tk.BOTH, expand=True)
-
         #Boton para cocinar Porducto personalizado
-        self.botonCocinarProductoPersonalizado = Button(self.frameCocinar, text="Cocinar producto personalizado") #Añadir comando aqui
+        self.botonCocinarProductoPersonalizado = Button(self.frameCocinar, text="Cocinar producto personalizado", command= self.cargarProductoPersonalizado2) 
         self.botonCocinarProductoPersonalizado.pack()
         
         #Frame de resultados de la ejecuion de Cocinar
@@ -532,6 +516,8 @@ class VentanaPrincipal:
         self.infoCrearPersonalizado = Label(self.frameCrearPersonalizado, text="Aquí puede crear un producto personalizado, para hacerlo debe ingresar el nombre del producto, la cantidad de ingredientes que desea que tenga y posteriormente presionar el botón Aceptar.", wraplength=380, pady=10)
         self.tituloCrearPersonalizado.pack()
         self.infoCrearPersonalizado.pack()
+        self.botonIrAtras = Button(self.frameCrearPersonalizado, text = "Volver Atrás", command = lambda: self.cambiarFrame(self.frameCanasta))
+        self.botonIrAtras.pack(pady=10)
         
         def botonIngredientes(val):
             if val[0] in self.diccionarioParaProductoPersonalizado:
@@ -605,11 +591,85 @@ class VentanaPrincipal:
         self.texto_widget2.tag_add("center", "1.0", "end")
         
         self.cambiarFrame(self.frameCrearPersonalizado)
+    
+    def cargarProductoPersonalizado2(self):
+        
+        self.diccionarioParaProductoPersonalizado = {}
+        self.frameCrearPersonalizado = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
+        self.frames.append(self.frameCrearPersonalizado)
+        self.tituloCrearPersonalizado = Label(self.frameCrearPersonalizado, text="AGREGAR PRODUCTO PERSONALIZADO", pady=10)
+        self.infoCrearPersonalizado = Label(self.frameCrearPersonalizado, text="Aquí puede crear un producto personalizado, para hacerlo debe ingresar el nombre del producto, la cantidad de ingredientes que desea que tenga y posteriormente presionar el botón Aceptar.", wraplength=380, pady=10)
+        self.tituloCrearPersonalizado.pack()
+        self.infoCrearPersonalizado.pack()
+
+        self.frameCocinar2.pack(in_=self.frameCrearPersonalizado)
+        
+        def botonIngredientes(val):
+            
+            if val[0] in self.diccionarioParaProductoPersonalizado:
+                self.diccionarioParaProductoPersonalizado[val[0]] += int(val[1])
+            else:
+                self.diccionarioParaProductoPersonalizado[val[0]] = int(val[1])
+            self.textEjecCocinar.config(state=tk.NORMAL)
+            self.textEjecCocinar.delete(1.0, "end")
+            self.textEjecCocinar.insert(1.0, "Ingredientes necesarios para cocinar " + self.ffCrearPersonalizado.getValores()[0] + ":\n")
+            
+            for elements, cantidad in self.diccionarioParaProductoPersonalizado.items():
+                self.textEjecCocinar.insert(tk.END, "Ingrediente: " + elements + " - Cantidad: " + str(cantidad) + "\n")
+
+            self.textEjecCocinar.tag_configure("center", justify="center")
+
+            # Aplicar el tag al texto
+            self.textEjecCocinar.tag_add("center", "1.0", "end")
+
+        self.ffCrearPersonalizado = FieldFrame("Producto deseado", ["Nombre del producto:", "Cantidad del producto:"], "Ingrese aquí")
+        self.ffCrearPersonalizado.defRoot(self.frameCrearPersonalizado)
+        
+        self.ffCrearPersonalizado2 = FieldFrame("Ingredientes necesarios", ["Nombre del ingrediente:", "Cantidad del ingrediente:"], "Ingrese aquí")
+        self.ffCrearPersonalizado2.defRoot(self.frameCrearPersonalizado)
+        self.ffCrearPersonalizado2.defFunc(botonIngredientes)
+
+        def anadirProductoPersonalizado():
+            Cliente.getSesion().getCanastaOrden().recibirOrdenPersonalizada(self.ffCrearPersonalizado.getValores()[0], self.diccionarioParaProductoPersonalizado, self.ffCrearPersonalizado.getValores()[1], self.var2.get())
+            self.textEjecCocinar.config(state=tk.NORMAL)
+            self.textEjecCocinar.delete(1.0, "end")
+
+            for ingredienteNombre, cantidad in self.diccionarioFuncionalidad4.items():
+                    self.textEjecCocinar.insert(tk.END, "Produco: " + Producto.obtenerObjetoPorIdP(ingredienteNombre).getNombre() + " - Cantidad: " + str(cantidad) + "\n")
+
+            # Tag para centrar texto
+            self.textEjecCocinar.tag_configure("center", justify="center")
+
+            # Aplicar el tag al texto
+            self.textEjecCocinar.tag_add("center", "1.0", "end")
+            self.textEjecCocinar.config(state=tk.DISABLED)
+
+        self.var2 = tk.BooleanVar()
+        self.var2.set(False)
+        
+        self.botonCrearPersonalizado = Button(self.frameCrearPersonalizado, text="Agregar Producto", command=anadirProductoPersonalizado)
+        self.botonCrearPersonalizado.pack(pady = 5)
+
+        self.botonIrAtras = Button(self.frameCrearPersonalizado, text = "Volver Atrás", command = lambda: self.cambiarFrame(self.frameCocinar))
+        self.botonIrAtras.pack(pady= 5)
+
+        # Agregar un Scrollbar
+        scrollbar = Scrollbar(self.frameCrearPersonalizado)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+
+        # Tag para centrar texto
+        self.textEjecCocinar.tag_configure("center", justify="center")
+
+        # Aplicar el tag al texto
+        self.textEjecCocinar.tag_add("center", "1.0", "end")
+        
+        self.cambiarFrame(self.frameCrearPersonalizado)
 
     # frameFacturacion
     def cargarFrameFacturacion(self):
-        Cliente.getSesion().getCanastaOrden().setPagada(True)
-        self.chequeoDeEstados()
+        from gestorAplicacion.gestion.Recibo import Recibo #importo esto aqui para evitar el error de importacion circular
+        #Cliente.getSesion().getCanastaOrden().setPagada(True)
+        #self.chequeoDeEstados()
         #No borrar esas lineas, las comenté para que no te aparezca la alerta
         
         #Creacion de la factura
@@ -643,6 +703,7 @@ class VentanaPrincipal:
         self.textoFacturacion.insert(1.0, self.varFactura)
 
     def cargarFrameCocinarDesdeClienteNormal(self):
+        
         self.frameCocinar1 = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
         self.frames.append(self.frameCocinar1)
         self.cambiarFrame(self.frameCocinar1)
@@ -654,20 +715,21 @@ class VentanaPrincipal:
             self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="normal")
             #self.textEjecCocinar1.config(state=tk.NORMAL)
             messagebox.showinfo("Información", "Parece que faltan ingredientes para cocinar sus productos, se accede a conseguir ingredientes")
-            self.cargarFrameIngredientesDesdeClienteNormal()#voy
-            GestionCocinar.barraProgresoDeTodos(self.frameCocinar1) #mateo hace commit porfa
-            #self.textEjecCocinar1.config(state=tk.DISABLED) 
+            self.cargarFrameIngredientesDesdeClienteNormal(self.frameCocinar1)
+            
+            #self.textEjecCocinar1.config(state=tk.DISABLED)
 
         self.tituloCocinar1.pack(pady = 5)
         self.descipCocinar1.pack(pady = 5)
         self.botonCocinar1 = Button(self.frameCocinar1, text="Cocinar", command=procesoDeCocina)
         self.botonCocinar1.pack(pady = 5)
+        
 
         #self.textEjecCocinar1 = Text(self.frameCocinar1)
         #self.textEjecCocinar1.config(state=tk.DISABLED)
         #self.textEjecCocinar1.pack(fill=tk.BOTH, expand=True)
 
-    def cargarFrameIngredientesDesdeClienteNormal(self):
+    def cargarFrameIngredientesDesdeClienteNormal(self,frame):
         self.frameIngredientes1 = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
         self.frames.append(self.frameIngredientes1)
         self.cambiarFrame(self.frameIngredientes1)
@@ -682,6 +744,7 @@ class VentanaPrincipal:
             messagebox.showinfo("Información", "Ingredientes comprados, se procede a cocinar")
             self.chequeoDeEstados()
             self.cambiarFrame(self.frameCocinar1)
+            #GestionCocinar.barraProgresoDeTodos(frame)
 
         self.tituloIngredientes1.pack(pady = 5)
         self.descipIngredientes1.pack(pady = 5)
@@ -849,6 +912,8 @@ class VentanaPrincipal:
 
                 # Aplicar el tag al texto
                 self.texto_widget.tag_add("center", "1.0", "end")
+                Cliente.getSesion().getCanastaOrden().setPagada(True)
+                #self.chequeoDeEstados()
                 self.chequeoDeEstados()
 
         except CamposVaciosError as e:
@@ -901,7 +966,7 @@ class VentanaPrincipal:
             if Cliente.getSesion().getId()==202:
                 canasta=cliente.getCanastaOrden()
                 if canasta.getPagada():
-                    messagebox.showinfo("Info", "Ha comenzado un proceso de compra, continue con el proceso de compra, al finalizar se desbloquearan el resto de opciones")
+                    #messagebox.showinfo("Info", "Ha comenzado un proceso de compra, continue con el proceso de compra, al finalizar se desbloquearan el resto de opciones")
                     self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="disabled")
                     self.menu_procesos.entryconfigure("Func. Facturar", state="disabled")
                     self.menu_procesos.entryconfigure("Func. Cocinar", state="normal")
@@ -1122,22 +1187,6 @@ class VentanaPrincipal:
                 messagebox.showinfo("Validar tipo de cliente", "Tipo de cliente validado correctamente")
         except CamposVaciosError as e:
             messagebox.showwarning("Error", "Tipo de cliente inválido o campo vacio")
-
-    def cambioAIngredientes(self,val):
-        
-        # Frame para ingredientes de personalizado
-        self.frameIngredientesPersonalizado = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
-        self.frames.append(self.frameIngredientesPersonalizado)
-        self.ffCocinarPersonalizado2 = FieldFrame("Ingredientes necesarios", ["Nombre del ingrediente:", "Cantidad:"], "Ingreselos Aquí")
-        self.ffCocinarPersonalizado2.defRoot(self.frameIngredientesPersonalizado)
-        self.botonVolverIngrediente = Button(self.frameIngredientesPersonalizado, text="Volver Atras", command=self.volverAtras)
-        self.botonVolverIngrediente.pack()
-        self.frameIngredientesPersonalizado2 = Frame(self.frameIngredientesPersonalizado, bd=1, relief=FLAT, padx=1, pady=1)
-        self.textDescPersonalizado = Text(self.frameIngredientesPersonalizado2)
-        self.textDescPersonalizado.pack(fill=tk.BOTH, expand=True)
-        self.frameIngredientesPersonalizado2.pack(fill=tk.BOTH, expand=True)
-
-        self.cambiarFrame(self.frameIngredientesPersonalizado)
 
     def pasarAlPago(self):
         if Cliente.getSesion().getCanastaOrden().getProductosEnLista() == {} and Cliente.getSesion().getCanastaOrden().getIngredientesEnLista() == {} and Cliente.getSesion().getCanastaOrden().getKitsEnLista() == {}:

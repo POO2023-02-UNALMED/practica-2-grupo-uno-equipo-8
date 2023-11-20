@@ -1,4 +1,4 @@
-from random import Random
+import random
 import tkinter as tk
 from tkinter import ttk
 from gestorAplicacion.humanos.Cocinero import Cocinero
@@ -15,8 +15,8 @@ class GestionCocinar:
         print(fallos)
         print(listaDeListas)
         if fallos != 0:
-            numero_random = Random.randint(0, 4)
-            mensaje_fallo = f"Perdón su pedido tartará un poco más porque {Catastrofe.fallos_cocina[numero_random]}"
+            numero_random = random.randint(0, 4)
+            mensaje_fallo = f"Perdón su pedido tartará un poco más porque {Cocinero.fallos_cocina[numero_random]}"
             
             label_fallo = tk.Label(frame_principal, text=mensaje_fallo)
             label_fallo.pack()
