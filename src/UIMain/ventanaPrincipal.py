@@ -46,15 +46,11 @@ class VentanaPrincipal:
         self.menu_procesos.add_command(label = "Func. Cocinar",command=lambda:self.cambiarFrame(self.frameCocinar), state="disabled")
         self.menu_procesos.add_command(label = "Func. Conseguir Ingredientes", command=lambda:self.cambiarFrame(self.frameComprarIngredientes), state="disabled")
         self.menu_procesos.add_command(label = "Func. Domicilio", state="disabled")
-        self.menu_procesos.add_command(label = "Lo mejor de nuestra panaderia", state="disabled",command = lambda: self.cambiarFrame(self.frameRanking))
-        self.menu_procesos.add_command(label = "Ver facturas pasadas", state="disabled",command = lambda: self.cambiarFrame(self.frameHistorial))
+        self.menu_procesos.add_command(label = "Lo mejor de nuestra panaderia", state="disabled",command = lambda: self.cambiarFrame(self.frameLoMejor))
+
         self.menu_procesos.add_command(label = "Modificar datos", state="disabled",command = lambda: self.cambiarFrame(self.frameModificarDatos))
-        """
-        self.menu_procesos.add_command(label = "Cambiar contraseña", state="disabled",command = lambda: self.cambiarFrame(self.frameContrasena))
-        self.menu_procesos.add_command(label = "Meter plata a mi cuenta", state="disabled",command = lambda: self.cambiarFrame(self.framePlata))
-        self.menu_procesos.add_command(label = "Validar tipo de cliente", state="disabled",command = lambda: self.cambiarFrame(self.frameValidarTipo))
-        self.menu_procesos.add_command(label = "Modificar direccion", state="disabled",command = lambda: self.cambiarFrame(self.frameDireccion))
-        """
+        
+        
 
         self.menu_principal.add_cascade(label="Procesos y Consultas", menu=self.menu_procesos)
         menu_ayuda = tk.Menu(self.menu_principal, tearoff=0)
@@ -79,7 +75,10 @@ class VentanaPrincipal:
         #self.labelp1.pack()
         self.imagen_1tk = tk.PhotoImage(file='src/resources/logoBienvenida.png')
         self.labelBienvenida = Label(self.framePrincipal, image = self.imagen_1tk)
-        self.labelBienvenida.pack()
+        self.labelBienvenida.pack(pady = 10)
+        self.imagen_2tk = tk.PhotoImage(file='src/resources/ratonInicio.png')
+        self.labelBienvenida2 = Label(self.framePrincipal, image = self.imagen_2tk)
+        self.labelBienvenida2.pack(pady = 10)
 
 
 
@@ -140,14 +139,14 @@ class VentanaPrincipal:
         self.frames.append(self.framePreguntarDomicilio)
         self.imagenfpd = tk.PhotoImage(file="src/resources/ratonDomicilio.png")
         self.imagenPreguntarDomicilio = Label(self.framePreguntarDomicilio, image = self.imagenfpd)
-        self.imagenPreguntarDomicilio.pack()
+        self.imagenPreguntarDomicilio.pack(pady=5)
         self.labelPreguntarDomicilio = Label(self.framePreguntarDomicilio, text="Desea que le entreguemos su pedido a domicilio? Haga click abajo si asi lo desea")
-        self.labelPreguntarDomicilio.pack()
+        self.labelPreguntarDomicilio.pack(pady=5)
         self.checkButtonFramePreguntarDomicilio = ttk.Checkbutton(self.framePreguntarDomicilio, text="Pedido a domicilio") # Logica Domicilio que cuando el checkButton este activado se envie a domicilio
-        self.checkButtonFramePreguntarDomicilio.pack()
+        self.checkButtonFramePreguntarDomicilio.pack(pady=5)
 
         # fieldframe domicilio
-        self.frameDireccion2 = Frame(self.framePreguntarDomicilio, bd=1, relief=FLAT, padx=1, pady=1)
+        self.frameDireccion2 = Frame(self.framePreguntarDomicilio, bd=1, relief="raise", borderwidth=2, padx=1, pady=1)
         self.frameDireccion2.pack()
         self.LabelDireccion2 = Label(self.frameDireccion2, text="Cambiar direccion")
         self.LabelDireccionDes2 = Label(self.frameDireccion2, text="Descripcion")
@@ -158,6 +157,12 @@ class VentanaPrincipal:
         self.fieldFrameDireccion2 = FieldFrame("Datos", ["Direccion específica:"], "Ingrese aqui")
         self.fieldFrameDireccion2.defRoot(self.frameDireccion2)
         self.fieldFrameDireccion2.defFunc(self.cambiarDireccion)
+
+        # botones ir a facturar
+        self.botonContinuarfpd = Button(self.framePreguntarDomicilio, text = "Ir a pagar", command = lambda: self.cambiarFrame(self.frameFacturacion))
+        self.botonContinuarfpd.pack(pady=5)
+        self.botonAtrasfpd = Button(self.framePreguntarDomicilio, text="Volver atras", command=self.volverAtras)
+        self.botonAtrasfpd.pack(pady=5)
         
         # frameCatalogo Catalogo de opciones disponibles para comprar
         self.frameCatalogo = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
@@ -244,7 +249,21 @@ class VentanaPrincipal:
 
         # frameFacturacion
         self.frameFacturacion = Frame(self.root, bd = 1, relief = FLAT)
+        self.frames.append(self.frameFacturacion)
+        self.fotoff1 = PhotoImage(file="src/resources/ratonFactura.png")
+        self.fotoFacturacion = Label(self.frameFacturacion, image = self.fotoff1)
+        self.fotoFacturacion.pack(pady = 5)
         self.LabelFacturacion = Label(self.frameFacturacion, text="Su factura")
+        self.LabelFacturacion.pack(pady=5)
+
+        #Botones
+        self.botonPagar = Button(self.frameFacturacion, text = "Pagar factura")
+        self.botonPagar.pack(pady = 5)
+        self.botonFacPasadas = Button(self.frameFacturacion, text = "Ver mis facturas pasadas", command=lambda: self.cambiarFrame(self.frameFacturasPasadas))
+        self.botonFacPasadas.pack(pady = 5)
+        self.botonAtrasFacturacion = Button(self.frameFacturacion, text = "Volver atras", command = lambda: self.cambiarFrame(self.framePreguntarDomicilio, False))
+        self.botonAtrasFacturacion.pack(pady = 5)
+        
 
         # Agregar un Scrollbar
         scrollbar = Scrollbar(self.frameFacturacion)
@@ -252,18 +271,12 @@ class VentanaPrincipal:
 
         # Agregar un widget de Texto
         self.textoFacturacion = Text(self.frameFacturacion, wrap=tk.WORD, yscrollcommand=scrollbar.set)
-        self.textoFacturacion.pack(fill=tk.BOTH, expand=True)
-
-        #Botones
-        self.botonPagar = Button(self.frameFacturacion, text = "Pagar factura")
-        self.botonAtrasFacturacion = Button(self.frameFacturacion, text = "Volver a la canasta de compras", command = lambda: self.cambiarFrame(self.frameComprar))
-        
+        self.textoFacturacion.pack(fill=tk.BOTH, expand=True, pady=10, padx=10)
 
         # frameHistorial Historial de facturas
         self.frameHistorial = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
         self.LabelHistorial = Label(self.frameHistorial, text="Historial de facturas")
         self.LabelHistorial.pack()
-        #usar fieldframe aqui ...
         self.frames.append(self.frameHistorial)
         
 
@@ -276,7 +289,28 @@ class VentanaPrincipal:
         tk.Grid.rowconfigure(self.frameModificarDatos, 1, weight=1)
         tk.Grid.rowconfigure(self.frameModificarDatos, 2, weight=1)
         tk.Grid.columnconfigure(self.frameModificarDatos, 0, weight=1)
-        tk.Grid.columnconfigure(self.frameModificarDatos, 1, weight=1)        
+        tk.Grid.columnconfigure(self.frameModificarDatos, 1, weight=1)
+
+        # frameFacturasPasadas
+        self.frameFacturasPasadas = Frame(self.root, padx= 2, pady= 2)
+        self.frames.append(self.frameFacturasPasadas)
+        self.fotofp1 = PhotoImage(file="src/resources/ratonFactura.png")
+        self.fotoFacturasPasadas = Label(self.frameFacturasPasadas, image = self.fotofp1)
+        self.fotoFacturasPasadas.pack(pady = 10)
+        self.labelFPasadas = Label(self.frameFacturasPasadas, text="Sus facturas pasadas")
+        self.labelFPasadas.pack(pady=10)
+        self.botonAtrasFp = Button(self.frameFacturasPasadas, text="Volver a facturacion", command = lambda: self.cambiarFrame(self.frameFacturacion))
+        self.botonAtrasFp.pack(pady=10)
+        self.botonInicioFp = Button(self.frameFacturasPasadas, text="Volver al inicio", command = lambda: self.cambiarFrame(self.framePrincipal))
+        self.botonInicioFp.pack(pady=10)
+
+        # Agregar un Scrollbar
+        scrollbarfp = Scrollbar(self.frameFacturasPasadas)
+        scrollbarfp.pack(side=tk.RIGHT, fill=tk.Y)
+
+        # Agregar un widget de Texto
+        self.textoFacturasPasadas = Text(self.frameFacturasPasadas, wrap=tk.WORD, yscrollcommand=scrollbarfp.set)
+        self.textoFacturasPasadas.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
 
         # frameContrasena cambiar contraseña
         self.frameContrasena = Frame(self.frameModificarDatos, bd=1, relief=FLAT, padx=1, pady=1)
@@ -363,6 +397,8 @@ class VentanaPrincipal:
         self.ffCocinarPersonalizado1 = FieldFrame("Datos del producto", ["Nombre del producto:", "Cantidad a cocinar:"], "Ingreselos Aquí")
         self.ffCocinarPersonalizado1.defRoot(self.frameCocinarPersonalizado)
         self.ffCocinarPersonalizado1.defFunc(self.cambioAIngredientes)
+        self.botonVolverPersonalizado = Button(self.frameCocinarPersonalizado, text="Volver Atras", command=lambda: self.cambiarFrame(self.frameCocinar))
+        self.botonVolverPersonalizado.pack()
 
         #Texto de ejecucion de cocinar producto personalizado
         self.frameCocinarPersonalizado2 = Frame(self.frameCocinarPersonalizado, bd=1, relief=FLAT, padx=1, pady=1)
@@ -412,14 +448,30 @@ class VentanaPrincipal:
         self.textEjecComprarIngredientes.pack(fill=tk.BOTH, expand=True)
         self.frameComprarIngredientes2.pack(fill=tk.BOTH, expand=True)
 
+        # frameLoMejor (Frames lo mejor de nuestra Panaderia) 
+        self.frameLoMejor = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
+        self.frames.append(self.frameLoMejor)
+        self.tituloLoMejor = Label(self.frameLoMejor, text="LO MEJOR DE NUESTRA PANADERIA")
+        self.infoLoMejor = Label(self.frameLoMejor, text="Aquí puede ver los rankings de lo mejor de nuestra panadería, las opcones que puede escoger son, los mejores cocineros, los mejores domiciliarios, los mejores productos y los mejores ingredientes, para verlas escriba, cocineros, domiciliarios productos o ingredientes respectivamente y posteriormente presione el botón Aceptar.s")
+        self.tituloLoMejor.pack()
+        self.infoLoMejor.pack()
+        self.ffLoMejor = FieldFrame("Rankings", "Escriba qué ranking desea ver:", "Ingrese aquí el nombre")
+        self.ffLoMejor.defRoot(self.frameLoMejor)
+        self.frameLoMejor2 = Frame(self.frameLoMejor, bd=1, relief=FLAT, padx=1, pady=1)
+        self.textEjecLoMejor = Text(self.frameLoMejor2)
+        self.textEjecLoMejor.pack(fill=tk.BOTH, expand=True)
+        self.frameLoMejor2.pack(fill=tk.BOTH, expand=True)
+
     # frameComprar
     def cargarFrameCarrito(self):
         #framep1 = Frame(frame, bd = 5, relief=FLAT, padx = 2, pady = 2, bg = "white").grid(row =0 , column = 0)
         #framep2 = Frame(frame, bd = 5, relief=FLAT, padx = 2, pady = 2, bg = "white").grid(row =0 , column = 1)
         self.frameComprar1 = Frame(self.frameComprar)
         self.frameComprar1.pack()
-        self.labelfc1 = Label(self.frameComprar1, text="Hola cliente, bienvenido a su canasta de compras", wraplength=300)
+        self.labelfc1 = Label(self.frameComprar1, text="Crear Canasta de Compras", wraplength=300)
         self.labelfc1.pack(pady=5)
+        self.labelDescripcion = Label(self.frameComprar1, text="Descripcion")
+        self.labelDescripcion.pack(pady=5)
 
         #Label para el primer comboBox
         self.labelfc1_2 = Label(self.frameComprar1, text="Elija un producto")
@@ -667,7 +719,6 @@ class VentanaPrincipal:
         self.menu_procesos.entryconfigure("Func. Domicilio", state="disabled")
 
         self.menu_procesos.entryconfigure("Lo mejor de nuestra panaderia", state="disabled")
-        self.menu_procesos.entryconfigure("Ver facturas pasadas", state="disabled")
         self.menu_procesos.entryconfigure("Modificar datos", state="disabled")
         self.cambiarFrame(self.framePrincipal)
 
@@ -692,7 +743,7 @@ class VentanaPrincipal:
                 self.menu_procesos.entryconfigure("Func. Domicilio", state="normal")
     
                 self.menu_procesos.entryconfigure("Lo mejor de nuestra panaderia", state="normal")
-                self.menu_procesos.entryconfigure("Ver facturas pasadas", state="normal")
+
                 self.menu_procesos.entryconfigure("Modificar datos", state="normal")
                 messagebox.showinfo("Inicio de sesion", "Inicio de sesion exitoso")
                 self.cambiarFrame(self.framePrincipal)
@@ -722,7 +773,6 @@ class VentanaPrincipal:
             self.menu_procesos.entryconfigure("Func. Domicilio", state="normal")
 
             self.menu_procesos.entryconfigure("Lo mejor de nuestra panaderia", state="normal")
-            self.menu_procesos.entryconfigure("Ver facturas pasadas", state="normal")
             self.menu_procesos.entryconfigure("Modificar datos", state="normal")
             self.cambiarFrame(self.framePrincipal)
         except usuarioExistenteError as e:
@@ -763,6 +813,12 @@ class VentanaPrincipal:
         self.frames.append(self.frameIngredientesPersonalizado)
         self.ffCocinarPersonalizado2 = FieldFrame("Ingredientes necesarios", ["Nombre del ingrediente:", "Cantidad:"], "Ingreselos Aquí")
         self.ffCocinarPersonalizado2.defRoot(self.frameIngredientesPersonalizado)
+        self.botonVolverIngrediente = Button(self.frameIngredientesPersonalizado, text="Volver Atras", command=self.volverAtras)
+        self.botonVolverIngrediente.pack()
+        self.frameIngredientesPersonalizado2 = Frame(self.frameIngredientesPersonalizado, bd=1, relief=FLAT, padx=1, pady=1)
+        self.textDescPersonalizado = Text(self.frameIngredientesPersonalizado2)
+        self.textDescPersonalizado.pack(fill=tk.BOTH, expand=True)
+        self.frameIngredientesPersonalizado2.pack(fill=tk.BOTH, expand=True)
 
         self.cambiarFrame(self.frameIngredientesPersonalizado)
 

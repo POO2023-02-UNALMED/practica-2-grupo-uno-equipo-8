@@ -34,13 +34,12 @@ class FieldFrame(Frame):
 
             try:
                 self.verificar_campos_llenos(entriesValues)
+                if self.funcionAsociada:
+                    self.funcionAsociada(self.valores)
             except CamposVaciosError as e:
                 mensaje = f"Por favor, complete los campos: {len(e.campos_faltantes)}"
                 messagebox.showwarning("Campos Vacíos", mensaje)
                 eliminar()
-
-            if self.funcionAsociada:
-                self.funcionAsociada(self.valores)
 
         for k in criterios:
             cont = criterios.index(k)
