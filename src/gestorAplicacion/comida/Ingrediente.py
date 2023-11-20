@@ -9,6 +9,19 @@ class Ingrediente(ComidaDefault):
     contador1 = 0
 
     def __init__(self, nombre, identificador=None, precioVenta=None, precioCompra=None, vecesVendido=None):
+        """
+        Inicializa un objeto Ingrediente con los siguientes atributos:
+
+        Args:
+            nombre (str): El nombre del ingrediente.
+            identificador (str, opcional): El identificador del ingrediente. Si no se proporciona, se generará automáticamente.
+            precioVenta (float, opcional): El precio de venta del ingrediente.
+            precioCompra (float, opcional): El precio de compra del ingrediente.
+            vecesVendido (int, opcional): El número de veces que se ha vendido el ingrediente.
+
+        Returns:
+            None
+        """
         from gestorAplicacion.comida.Producto import Producto
         self._nombre = nombre
         if identificador is None:
@@ -26,6 +39,8 @@ class Ingrediente(ComidaDefault):
             self._precioDeVenta = precioVenta
             self._precioDeCompra = precioCompra
             self._vecesVendido = vecesVendido
+
+#getters y setters
 
     def getNombre(self):
         return self._nombre
@@ -86,7 +101,19 @@ class Ingrediente(ComidaDefault):
         cls._topMasVendidos = topMasVendidos
 
     @classmethod
-    def crearIngrediente(cls,nombreId):
+    def crearIngrediente(cls, nombreId):
+        """
+        Crea un objeto Ingrediente con el nombre y el ID especificados.
+
+        Args:
+            nombreId (str): El nombre o ID del ingrediente.
+
+        Returns:
+            Ingrediente: El objeto Ingrediente creado.
+
+        Raises:
+            None
+        """
         if Ingrediente.verificacionExistenciaPorNombreI(nombreId) or Ingrediente.verificacionExistenciaPorIdI(nombreId):
             ingredienteExistente = Ingrediente.obtenerObjetoPorNombreI(nombreId)
             return Ingrediente(
@@ -100,12 +127,28 @@ class Ingrediente(ComidaDefault):
             return Ingrediente(nombreId)
 
     def caducidad(cls, ingrediente):
+        """
+        Verifica la caducidad de un ingrediente y actualiza su estado de caducado.
+
+        :param ingrediente: El ingrediente a verificar.
+        :type ingrediente: Ingrediente
+        """
         ingrediente.setCaducado(False)
         caducidad = random.randint(0, 19)
         if caducidad == cls.probabilidadConstante:
             ingrediente.setCaducado(True)
             
     def revisarCaducidad(self, cantidad, panaderia):
+        """
+        Revisa la caducidad del ingrediente y realiza las acciones correspondientes si está vencido.
+
+        Args:
+            cantidad (int): La cantidad del ingrediente a revisar.
+            panaderia (Panaderia): La instancia de la panadería.
+
+        Returns:
+            None
+        """
         self.caducidad(self)
         vencido = self.isCaducado()
         if vencido:
@@ -117,6 +160,14 @@ class Ingrediente(ComidaDefault):
     #cambiar
     @classmethod
     def organizarTopMasVendidos(cls):
+        """
+        Organiza los ingredientes más vendidos en orden descendente según el número de veces que han sido vendidos.
+        Actualiza la lista de los ingredientes más vendidos (_topMasVendidos) con los primeros 5 ingredientes de la lista ordenada.
+
+        Parámetros:
+        - cls: la clase Ingrediente
+
+        """
         Ingrediente._topMasVendidos.clear()
         for i in range(len(ComidaDefault._baseDatosIngredientes)):
             for j in range(len(ComidaDefault._baseDatosIngredientes)):

@@ -44,7 +44,17 @@ class ComidaDefault:
         cls._baseDatosIngredientes = baseDatosIngredientes
 
     @classmethod
-    def verificacionExistenciaPorNombreI(cls,nombre):
+    def verificacionExistenciaPorNombreI(cls, nombre):
+        """
+        Verifica si existe un ingrediente en la base de datos por su nombre.
+
+        Args:
+            cls (type): La clase ComidaDefault.
+            nombre (str): El nombre del ingrediente a verificar.
+
+        Returns:
+            bool: True si el ingrediente existe, False en caso contrario.
+        """
         existe = False
         for ingrediente in cls._baseDatosIngredientes:
             if ingrediente._nombre == nombre:
@@ -53,7 +63,17 @@ class ComidaDefault:
         return existe
 
     @classmethod
-    def verificacionExistenciaPorIdI(cls,id):
+    def verificacionExistenciaPorIdI(cls, id):
+        """
+        Verifica si existe un ingrediente en la base de datos por su ID.
+
+        Args:
+            cls (type): La clase ComidaDefault.
+            id (int): El ID del ingrediente a verificar.
+
+        Returns:
+            bool: True si el ingrediente existe, False en caso contrario.
+        """
         existe = False
         for ingrediente in cls._baseDatosIngredientes:
             if ingrediente._id == id:
@@ -62,14 +82,36 @@ class ComidaDefault:
         return existe
 
     @classmethod
-    def obtenerObjetoPorNombreI(cls,nombre):
+    def obtenerObjetoPorNombreI(cls, nombre):
+        """
+        Devuelve el objeto de ingrediente correspondiente al nombre dado.
+
+        Parámetros:
+        - cls: la clase ComidaDefault.
+        - nombre: el nombre del ingrediente a buscar.
+
+        Retorna:
+        - El objeto de ingrediente correspondiente al nombre dado, si se encuentra.
+        - None si no se encuentra ningún ingrediente con el nombre dado.
+        """
         for ingrediente in cls._baseDatosIngredientes:
             if ingrediente._nombre == nombre:
                 return ingrediente
         return None
     
     @classmethod
-    def obtenerObjetoPorIdI(cls,id):
+    def obtenerObjetoPorIdI(cls, id):
+        """
+        Devuelve el objeto de ingrediente correspondiente al ID proporcionado.
+
+        Parámetros:
+        - cls: la clase ComidaDefault.
+        - id: el ID del ingrediente a buscar.
+
+        Retorna:
+        - El objeto de ingrediente correspondiente al ID proporcionado, o None si no se encuentra.
+
+        """
         for ingrediente in cls._baseDatosIngredientes:
             if ingrediente._id == id:
                 return ingrediente
@@ -85,7 +127,17 @@ class ComidaDefault:
         cls.baseDatosProductos = nuevaBaseDatosProductos
 
     @classmethod
-    def verificarExistenciaPorNombreP(cls,nombre):
+    def verificarExistenciaPorNombreP(cls, nombre):
+        """
+        Verifica si existe un producto en la base de datos por su nombre.
+
+        Args:
+            cls (type): La clase ComidaDefault.
+            nombre (str): El nombre del producto a buscar.
+
+        Returns:
+            bool: True si el producto existe, False en caso contrario.
+        """
         existe = False
         for producto in cls.baseDatosProductos:
             if producto.getNombre() == nombre:
@@ -94,7 +146,17 @@ class ComidaDefault:
         return existe
     
     @classmethod
-    def verificarExistenciaPorIdP(cls,id):
+    def verificarExistenciaPorIdP(cls, id):
+        """
+        Verifica si existe un producto en la base de datos de productos por su ID.
+
+        Args:
+            cls (type): La clase ComidaDefault.
+            id (int): El ID del producto a verificar.
+
+        Returns:
+            bool: True si el producto existe, False de lo contrario.
+        """
         existe = False
         for producto in cls.baseDatosProductos:
             if producto.getId() == id:
@@ -102,7 +164,17 @@ class ComidaDefault:
         return existe
     
     @classmethod
-    def obtenerObjetoPorNombreP(cls,nombre):
+    def obtenerObjetoPorNombreP(cls, nombre):
+        """
+        Obtiene un objeto de tipo Producto por su nombre.
+
+        Args:
+            nombre (str): El nombre del producto a buscar.
+
+        Returns:
+            Producto: El objeto Producto encontrado, o None si no se encuentra.
+
+        """
         from gestorAplicacion.comida.Producto import Producto
         producto = None
         for productoActual in Producto.baseDatosProductos:
@@ -111,7 +183,17 @@ class ComidaDefault:
         return producto
     
     @classmethod
-    def obtenerObjetoPorIdP(cls,id):
+    def obtenerObjetoPorIdP(cls, id):
+        """
+        Obtiene un objeto Producto por su ID.
+
+        Parámetros:
+        - id: El ID del producto a buscar.
+
+        Retorna:
+        - El objeto Producto correspondiente al ID proporcionado, o None si no se encuentra.
+
+        """
         from gestorAplicacion.comida.Producto import Producto
         producto = None
         for productoActual in Producto.baseDatosProductos:
