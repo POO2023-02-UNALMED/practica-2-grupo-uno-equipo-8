@@ -204,56 +204,47 @@ class Canasta:
     
     #Para productos en lista
     def gestionEliminarP(self, prdct, cantidad):
-        if (prdct is not None) and (self._productosEnLista.has_key(prdct)):
+        if (prdct is not None) and (prdct in self._productosEnLista):
             if self._productosEnLista.get(prdct)+cantidad > 0:
-                self._productosEnLista.update(prdct, self._productosEnLista.get(prdct)+cantidad)
+                self._productosEnLista[prdct]=self._productosEnLista.get(prdct)+cantidad
                 self.calcularElementosLista()
                 self.generarCostoDeOrden()
                 return True
-            elif self._productosEnLista.get(prdct)+cantidad == 0:
+            elif self._productosEnLista.get(prdct)+cantidad <= 0:
                 self._productosEnLista.pop(prdct)
                 self.calcularElementosLista()
                 self.generarCostoDeOrden()
                 return True
-            elif self._productosEnLista.get(prdct)+cantidad < 0:
-                return False
+        return False
     
     #Para ingredientes en lista
     def gestionEliminarI(self, ingr, cantidad):
-        if (ingr is not None) and (self._ingredientesEnLista.has_key(ingr)):
+        if (ingr is not None) and (ingr in self._ingredientesEnLista):
             if self._ingredientesEnLista.get(ingr)+cantidad > 0:
-                self._ingredientesEnLista.update(ingr, self._ingredientesEnLista.get(ingr)+cantidad)
+                self._ingredientesEnLista[ingr]= self._ingredientesEnLista.get(ingr)+cantidad
                 self.calcularElementosLista()
                 self.generarCostoDeOrden()
                 return True
-            elif self._ingredientesEnLista.get(ingr)+cantidad == 0:
+            elif self._ingredientesEnLista.get(ingr)+cantidad <= 0:
                 self._ingredientesEnLista.pop(ingr)
                 self.calcularElementosLista()
                 self.generarCostoDeOrden()
                 return True
-            elif self._ingredientesEnLista.get(ingr)+cantidad < 0:
-                return False
-        else:
-            return False
         return False
     
     #Para kits en lista
     def gestionEliminarK(self, kit, cantidad):
-        if (kit is not None) and (self._kitsEnLista.has_key(kit)):
+        if (kit is not None) and (kit in self._kitsEnLista):
             if self._kitsEnLista.get(kit)+cantidad > 0:
-                self._kitsEnLista.update(kit, self._kitsEnLista.get(kit)+cantidad)
+                self._kitsEnLista[kit] = self._kitsEnLista.get(kit)+cantidad
                 self.calcularElementosLista()
                 self.generarCostoDeOrden()
                 return True
-            elif self._kitsEnLista.get(kit)+cantidad == 0:
+            elif self._kitsEnLista.get(kit)+cantidad <= 0:
                 self._kitsEnLista.pop(kit)
                 self.calcularElementosLista()
                 self.generarCostoDeOrden()
                 return True
-            elif self._kitsEnLista.get(kit)+cantidad < 0:
-                return False
-        else:
-            return False
         return False
     
 

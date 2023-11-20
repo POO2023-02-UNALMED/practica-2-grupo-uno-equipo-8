@@ -423,7 +423,7 @@ class VentanaPrincipal:
         self.ffComprarIngredientes.defFunc(self.valoresdiccionarioCompra)
 
         #Boton 
-        self.botonComprarIngredientes = Button(self.frameComprarIngredientes, text="Comprar")
+        self.botonComprarIngredientes = Button(self.frameComprarIngredientes, text="Comprar", command=self.ejecucionComprarIngredientes)
         self.botonComprarIngredientes.pack(pady = 5)
         
         self.frameComprarIngredientes2 = Frame(self.frameComprarIngredientes, bd=1, relief=FLAT, padx=1, pady=1)
@@ -453,8 +453,14 @@ class VentanaPrincipal:
         self.frameComprar1.pack()
         self.labelfc1 = Label(self.frameComprar1, text="Crear Canasta de Compras", wraplength=300)
         self.labelfc1.pack(pady=5)
-        self.labelDescripcion = Label(self.frameComprar1, text="En este apartado se pueden hace varias cosas, se pueden añadir cosas a la canasta, esto con la ayuda de la lista de opciones depleglable donde se podrá escoger el producto, ingrediente o kit que desea adquirir, posteriormente deberá añadir la cantidad que desea de lo que se haya seleccionado, debe tener en cuenta que hay un limíte el cual sera de *** unidades, si desea quitar cosas a la canasta deberá seleccionar en la lista de opciones deplegable el producto, ingrediente o kit que desea eliminar y posteriormente debe añadir una cantidad negativa para quitar esa cantidad de unidades, el listado de productos con su respectiva cantidad escogida apareceran en la parte inferior de la pantalla, cuando tenga su canasta como la desea debe presionar el boton Continuar con proceso de compra para seguir con la compra de su canasta, además de eso se puede añadir productos personalizados a la canasta haciendo uso del boton Añadir producto personalizado y con ayuda del botón Catálogo se podrá ingresar al catálogo de productos.", wraplength=800, pady=10)
+        self.labelDescripcion = Label(self.frameComprar1, text="En este apartado se pueden hace varias cosas, se pueden añadir cosas a la canasta, esto con la ayuda de la lista de opciones depleglable donde se podrá escoger el producto o ingrediente que desea adquirir, si es un producto y desea el kit presione el checkbox de kit, posteriormente deberá añadir la cantidad que desea de lo que se haya seleccionado y darle click en aceptar, de esta manera se irán añadiendo los productos a canasta. Debe tener en cuenta que hay un limíte el cual sera de 15 unidades, si desea quitar cosas a la canasta deberá seleccionar en la lista de opciones deplegable el producto, ingrediente o kit que desea eliminar y posteriormente debe añadir una cantidad negativa para quitar esa cantidad de unidades, el listado de productos con su respectiva cantidad escogida apareceran en la parte inferior de la pantalla, cuando tenga su canasta como la desea debe presionar el boton Continuar con proceso de compra para seguir con la compra de su canasta, además de eso se puede añadir productos personalizados a la canasta haciendo uso del boton Añadir producto personalizado y con ayuda del botón Catálogo se podrá ingresar al catálogo de productos.", wraplength=800, pady=10)
         self.labelDescripcion.pack(pady=5)
+
+        self.botonIrCatalogo = tk.Button(self.frameComprar1, text="Ir al catalogo", command = lambda: self.cambiarFrame(self.frameCatalogo))
+        self.botonIrCatalogo.pack( pady=10)
+
+        self.botonCocinar = tk.Button(self.frameComprar1, text="Agregar un producto personalizado")
+        self.botonCocinar.pack(pady=10)
 
         #Label para el primer comboBox
         self.labelfc1_2 = Label(self.frameComprar1, text="Elija un producto")
@@ -473,23 +479,17 @@ class VentanaPrincipal:
 
         # FieldFrame para cantidad
 
-        self.ffCarrito = FieldFrame("Valores", ["Cantidad a comprar:"], "Ingrese aquí")
-        self.ffCarrito.defRoot(self.frameComprar1)
-        self.ffCarrito.defFunc(self.registrarPedidoCanasta)
-
         #checkbox
         self.var = tk.BooleanVar()
         self.var.set(False)
         self.checkButton = ttk.Checkbutton(self.frameComprar1, text="Desea el kit?", variable=self.var) 
         self.checkButton.pack(pady=5)
 
-        self.botonCocinar = tk.Button(self.frameComprar1, text="Agregar producto personalizado")
-        self.botonCocinar.pack(pady=10)
+        self.ffCarrito = FieldFrame("Valores", ["Cantidad a comprar:"], "Ingrese aquí")
+        self.ffCarrito.defRoot(self.frameComprar1)
+        self.ffCarrito.defFunc(self.registrarPedidoCanasta)
 
-        self.botonIrCatalogo = tk.Button(self.frameComprar1, text="Ir al catalogo", command = lambda: self.cambiarFrame(self.frameCatalogo))
-        self.botonIrCatalogo.pack( pady=10)
-
-        self.botonIrPreguntarDomicilio = Button(self.frameComprar1, text = "Continuar con proceso de compra", command = lambda: self.cambiarFrame(self.framePreguntarDomicilio))
+        self.botonIrPreguntarDomicilio = Button(self.frameComprar1, text = "Continuar con proceso de compra", command = self.pasarAlPago)
         self.botonIrPreguntarDomicilio.pack(side="bottom", pady=10)
 
         self.frameComprar2 = Frame(self.frameComprar)
@@ -626,7 +626,7 @@ class VentanaPrincipal:
         Sahely Romero
         Samuel Castaño
         Nicolas Echeverry
-         '''
+        '''
         messagebox.showinfo("Información", info)
         #self.labelInformacion.config(text=info)
         #self.cambiarFrame(self.frameInfo)
@@ -714,15 +714,23 @@ class VentanaPrincipal:
         # Aplicar el tag al texto
         self.textoDescripcion.tag_add("center", "1.0", "end")
 
+    @staticmethod
+    def esNumero(valor):
+        try:
+            int(valor)  # Intenta convertir la cadena a un número de punto flotante
+            return True
+        except ValueError:
+            return False
+
     def registrarPedidoCanasta(self,val):
         try:
             if val[0] == "":
                 raise CamposVaciosError([val[0]])
             elif not(Ingrediente.verificacionExistenciaPorNombreI(self.comboboxfc1.get()) or Producto.verificarExistenciaPorNombreP(self.comboboxfc1.get())):
                 raise ProductoNoEncontradoError(self.comboboxfc1.get())
-            elif not val[0].isdigit():
+            elif not self.esNumero(val[0]):
                 raise ValueError()
-            elif int(val[0]) < -15 or int(val[0])>15:
+            elif int(val[0]) < -15 or int(val[0])>15 or int(val[0]) == 0:
                 raise CantidadInvalidaError(int(val[0]))
             else:
                 producto = self.comboboxfc1.get()
@@ -835,34 +843,43 @@ class VentanaPrincipal:
         messagebox.showinfo("Meter plata", "Plata ingresada correctamente")
 
     # Métodos para la funcionalidad 5
-    def creaciondiccionarioCompra(self, llaves, valores):
-        
-        for i in range (0, len(llaves)-1):
-            self.diccionarioFuncionalidad5[llaves[i]] = valores[i]
-            x = (f"{llaves[i]}: {valores[i]}") 
-            self.textEjecComprarIngredientes.insert(x)
 
     def valoresdiccionarioCompra(self, values):
-        valores = []
-        llaves = []
-
-        if values != []:
-            for i in values:
-                valores.append(i)
-        else:
-            print("No se ingreso nada") #Recordar Cambiar por un exception
         
-        y = self.comboboxComprarIngredientes.get()
-
-        if y == None or y == "":
-            print("No hay nada en el combobox") #Recordar Cambiar por una excepcion
+        try:
+            if self.comboboxComprarIngredientes.get() == None or self.comboboxComprarIngredientes.get() == "":
+                raise CamposVaciosError(self.comboboxComprarIngredientes.get())
+            elif not (Ingrediente.verificacionExistenciaPorNombreI(self.comboboxComprarIngredientes.get())):
+                raise ProductoNoEncontradoError(self.comboboxComprarIngredientes.get())
+            elif not self.esNumero(values[0]):
+                raise ValueError()
+            elif int(values[0]) < 0 or 50 < int(values[0]) or int(values[0]) == 0:
+                raise CantidadInvalidaError(int(values[0]))
+            else:
+                if not (self.comboboxComprarIngredientes.get() in self.diccionarioFuncionalidad5):
+                    self.diccionarioFuncionalidad5[self.comboboxComprarIngredientes.get()] = int(values[0])
+                else:
+                    self.diccionarioFuncionalidad5[self.comboboxComprarIngredientes.get()] = int(self.diccionarioFuncionalidad5[self.comboboxComprarIngredientes.get()]) + int(values[0])
+                    
+                self.textEjecComprarIngredientes.delete(1.0, tk.END)
+                for ingredienteNombre, cantidad in self.diccionarioFuncionalidad5.items():
+                    self.textEjecComprarIngredientes.insert(tk.END, "Ingrediente: " + ingredienteNombre + " - Cantidad: " + str(cantidad) + "\n")
+                self.comboboxComprarIngredientes.delete(0, "end")
+                self.textEjecComprarIngredientes.tag_configure("center", justify="center")
+                self.textEjecComprarIngredientes.tag_add("center", "1.0", "end")
         
-        else:
-            llaves.append(y)
+        except CamposVaciosError as e:
+            messagebox.showwarning("Error", "Completa los campos vacíos")
+        except ProductoNoEncontradoError as e:
+            messagebox.showwarning("Error", "El ingrediente ingresado no existe")
+        except ValueError:
+            messagebox.showwarning("Error", "La cantidad debe ser un entero")
+        except CantidadInvalidaError as e:
+            messagebox.showwarning("Error", "Debes ingresar una cantidad no negativa, menor a 50 y diferente de 0")
 
-        self.creaciondiccionarioCompra(llaves, valores)
-
+    def ejecucionComprarIngredientes(self):
         Cliente.getSesion().getPanaderia().comprarIngredientes(self.diccionarioFuncionalidad5, self.textEjecComprarIngredientes)
+        self.diccionarioFuncionalidad5 = {}
     
     def cambiarDireccion(self, val):
         try:
@@ -899,6 +916,12 @@ class VentanaPrincipal:
         self.frameIngredientesPersonalizado2.pack(fill=tk.BOTH, expand=True)
 
         self.cambiarFrame(self.frameIngredientesPersonalizado)
+
+    def pasarAlPago(self):
+        if Cliente.getSesion().getCanastaOrden().getProductosEnLista() == {} and Cliente.getSesion().getCanastaOrden().getIngredientesEnLista() == {} and Cliente.getSesion().getCanastaOrden().getKitsEnLista() == {}:
+            messagebox.showwarning("Error", "No hay productos en la canasta")
+        else:
+            self.cambiarFrame(self.framePreguntarDomicilio)
 
 # Codigo que produce la ejecucion de la ventana cuando se ejecuta desde este archivo
 def main():
