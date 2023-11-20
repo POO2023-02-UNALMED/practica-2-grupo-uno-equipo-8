@@ -118,7 +118,7 @@ class Recibo:
         return self.factura
     
 
-    def mostrarCanasta(canasta):
+    def mostrarCanasta(self, canasta):
         print("_".repeat(55))
         print("")
         print(Texto.centrar("PRODUCTOS"))
@@ -158,7 +158,8 @@ class Recibo:
         print(Texto.alinear("subtotal", canasta.getCostoTotalEnLista()))
 
     
-    def imprimir_factura(recibo):
+    def imprimir_factura(self):
+        recibo = self
         print("")
         print("")
         print(Texto.centrar("POO Bakery"))
@@ -173,7 +174,7 @@ class Recibo:
         print(Texto.centrar(""))
         print(Texto.centrar(Texto.centrar("DETALLE DE VENTA")))
         print(" ")
-        mostrarCanasta(recibo.getCanasta())
+        self.mostrarCanasta(recibo.getCanasta())
         print("")
         print("")
         print("_".repeat(55))
