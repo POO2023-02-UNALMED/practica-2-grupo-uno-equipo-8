@@ -4,7 +4,7 @@ from tkinter import messagebox
 from tkinter import ttk
 from FieldFrame import FieldFrame
 from Texto import centrar
-from ErrorAplicacion import CamposVaciosError, UsuarioNoEncontradoError, usuarioExistenteError
+from ErrorAplicacion import CamposVaciosError, CantidadInvalidaError, ProductoNoEncontradoError, UsuarioNoEncontradoError, usuarioExistenteError
 
 import os
 import sys
@@ -24,6 +24,9 @@ class VentanaPrincipal:
         self.root = root
         self.root.title("Ventana principal")
         self.root.geometry("1000x800")
+
+        #Listas exclusivas para la funcionalidad 5
+        self.diccionarioFuncionalidad5 = {}
 
         self.panaderia = Serializador.cargarPanaderia()
         Cliente.setPanaderia(self.panaderia)
@@ -75,11 +78,12 @@ class VentanaPrincipal:
         #self.labelp1.pack()
         self.imagen_1tk = tk.PhotoImage(file='src/resources/logoBienvenida.png')
         self.labelBienvenida = Label(self.framePrincipal, image = self.imagen_1tk)
-        self.labelBienvenida.pack(pady = 10)
-        self.imagen_2tk = tk.PhotoImage(file='src/resources/ratonInicio.png')
-        self.labelBienvenida2 = Label(self.framePrincipal, image = self.imagen_2tk)
-        self.labelBienvenida2.pack(pady = 10)
-
+        self.labelBienvenida.pack()
+        #self.imagen_2tk = tk.PhotoImage(file='src/resources/ratonInicio.png')
+        #self.labelBienvenida2 = Label(self.framePrincipal, image = self.imagen_2tk)
+        #self.labelBienvenida2.pack()
+        self.labelBienvenida3 = Label(self.framePrincipal, text="Bienvenido a nuestra aplicacion, en el menu de procesos y consultas podras iniciar tu compra, elije crear canasta de compras y haz tu pedido ya!")
+        self.labelBienvenida3.pack()
 
 
 
@@ -161,7 +165,7 @@ class VentanaPrincipal:
         # botones ir a facturar
         self.botonContinuarfpd = Button(self.framePreguntarDomicilio, text = "Ir a pagar", command = lambda: self.cambiarFrame(self.frameFacturacion))
         self.botonContinuarfpd.pack(pady=5)
-        self.botonAtrasfpd = Button(self.framePreguntarDomicilio, text="Volver atras", command=self.volverAtras)
+        self.botonAtrasfpd = Button(self.framePreguntarDomicilio, text="Volver a canasta", command=lambda: self.cambiarFrame(self.frameComprar))
         self.botonAtrasfpd.pack(pady=5)
         
         # frameCatalogo Catalogo de opciones disponibles para comprar
@@ -250,29 +254,7 @@ class VentanaPrincipal:
         # frameFacturacion
         self.frameFacturacion = Frame(self.root, bd = 1, relief = FLAT)
         self.frames.append(self.frameFacturacion)
-        self.fotoff1 = PhotoImage(file="src/resources/ratonFactura.png")
-        self.fotoFacturacion = Label(self.frameFacturacion, image = self.fotoff1)
-        self.fotoFacturacion.pack(pady = 5)
-        self.LabelFacturacion = Label(self.frameFacturacion, text="Su factura")
-        self.LabelFacturacion.pack(pady=5)
-
-        #Botones
-        self.botonPagar = Button(self.frameFacturacion, text = "Pagar factura")
-        self.botonPagar.pack(pady = 5)
-        self.botonFacPasadas = Button(self.frameFacturacion, text = "Ver mis facturas pasadas", command=lambda: self.cambiarFrame(self.frameFacturasPasadas))
-        self.botonFacPasadas.pack(pady = 5)
-        self.botonAtrasFacturacion = Button(self.frameFacturacion, text = "Volver atras", command = lambda: self.cambiarFrame(self.framePreguntarDomicilio, False))
-        self.botonAtrasFacturacion.pack(pady = 5)
         
-
-        # Agregar un Scrollbar
-        scrollbar = Scrollbar(self.frameFacturacion)
-        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
-
-        # Agregar un widget de Texto
-        self.textoFacturacion = Text(self.frameFacturacion, wrap=tk.WORD, yscrollcommand=scrollbar.set)
-        self.textoFacturacion.pack(fill=tk.BOTH, expand=True, pady=10, padx=10)
-
         # frameHistorial Historial de facturas
         self.frameHistorial = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
         self.LabelHistorial = Label(self.frameHistorial, text="Historial de facturas")
@@ -438,6 +420,7 @@ class VentanaPrincipal:
         #Implementaion del field frame
         self.ffComprarIngredientes = FieldFrame("Elija la cantidad", ["Cantidad a comprar:"], "Ingrese aquí")
         self.ffComprarIngredientes.defRoot(self.frameComprarIngredientes)
+        self.ffComprarIngredientes.defFunc(self.valoresdiccionarioCompra)
 
         #Boton 
         self.botonComprarIngredientes = Button(self.frameComprarIngredientes, text="Comprar")
@@ -451,11 +434,11 @@ class VentanaPrincipal:
         # frameLoMejor (Frames lo mejor de nuestra Panaderia) 
         self.frameLoMejor = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
         self.frames.append(self.frameLoMejor)
-        self.tituloLoMejor = Label(self.frameLoMejor, text="LO MEJOR DE NUESTRA PANADERIA")
-        self.infoLoMejor = Label(self.frameLoMejor, text="Aquí puede ver los rankings de lo mejor de nuestra panadería, las opcones que puede escoger son, los mejores cocineros, los mejores domiciliarios, los mejores productos y los mejores ingredientes, para verlas escriba, cocineros, domiciliarios productos o ingredientes respectivamente y posteriormente presione el botón Aceptar.s")
+        self.tituloLoMejor = Label(self.frameLoMejor, text="LO MEJOR DE NUESTRA PANADERIA", pady=10)
+        self.infoLoMejor = Label(self.frameLoMejor, text="Aquí puede ver los rankings de lo mejor de nuestra panadería, las opciones que puede escoger son, los mejores cocineros, los mejores domiciliarios, los mejores productos y los mejores ingredientes, para verlas escriba, cocineros, domiciliarios, productos o ingredientes respectivamente y posteriormente presione el botón Aceptar.", wraplength=380, pady=10)
         self.tituloLoMejor.pack()
         self.infoLoMejor.pack()
-        self.ffLoMejor = FieldFrame("Rankings", "Escriba qué ranking desea ver:", "Ingrese aquí el nombre")
+        self.ffLoMejor = FieldFrame("Rankings", ["Escriba qué ranking desea ver:"], "Ingrese aquí el nombre")
         self.ffLoMejor.defRoot(self.frameLoMejor)
         self.frameLoMejor2 = Frame(self.frameLoMejor, bd=1, relief=FLAT, padx=1, pady=1)
         self.textEjecLoMejor = Text(self.frameLoMejor2)
@@ -470,7 +453,7 @@ class VentanaPrincipal:
         self.frameComprar1.pack()
         self.labelfc1 = Label(self.frameComprar1, text="Crear Canasta de Compras", wraplength=300)
         self.labelfc1.pack(pady=5)
-        self.labelDescripcion = Label(self.frameComprar1, text="Descripcion")
+        self.labelDescripcion = Label(self.frameComprar1, text="En este apartado se pueden hace varias cosas, se pueden añadir cosas a la canasta, esto con la ayuda de la lista de opciones depleglable donde se podrá escoger el producto, ingrediente o kit que desea adquirir, posteriormente deberá añadir la cantidad que desea de lo que se haya seleccionado, debe tener en cuenta que hay un limíte el cual sera de *** unidades, si desea quitar cosas a la canasta deberá seleccionar en la lista de opciones deplegable el producto, ingrediente o kit que desea eliminar y posteriormente debe añadir una cantidad negativa para quitar esa cantidad de unidades, el listado de productos con su respectiva cantidad escogida apareceran en la parte inferior de la pantalla, cuando tenga su canasta como la desea debe presionar el boton Continuar con proceso de compra para seguir con la compra de su canasta, además de eso se puede añadir productos personalizados a la canasta haciendo uso del boton Añadir producto personalizado y con ayuda del botón Catálogo se podrá ingresar al catálogo de productos.", wraplength=800, pady=10)
         self.labelDescripcion.pack(pady=5)
 
         #Label para el primer comboBox
@@ -492,15 +475,19 @@ class VentanaPrincipal:
 
         self.ffCarrito = FieldFrame("Valores", ["Cantidad a comprar:"], "Ingrese aquí")
         self.ffCarrito.defRoot(self.frameComprar1)
+        self.ffCarrito.defFunc(self.registrarPedidoCanasta)
 
-        self.botonfc1 = Button(self.frameComprar1, text="Agregar a la canasta", command= self.registrarPedidoCanasta)
-        self.botonfc1.pack(pady = 10)
+        #checkbox
+        self.var = tk.BooleanVar()
+        self.var.set(False)
+        self.checkButton = ttk.Checkbutton(self.frameComprar1, text="Desea el kit?", variable=self.var) 
+        self.checkButton.pack(pady=5)
 
-        self.botonCocinar = tk.Button(self.frameComprar1, text="Cocinar producto personalizado")
-        self.botonCocinar.pack(side="bottom", pady=10)
+        self.botonCocinar = tk.Button(self.frameComprar1, text="Agregar producto personalizado")
+        self.botonCocinar.pack(pady=10)
 
         self.botonIrCatalogo = tk.Button(self.frameComprar1, text="Ir al catalogo", command = lambda: self.cambiarFrame(self.frameCatalogo))
-        self.botonIrCatalogo.pack(side="bottom", pady=10)
+        self.botonIrCatalogo.pack( pady=10)
 
         self.botonIrPreguntarDomicilio = Button(self.frameComprar1, text = "Continuar con proceso de compra", command = lambda: self.cambiarFrame(self.framePreguntarDomicilio))
         self.botonIrPreguntarDomicilio.pack(side="bottom", pady=10)
@@ -529,8 +516,35 @@ class VentanaPrincipal:
         # Aplicar el tag al texto
         self.texto_widget.tag_add("center", "1.0", "end")
 
+    # frameFacturacion
+    def cargarFrameFacturacion(self):
+        self.fotoff1 = PhotoImage(file="src/resources/ratonFactura.png")
+        self.fotoFacturacion = Label(self.frameFacturacion, image = self.fotoff1)
+        self.fotoFacturacion.pack(pady = 5)
+        self.LabelFacturacion = Label(self.frameFacturacion, text="Su factura")
+        self.LabelFacturacion.pack(pady=5)
 
+        #Botones
+        self.botonPagar = Button(self.frameFacturacion, text = "Pagar")
+        self.botonPagar.pack(pady = 10)
+        self.botonFacPasadas = Button(self.frameFacturacion, text = "Ver facturas pasadas", command=lambda: self.cambiarFrame(self.frameFacturasPasadas))
+        self.botonFacPasadas.pack(pady = 10)
+        self.botonAtrasFacturacion = Button(self.frameFacturacion, text = "Volver atras", command = lambda: self.cambiarFrame(self.framePreguntarDomicilio, False))
+        self.botonAtrasFacturacion.pack(pady = 10)
+        
 
+        # Agregar un Scrollbar
+        scrollbar = Scrollbar(self.frameFacturacion)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+
+        # Agregar un widget de Texto
+        self.textoFacturacion = Text(self.frameFacturacion, wrap=tk.WORD, yscrollcommand=scrollbar.set)
+        self.textoFacturacion.pack(fill=tk.BOTH, expand=True, pady=20, padx=20)
+
+        # Implementacion logica widget de texto
+        self.textoFacturacion.delete(1.0, "end")
+        self.varFactura = ""
+        self.textoFacturacion.insert(1.0, self.varFactura)
 
         #Metodos necesiarios para la interfaz de usuario
     def verificar_campos_llenos(self, campos):  # Asegúrate de pasar 'self' como primer argumento
@@ -627,6 +641,8 @@ class VentanaPrincipal:
                 self.frameAnterior = self.frameActual
 
             for f in self.frames:
+                if frame == self.frameFacturacion:
+                    self.cargarFrameFacturacion()
                 if f == frame:
                     f.pack(padx = 5, pady = 5, fill = "both", expand=True)
                     self.frameActual = frame
@@ -698,14 +714,46 @@ class VentanaPrincipal:
         # Aplicar el tag al texto
         self.textoDescripcion.tag_add("center", "1.0", "end")
 
-    def registrarPedidoCanasta(self):
-        producto = self.comboboxfc1.get()
-        cantidad = self.comboboxfc1_2.get()
-        self.texto_widget.insert(tk.END, "Producto: " + producto + " - Cantidad: " + cantidad + "\n")
-        self.comboboxfc1.delete(0, 'end')
-        self.comboboxfc1_2.delete(0, 'end')
-        Cliente.getSesion().getCanastaOrden().recibir_orden(producto, cantidad, False)
-        
+    def registrarPedidoCanasta(self,val):
+        try:
+            if val[0] == "":
+                raise CamposVaciosError([val[0]])
+            elif not(Ingrediente.verificacionExistenciaPorNombreI(self.comboboxfc1.get()) or Producto.verificarExistenciaPorNombreP(self.comboboxfc1.get())):
+                raise ProductoNoEncontradoError(self.comboboxfc1.get())
+            elif not val[0].isdigit():
+                raise ValueError()
+            elif int(val[0]) < -15 or int(val[0])>15:
+                raise CantidadInvalidaError(int(val[0]))
+            else:
+                producto = self.comboboxfc1.get()
+                elemento = ""
+                if Producto.verificarExistenciaPorNombreP(producto):
+                    elemento = Producto.obtenerObjetoPorNombreP(producto).getId()
+                elif Ingrediente.verificacionExistenciaPorNombreI(producto):
+                    elemento = Ingrediente.obtenerObjetoPorNombreI(producto).getId()
+                Cliente.getSesion().getCanastaOrden().recibir_orden(elemento, val[0], self.var.get())
+                self.texto_widget.delete(1.0, tk.END)
+                for elements, cantidad in Cliente.getSesion().getCanastaOrden().getProductosEnLista().items():
+                    self.texto_widget.insert(tk.END, "Producto: " + Producto.obtenerObjetoPorIdP(elements).getNombre() + " - Cantidad: " + str(cantidad) + "\n")
+                for elements, cantidad in Cliente.getSesion().getCanastaOrden().getIngredientesEnLista().items():
+                    self.texto_widget.insert(tk.END, "Ingrediente: " + Ingrediente.obtenerObjetoPorIdI(elements).getNombre() + " - Cantidad: " + str(cantidad) + "\n")
+                for elements, cantidad in Cliente.getSesion().getCanastaOrden().getKitsEnLista().items():
+                    self.texto_widget.insert(tk.END, "Kits: " + Producto.obtenerObjetoPorIdP(elements).getNombre() + " - Cantidad: " + str(cantidad) + "\n")
+                self.comboboxfc1.delete(0, 'end')   
+                self.texto_widget.tag_configure("center", justify="center")
+
+                # Aplicar el tag al texto
+                self.texto_widget.tag_add("center", "1.0", "end")
+
+        except CamposVaciosError as e:
+            messagebox.showwarning("Error", "Completa los campos vacios")
+        except ProductoNoEncontradoError as e:
+            messagebox.showwarning("Error", "El producto no existe")
+        except ValueError:
+            messagebox.showwarning("Error", "La cantidad debe ser un numero")
+        except CantidadInvalidaError as e:
+            messagebox.showwarning("Error", "La cantidad debe estar entre -15 y 15")
+
     def cerrarSesion(self):
         Cliente.setSesion(None)
         self.menu_procesos.entryconfigure("Iniciar sesion", state="normal")
@@ -786,6 +834,36 @@ class VentanaPrincipal:
         Cliente.getSesion().setPresupuesto(Cliente.getSesion().getPresupuesto() + int(val[0]))
         messagebox.showinfo("Meter plata", "Plata ingresada correctamente")
 
+    # Métodos para la funcionalidad 5
+    def creaciondiccionarioCompra(self, llaves, valores):
+        
+        for i in range (0, len(llaves)-1):
+            self.diccionarioFuncionalidad5[llaves[i]] = valores[i]
+            x = (f"{llaves[i]}: {valores[i]}") 
+            self.textEjecComprarIngredientes.insert(x)
+
+    def valoresdiccionarioCompra(self, values):
+        valores = []
+        llaves = []
+
+        if values != []:
+            for i in values:
+                valores.append(i)
+        else:
+            print("No se ingreso nada") #Recordar Cambiar por un exception
+        
+        y = self.comboboxComprarIngredientes.get()
+
+        if y == None or y == "":
+            print("No hay nada en el combobox") #Recordar Cambiar por una excepcion
+        
+        else:
+            llaves.append(y)
+
+        self.creaciondiccionarioCompra(llaves, valores)
+
+        Cliente.getSesion().getPanaderia().comprarIngredientes(self.diccionarioFuncionalidad5, self.textEjecComprarIngredientes)
+    
     def cambiarDireccion(self, val):
         try:
             if val[0] == "":
