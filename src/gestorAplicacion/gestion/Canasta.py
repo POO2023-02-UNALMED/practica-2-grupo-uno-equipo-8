@@ -113,7 +113,7 @@ class Canasta:
     def getPagada(self):
         return self._pagada
 
-    def getEstadoOrden(self):
+    def getCocinada(self):
         return self._cocinada
     
     def getEntregada(self):
@@ -165,7 +165,7 @@ class Canasta:
     def setPagada(self, pagada):
         self._pagada = pagada
 
-    def setEstadoOrden(self, estadoOrden):
+    def setCocinada(self, estadoOrden):
         self._cocinada = estadoOrden
 
     def setEntregada(self, entregada):
