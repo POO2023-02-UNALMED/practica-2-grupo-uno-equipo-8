@@ -49,7 +49,7 @@ class VentanaPrincipal:
         self.menu_procesos.add_command(label = "Func. Crear Canasta de Compras", state="disabled",command = lambda: self.cambiarFrame(self.frameComprar))
         self.menu_procesos.add_command(label = "Func. Facturar", state="disabled")
         self.menu_procesos.add_command(label = "Func. Cocinar",command=lambda:self.cambiarFrame(self.frameCocinar), state="disabled")
-        self.menu_procesos.add_command(label = "Func. Conseguir Ingredientes", command=lambda:self.cambiarFrame(self.frameComprarIngredientes), state="disabled")
+        self.menu_procesos.add_command(label = "Func. Ingredientes e inventario", command=lambda:self.cambiarFrame(self.frameComprarIngredientes), state="disabled")
         self.menu_procesos.add_command(label = "Func. Domicilio", state="disabled")
         self.menu_procesos.add_command(label = "Lo mejor de nuestra panaderia", state="disabled",command = lambda: self.cambiarFrame(self.frameLoMejor))
 
@@ -199,21 +199,6 @@ class VentanaPrincipal:
         #Empaquetar el canvas y el scrollbar
         self.canvas.pack(side="left", fill="both", expand=True)
         scrollbar.pack(side="right", fill="y")
-
-        self.agregarAlCatalogo("Pancake con forma de manzana1")
-        self.agregarAlCatalogo("Pancake con forma de manzana2")
-        self.agregarAlCatalogo("Pancake con forma de manzana3")
-        self.agregarAlCatalogo("Pancake con forma de manzana4")
-        self.agregarAlCatalogo("Pancake con forma de manzana5")
-        self.agregarAlCatalogo("Pancake con forma de manzana6")
-        self.agregarAlCatalogo("Pancake con forma de manzana7")
-        self.agregarAlCatalogo("Pancake con forma de manzana8")
-        self.agregarAlCatalogo("Pancake con forma de manzana9")
-        self.agregarAlCatalogo("Pancake con forma de manzana10")
-        self.agregarAlCatalogo("Pancake con forma de manzana11")
-        self.agregarAlCatalogo("Pancake con forma de manzana12")
-        self.agregarAlCatalogo("Pancake con forma de manzana13")
-        self.agregarAlCatalogo("Pancake con forma de manzana14")
 
         self.BotonAtrasCatalogo = Button(self.frameCatalogo, text="volver atras", command= self.volverAtras)
         self.BotonAtrasCatalogo.pack(pady = 10)
@@ -405,7 +390,7 @@ class VentanaPrincipal:
         self.frameComprarIngredientes = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
         self.frames.append(self.frameComprarIngredientes)
         self.tituloComprarIngredientes = Label(self.frameComprarIngredientes, text="COMPRAR INGREDIENTES")
-        self.descipComprarIngredientes = Label(self.frameComprarIngredientes, text="DESCRIPCION")
+        self.descipComprarIngredientes = Label(self.frameComprarIngredientes, text="En este apartado podrá enviar a comprar ingredientes que se añadirán al inventario de la panadería, los primero que debe hacer es crear su listado de ingredientes, esto lo podrá hacer con ayuda del menú desplegable en el cuál podrá escoger el ingrediente que desea enviar a comprar, si ingresa un ingrediente que no manejamos se le generará un error, posteriormente debe digitar la cantidad que desea donde se le indica, debe ser una cantidad entera positiva menor que 50 y distinta de 0, luego para agregar el ingrediente con su respectiva cantidad debe presionar el botón Aceptar, podrá visualizar la lista de ingredientes que lleva hasta el momento en la parte inferior de la pantalla, cuando considere que ya ha llenado su lista por completo por favor presione el botón Comprar para continuar con la compra de los ingrdientes, cada paso del proceso se le irá informando en la parte inferior de la ventana", wraplength=800, pady=10)
         self.tituloComprarIngredientes.pack(pady = 5)
         self.descipComprarIngredientes.pack(pady = 5)
         self.labelComprarIngredientes = Label(self.frameComprarIngredientes, text="Elija un ingrediente")
@@ -430,6 +415,7 @@ class VentanaPrincipal:
         
         self.frameComprarIngredientes2 = Frame(self.frameComprarIngredientes, bd=1, relief=FLAT, padx=1, pady=1)
         self.textEjecComprarIngredientes = Text(self.frameComprarIngredientes2)
+        self.textEjecComprarIngredientes.config(state=tk.DISABLED)
         self.textEjecComprarIngredientes.pack(fill=tk.BOTH, expand=True)
         self.frameComprarIngredientes2.pack(fill=tk.BOTH, expand=True)
 
@@ -447,13 +433,14 @@ class VentanaPrincipal:
         self.textEjecLoMejor.pack(fill=tk.BOTH, expand=True)
         self.frameLoMejor2.pack(fill=tk.BOTH, expand=True)
 
+
+
+
     # frameComprar
     def cargarFrameCarrito(self):
-        #framep1 = Frame(frame, bd = 5, relief=FLAT, padx = 2, pady = 2, bg = "white").grid(row =0 , column = 0)
-        #framep2 = Frame(frame, bd = 5, relief=FLAT, padx = 2, pady = 2, bg = "white").grid(row =0 , column = 1)
         self.frameComprar1 = Frame(self.frameComprar)
         self.frameComprar1.pack()
-        self.labelfc1 = Label(self.frameComprar1, text="Crear Canasta de Compras", wraplength=300)
+        self.labelfc1 = Label(self.frameComprar1, text="CREAR CANASTA DE COMPRAS", wraplength=300)
         self.labelfc1.pack(pady=5)
         self.labelDescripcion = Label(self.frameComprar1, text="En este apartado se pueden hace varias cosas, se pueden añadir cosas a la canasta, esto con la ayuda de la lista de opciones depleglable donde se podrá escoger el producto o ingrediente que desea adquirir, si es un producto y desea el kit presione el checkbox de kit, posteriormente deberá añadir la cantidad que desea de lo que se haya seleccionado y darle click en aceptar, de esta manera se irán añadiendo los productos a canasta. Debe tener en cuenta que hay un limíte el cual sera de 15 unidades, si desea quitar cosas a la canasta deberá seleccionar en la lista de opciones deplegable el producto, ingrediente o kit que desea eliminar y posteriormente debe añadir una cantidad negativa para quitar esa cantidad de unidades, el listado de productos con su respectiva cantidad escogida apareceran en la parte inferior de la pantalla, cuando tenga su canasta como la desea debe presionar el boton Continuar con proceso de compra para seguir con la compra de su canasta, además de eso se puede añadir productos personalizados a la canasta haciendo uso del boton Añadir producto personalizado y con ayuda del botón Catálogo se podrá ingresar al catálogo de productos.", wraplength=800, pady=10)
         self.labelDescripcion.pack(pady=5)
@@ -461,7 +448,7 @@ class VentanaPrincipal:
         self.botonIrCatalogo = tk.Button(self.frameComprar1, text="Ir al catalogo", command = lambda: self.cambiarFrame(self.frameCatalogo))
         self.botonIrCatalogo.pack( pady=10)
 
-        self.botonCocinar = tk.Button(self.frameComprar1, text="Agregar un producto personalizado")
+        self.botonCocinar = tk.Button(self.frameComprar1, text="Agregar un producto personalizado", command=self.cargarProductoPersonalizado)
         self.botonCocinar.pack(pady=10)
 
         #Label para el primer comboBox
@@ -517,6 +504,98 @@ class VentanaPrincipal:
 
         # Aplicar el tag al texto
         self.texto_widget.tag_add("center", "1.0", "end")
+
+        self.cargarCatalogo()
+
+    def cargarCatalogo(self):
+        for element in Producto.baseDatosProductos:
+            self.agregarAlCatalogo(element.getNombre())
+        for element in Ingrediente._baseDatosIngredientes:
+            self.agregarAlCatalogo(element.getNombre())
+
+
+    #Frame agregarProductoPersonalizado
+    def cargarProductoPersonalizado(self):
+        self.diccionarioParaProductoPersonalizado = {}
+        self.frameCrearPersonalizado = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
+        self.frames.append(self.frameCrearPersonalizado)
+        self.tituloCrearPersonalizado = Label(self.frameCrearPersonalizado, text="AGREGAR PRODUCTO PERSONALIZADO", pady=10)
+        self.infoCrearPersonalizado = Label(self.frameCrearPersonalizado, text="Aquí puede crear un producto personalizado, para hacerlo debe ingresar el nombre del producto, la cantidad de ingredientes que desea que tenga y posteriormente presionar el botón Aceptar.", wraplength=380, pady=10)
+        self.tituloCrearPersonalizado.pack()
+        self.infoCrearPersonalizado.pack()
+        
+        def botonIngredientes(val):
+            if val[0] in self.diccionarioParaProductoPersonalizado:
+                self.diccionarioParaProductoPersonalizado[val[0]] += int(val[1])
+            else:
+                self.diccionarioParaProductoPersonalizado[val[0]] = int(val[1])
+            self.texto_widget2.config(state=tk.NORMAL)
+            self.texto_widget2.delete(1.0, "end")
+            self.texto_widget2.insert(1.0, "Ingredientes necesarios para cocinar " + self.ffCrearPersonalizado.getValores()[0] + ":\n")
+            for elements, cantidad in self.diccionarioParaProductoPersonalizado.items():
+                self.texto_widget2.insert(tk.END, "Ingrediente: " + elements + " - Cantidad: " + str(cantidad) + "\n")
+
+            self.texto_widget2.tag_configure("center", justify="center")
+
+            # Aplicar el tag al texto
+            self.texto_widget2.tag_add("center", "1.0", "end")
+
+        self.ffCrearPersonalizado = FieldFrame("Producto deseado", ["Nombre del producto:", "Cantidad del producto:"], "Ingrese aquí")
+        self.ffCrearPersonalizado.defRoot(self.frameCrearPersonalizado)
+        
+        self.ffCrearPersonalizado2 = FieldFrame("Ingredientes necesarios", ["Nombre del ingrediente:", "Cantidad del ingrediente:"], "Ingrese aquí")
+        self.ffCrearPersonalizado2.defRoot(self.frameCrearPersonalizado)
+        self.ffCrearPersonalizado2.defFunc(botonIngredientes)
+
+        def anadirProductoPersonalizado():
+            Cliente.getSesion().getCanastaOrden().recibirOrdenPersonalizada(self.ffCrearPersonalizado.getValores()[0], self.diccionarioParaProductoPersonalizado, self.ffCrearPersonalizado.getValores()[1], self.var2.get())
+            self.texto_widget2.config(state=tk.NORMAL)
+            self.texto_widget2.delete(1.0, "end")
+
+            for elements, cantidad in Cliente.getSesion().getCanastaOrden().getProductosEnLista().items():
+                self.texto_widget2.insert(tk.END, "Producto: " + Producto.obtenerObjetoPorIdP(elements).getNombre() + " - Cantidad: " + str(cantidad) + "\n")
+            for elements, cantidad in Cliente.getSesion().getCanastaOrden().getIngredientesEnLista().items():
+                self.texto_widget2.insert(tk.END, "Ingrediente: " + Ingrediente.obtenerObjetoPorIdI(elements).getNombre() + " - Cantidad: " + str(cantidad) + "\n")
+            for elements, cantidad in Cliente.getSesion().getCanastaOrden().getKitsEnLista().items():
+                self.texto_widget2.insert(tk.END, "Kits: " + Producto.obtenerObjetoPorIdP(elements).getNombre() + " - Cantidad: " + str(cantidad) + "\n")
+
+            # Tag para centrar texto
+            self.texto_widget2.tag_configure("center", justify="center")
+
+            # Aplicar el tag al texto
+            self.texto_widget2.tag_add("center", "1.0", "end")
+            self.texto_widget2.config(state=tk.DISABLED)
+
+        self.var2 = tk.BooleanVar()
+        self.var2.set(False)
+        self.checkButton2 = ttk.Checkbutton(self.frameCrearPersonalizado, text="Desea el kit?", variable=self.var2) 
+        self.checkButton2.pack(pady=5)
+
+        self.botonCrearPersonalizado = Button(self.frameCrearPersonalizado, text="Agregar Producto", command=anadirProductoPersonalizado)
+        self.botonCrearPersonalizado.pack(pady = 5)
+
+        # Agregar un Scrollbar
+        scrollbar = Scrollbar(self.frameCrearPersonalizado)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+
+        # Agregar un widget de Texto
+        self.texto_widget2 = Text(self.frameCrearPersonalizado, wrap=tk.WORD, yscrollcommand=scrollbar.set)
+        self.texto_widget2.pack(fill=tk.BOTH, expand=True)
+        for elements, cantidad in Cliente.getSesion().getCanastaOrden().getProductosEnLista().items():
+            self.texto_widget2.insert(tk.END, "Producto: " + Producto.obtenerObjetoPorIdP(elements).getNombre() + " - Cantidad: " + str(cantidad) + "\n")
+        for elements, cantidad in Cliente.getSesion().getCanastaOrden().getIngredientesEnLista().items():
+            self.texto_widget2.insert(tk.END, "Ingrediente: " + Ingrediente.obtenerObjetoPorIdI(elements).getNombre() + " - Cantidad: " + str(cantidad) + "\n")
+        for elements, cantidad in Cliente.getSesion().getCanastaOrden().getKitsEnLista().items():
+            self.texto_widget2.insert(tk.END, "Kits: " + Producto.obtenerObjetoPorIdP(elements).getNombre() + " - Cantidad: " + str(cantidad) + "\n")
+        self.texto_widget2.config(state=tk.DISABLED)
+
+        # Tag para centrar texto
+        self.texto_widget2.tag_configure("center", justify="center")
+
+        # Aplicar el tag al texto
+        self.texto_widget2.tag_add("center", "1.0", "end")
+        
+        self.cambiarFrame(self.frameCrearPersonalizado)
 
     # frameFacturacion
     def cargarFrameFacturacion(self):
@@ -782,7 +861,7 @@ class VentanaPrincipal:
         self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="disabled")
         self.menu_procesos.entryconfigure("Func. Facturar", state="disabled")
         self.menu_procesos.entryconfigure("Func. Cocinar", state="disabled")
-        self.menu_procesos.entryconfigure("Func. Conseguir Ingredientes", state="disabled")
+        self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="disabled")
         self.menu_procesos.entryconfigure("Func. Domicilio", state="disabled")
 
         self.menu_procesos.entryconfigure("Lo mejor de nuestra panaderia", state="disabled")
@@ -842,7 +921,7 @@ class VentanaPrincipal:
             self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="normal")
             self.menu_procesos.entryconfigure("Func. Facturar", state="normal")
             self.menu_procesos.entryconfigure("Func. Cocinar", state="normal")
-            self.menu_procesos.entryconfigure("Func. Conseguir Ingredientes", state="normal")
+            self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="normal")
             self.menu_procesos.entryconfigure("Func. Domicilio", state="normal")
 
             self.menu_procesos.entryconfigure("Lo mejor de nuestra panaderia", state="normal")
@@ -876,11 +955,18 @@ class VentanaPrincipal:
                 if not (self.comboboxComprarIngredientes.get() in self.diccionarioFuncionalidad5):
                     self.diccionarioFuncionalidad5[self.comboboxComprarIngredientes.get()] = int(values[0])
                 else:
-                    self.diccionarioFuncionalidad5[self.comboboxComprarIngredientes.get()] = int(self.diccionarioFuncionalidad5[self.comboboxComprarIngredientes.get()]) + int(values[0])
                     
+                    if int(self.diccionarioFuncionalidad5[self.comboboxComprarIngredientes.get()]) + int(values[0]) <= 50:
+                        self.diccionarioFuncionalidad5[self.comboboxComprarIngredientes.get()] = int(self.diccionarioFuncionalidad5[self.comboboxComprarIngredientes.get()]) + int(values[0])
+                    else:
+                        raise CantidadInvalidaError(int(self.diccionarioFuncionalidad5[self.comboboxComprarIngredientes.get()]) + int(values[0]))
+
+                self.textEjecComprarIngredientes.config(state=tk.NORMAL)
                 self.textEjecComprarIngredientes.delete(1.0, tk.END)
                 for ingredienteNombre, cantidad in self.diccionarioFuncionalidad5.items():
                     self.textEjecComprarIngredientes.insert(tk.END, "Ingrediente: " + ingredienteNombre + " - Cantidad: " + str(cantidad) + "\n")
+                self.textEjecComprarIngredientes.config(state=tk.DISABLED)
+                
                 self.comboboxComprarIngredientes.delete(0, "end")
                 self.textEjecComprarIngredientes.tag_configure("center", justify="center")
                 self.textEjecComprarIngredientes.tag_add("center", "1.0", "end")

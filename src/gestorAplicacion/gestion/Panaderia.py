@@ -7,6 +7,7 @@ from ..gestion.Canasta import Canasta
 from random import shuffle
 from tkinter import Text
 import tkinter as tk
+import time
 
 class Panaderia():
 
@@ -221,12 +222,19 @@ class Panaderia():
 
                 if self._enQuiebra == True:
                     text.config(state=tk.NORMAL)
-                    text.insert("La panadería no tenía dinero para realizar su pedido y ha entrado en quiebra :( , pero una franquicia más grande la ha comprado :D , podremos proseguir con su pedido")
+                    time.sleep(0.7)
+                    text.insert(tk.END, "La panadería no tenía dinero para realizar su pedido y ha entrado en quiebra :( , pero una franquicia más grande la ha comprado :D , podremos proseguir con su pedido" + "\n")
                     text.config(state=tk.DISABLED)
+                    text.tag_configure("center", justify="center")
+                    text.tag_add("center", "1.0", "end")
+
                 else:
                     text.config(state=tk.NORMAL)
-                    text.insert("La panadería no tenía dinero para realizar su pedido :( , pero ha pedido un prestamo y ya puede comprar lo que necesita para preparar su pedido :D")
+                    time.sleep(0.7)
+                    text.insert(tk.END, "La panadería no tenía dinero para realizar su pedido :( , pero ha pedido un prestamo y ya puede comprar lo que necesita para preparar su pedido :D" + "\n")
                     text.config(state=tk.DISABLED)
+                    text.tag_configure("center", justify="center")
+                    text.tag_add("center", "1.0", "end")
 
                 self.saldarDeudas()
 
@@ -236,12 +244,19 @@ class Panaderia():
         #GestionConseguirIngredientes.lecturaQuiebra(self._enQuiebra) #Crear estas lecturas
         if self._enQuiebra == True:
             text.config(state=tk.NORMAL)
-            text.insert("La panadería no tenía dinero para realizar su pedido y ha entrado en quiebra :( , pero una franquicia más grande la ha comprado :D , podremos proseguir con su pedido")
+            time.sleep(0.7)
+            text.insert(tk.END, "La panadería no tenía dinero para realizar su pedido y ha entrado en quiebra :( , pero una franquicia más grande la ha comprado :D , podremos proseguir con su pedido" + "\n")
             text.config(state=tk.DISABLED)
+            text.tag_configure("center", justify="center")
+            text.tag_add("center", "1.0", "end")
+
         else:
             text.config(state=tk.NORMAL)
-            text.insert("La panadería no tenía dinero para realizar su pedido :( , pero ha pedido un prestamo y ya puede comprar lo que necesita para preparar su pedido :D")
+            time.sleep(0.7)
+            text.insert(tk.END, "La panadería no tenía dinero para realizar su pedido :( , pero ha pedido un prestamo y ya puede comprar lo que necesita para preparar su pedido :D" + "\n")
             text.config(state=tk.DISABLED)
+            text.tag_configure("center", justify="center")
+            text.tag_add("center", "1.0", "end")
 
     def cocineroAleatorio(self):
         
@@ -266,28 +281,42 @@ class Panaderia():
     
     def comprarIngredientes(self, listIngredientes, text=None):
 
+        text.delete(1.0,tk.END)
         elegido = self.domiciliarioAleatorio()
         #GestionConseguirIngredientes.lecturaCompra(elegido.isRobado()) #Recordar hacer este lector
         if elegido.isRobado() == True:
             text.config(state=tk.NORMAL)
-            text.insert("Se ha enviado a comprar mas ingredientes, por favor espere a que se compren correctamente")
+            time.sleep(0.7)
+            text.insert(tk.END, "Se ha enviado a comprar mas ingredientes, por favor espere a que se compren correctamente" + "\n")
             text.config(state=tk.DISABLED)
+            text.tag_configure("center", justify="center")
+            text.tag_add("center", "1.0", "end")
+
         else:
             text.config(state=tk.NORMAL)
-            text.insert("Estamos en proceso de conseguir los ingredientes, lamentamos los inconvenientes")
+            time.sleep(0.7)
+            text.insert(tk.END, "Estamos en proceso de conseguir los ingredientes, lamentamos los inconvenientes" + "\n")
             text.config(state=tk.DISABLED)
+            text.tag_configure("center", justify="center")
+            text.tag_add("center", "1.0", "end")
 
-        x = elegido.conseguirIngredientes(listIngredientes)
+        x = elegido.conseguirIngredientes(listIngredientes, text)
         #GestionConseguirIngredientes.lecturaRobo(x)
         if x == True:
             text.config(state=tk.NORMAL)
-            text.insert("Han robado al trabajador que iba por los ingredientes, pedimos disculpas por el atraso, enviaremos a alguien mas por la compra")
+            time.sleep(0.7)
+            text.insert(tk.END, "Han robado al trabajador que iba por los ingredientes, pedimos disculpas por el atraso, enviaremos a alguien mas por la compra" + "\n")
             text.config(state=tk.DISABLED)
+            text.tag_configure("center", justify="center")
+            text.tag_add("center", "1.0", "end")
+
         else:
             text.config(state=tk.NORMAL)
-            text.insert("El trabajador ha regresado con los ingredientes!!")
+            time.sleep(0.7)
+            text.insert(tk.END, "El trabajador ha regresado con los ingredientes!!" + "\n")
             text.config(state=tk.DISABLED)
-
+            text.tag_configure("center", justify="center")
+            text.tag_add("center", "1.0", "end")
 
         while(x == True):
 
@@ -295,21 +324,35 @@ class Panaderia():
             #GestionConseguirIngredientes.lecturaCompra(elegido.isRobado()) #Recordar hacer este lector
             if elegido.isRobado() == True:
                 text.config(state=tk.NORMAL)
-                text.insert("Se ha enviado a comprar mas ingredientes, por favor espere a que se compren correctamente")
+                time.sleep(0.7)
+                text.insert(tk.END, "Se ha enviado a comprar mas ingredientes, por favor espere a que se compren correctamente" + "\n")
                 text.config(state=tk.DISABLED)
+                text.tag_configure("center", justify="center")
+                text.tag_add("center", "1.0", "end")
+
             else:
                 text.config(state=tk.NORMAL)
-                text.insert("Estamos en proceso de conseguir los ingredientes, lamentamos los inconvenientes")
+                time.sleep(0.7)
+                text.insert(tk.END, "Estamos en proceso de conseguir los ingredientes, lamentamos los inconvenientes" + "\n")
                 text.config(state=tk.DISABLED)
-            #GestionConseguirIngredientes.lecturaRobo(x)
+                text.tag_configure("center", justify="center")
+                text.tag_add("center", "1.0", "end")
+
             if x == True:
                 text.config(state=tk.NORMAL)
-                text.insert("Han robado al trabajador que iba por los ingredientes, pedimos disculpas por el atraso, enviaremos a alguien mas por la compra")
+                time.sleep(0.7)
+                text.insert(tk.END, "Han robado al trabajador que iba por los ingredientes, pedimos disculpas por el atraso, enviaremos a alguien mas por la compra" + "\n")
                 text.config(state=tk.DISABLED)
+                text.tag_configure("center", justify="center")
+                text.tag_add("center", "1.0", "end")
+
             else:
                 text.config(state=tk.NORMAL)
-                text.insert("El trabajador ha regresado con los ingredientes!!")
+                time.sleep(0.7)
+                text.insert(tk.END, "El trabajador ha regresado con los ingredientes!!" + "\n")
                 text.config(state=tk.DISABLED)
+                text.tag_configure("center", justify="center")
+                text.tag_add("center", "1.0", "end")
 
         elegido.setRobado(True)
 

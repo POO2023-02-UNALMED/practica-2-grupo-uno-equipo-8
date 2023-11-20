@@ -77,13 +77,13 @@ class FieldFrame(Frame):
 
     def getFrame(self):
         return self.frame
-    
+
     def getValores(self):
         if self.valores != []:
             return self.valores
         else:
             return None
-    
+
     def verificar_campos_llenos(self, campos):
         campos_vacios = [campo for campo in campos if len(campo) == 0]
         if campos_vacios:
