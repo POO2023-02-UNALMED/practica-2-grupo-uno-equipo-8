@@ -601,6 +601,8 @@ class VentanaPrincipal:
 
     # frameFacturacion
     def cargarFrameFacturacion(self):
+        Cliente.getSesion().getCanastaOrden().setPagada(True)
+        self.chequeoDeEstados()
         self.fotoff1 = PhotoImage(file="src/resources/ratonFactura.png")
         self.fotoFacturacion = Label(self.frameFacturacion, image = self.fotoff1)
         self.fotoFacturacion.pack(pady = 5)
@@ -630,11 +632,24 @@ class VentanaPrincipal:
         self.textoFacturacion.insert(1.0, self.varFactura)
 
     def cargarFrameCocinarDesdeClienteNormal(self):
-        self.cambiarFrame(self.frameCocinar)
-        self.descipCocina.config(text="Se cocinaran los productos de su canasta")
-        self.comboboxCocinar.pack_forget()
-        self.ffCocinar.pack_forget()
-        self.botonCocinar.configure(command=Cliente.getSesion().getCanastaEnOrden().enviarOrdenCanasta())
+        self.frameCocinar1 = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
+        self.frames.append(self.frameCocinar1)
+        self.cambiarFrame(self.frameCocinar1)
+        self.tituloCocinar1 = Label(self.frameCocinar1, text="COCINAR PRODUCTOS")
+        self.descipCocinar1 = Label(self.frameCocinar1, text="Se procede a cocinar los productos añadidos a su canasta, por favor continue el proceso dandole al botón Cocinar")
+
+        def procesoDeCocina():
+            Cliente.getSesion().getCanastaOrden().enviarOrdenCanasta(self.textEjecCocinar1)
+
+        self.tituloCocinar1.pack(pady = 5)
+        self.descipCocinar1.pack(pady = 5)
+        self.botonCocinar1 = Button(self.frameCocinar1, text="Cocinar", command=procesoDeCocina)
+        self.botonCocinar1.pack(pady = 5)
+
+        self.textEjecCocinar1 = Text(self.frameCocinar1)
+        #self.textEjecCocinar1.config(state=tk.DISABLED)
+        self.textEjecCocinar1.pack(fill=tk.BOTH, expand=True)
+
 
         print("f")
 
@@ -833,6 +848,8 @@ class VentanaPrincipal:
             except ValueError:
                 messagebox.showwarning("Error", "El usuario debe ser un numero")
                 break  # Sale del bucle si se encuentra un error en el inicio de sesión
+
+
     def chequeoDeEstados(self):
         if Cliente.getSesion() is not None:
             self.menu_procesos.entryconfigure("Iniciar sesion", state="disabled")

@@ -456,14 +456,14 @@ class Canasta:
         else:
             return False
 
-    def enviarOrdenCanasta(self):
+    def enviarOrdenCanasta(self,texto):
         """
         Envía una orden de canasta, agregando los productos, ingredientes y kits a la canasta del cliente.
 
         :return: None
         """
         from gestorAplicacion.humanos.Cliente import Cliente
-        productos_cocinados = Cliente.getSesion().getPanaderia().agregarProductosACanasta(self._productosEnLista)
+        productos_cocinados = Cliente.getSesion().getPanaderia().agregarProductosACanasta(self._productosEnLista,texto)
         ingredientes_cocinados = Cliente.getSesion().getPanaderia().agregarIngredientesACanasta(self._ingredientesEnLista)
         kits_cocinados = Cliente.getSesion().getPanaderia().agregarKitsACanasta(self._kitsEnLista)
 

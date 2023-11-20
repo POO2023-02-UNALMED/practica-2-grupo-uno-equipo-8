@@ -4,6 +4,7 @@ from random import randint as random
 from enum import Enum
 
 from UIMain.GestionCocinar import GestionCocinar
+#from UIMain.GestionDomicilioCliente import GestionDomicilioCliente
 
 class Cliente:
     _sesion = None  # Variable de clase para almacenar la sesión del cliente

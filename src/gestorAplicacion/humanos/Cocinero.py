@@ -141,7 +141,7 @@ class Cocinero(Domiciliario):
             ingredienteUsado = self._panaderia.getInventario().ingredientePorNombreBuscar(ingUsado)
             self._panaderia.getInventario().restarIngrediente(ingredienteUsado, cantidad * cantidades)
 
-    def repararCoccion(self, producto):
+    def repararCoccion(self, producto,texto):
         """
         Repara la cocción de un producto dado comprando los ingredientes utilizados.
 
@@ -150,7 +150,7 @@ class Cocinero(Domiciliario):
 
         """
         ingredientesUsados = producto.getIngredientes()
-        self._panaderia.comprarIngredientes(ingredientesUsados)
+        self._panaderia.comprarIngredientes(ingredientesUsados,texto)
 
     def detenerCoccion2(self, producto):
         """
@@ -165,7 +165,7 @@ class Cocinero(Domiciliario):
             ingredienteUsado = self._panaderia.getInventario().ingredientePorNombreBuscar(ingUsado)
             self._panaderia.getInventario().restarIngrediente(ingredienteUsado, cantidad)
 
-    def procesoCocinar(self, producto):
+    def procesoCocinar(self, producto,texto):
         """
         Realiza el proceso de cocinar un producto.
 
@@ -211,7 +211,7 @@ class Cocinero(Domiciliario):
                 chefIdeal.habilidad += 1
                 Cocinero._fallosCocinando +=1
                 chefIdeal.detenerCoccion2(producto)
-                chefIdeal.repararCoccion(producto)
+                chefIdeal.repararCoccion(producto,texto)
                 i = -1
             # Establece el cocinero como ocupado.
             chefIdeal.trabajo = True
@@ -259,7 +259,7 @@ class Cocinero(Domiciliario):
 
         return nuevoMapa
 
-    def laborParticular(self, canastaTrabajar):
+    def laborParticular(self, canastaTrabajar,texto):
         """
         Realiza la labor particular del cocinero con una canasta de trabajo.
 
@@ -293,7 +293,7 @@ class Cocinero(Domiciliario):
 
         if ingrFaltantes:
             Cocinero._fallosCocinando +=1
-            self._panaderia.comprarIngredientes(ingrFaltantes)
+            self._panaderia.comprarIngredientes(ingrFaltantes,texto)
             ingrFaltantes.clear()
             return False
 
@@ -303,7 +303,7 @@ class Cocinero(Domiciliario):
             cocinero = self._panaderia.cocineroAleatorio()
 
             for i in range(cantidad):
-                fallado = cocinero.procesoCocinar(productoNew)
+                fallado = cocinero.procesoCocinar(productoNew,texto)
                 self._panaderia.getInventario().agregarProducto(productoNew)
                 if fallado:
                     continue

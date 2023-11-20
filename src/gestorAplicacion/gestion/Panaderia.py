@@ -114,17 +114,17 @@ class Panaderia():
                 return canasta
         return None
 
-    def cocinar(self,productosParaCocinar):
+    def cocinar(self,productosParaCocinar,texto):
         canastaDeProductosCocinar = Canasta()
         canastaDeProductosCocinar.setProductosEnLista(productosParaCocinar)
         cocinero = self.cocineroAleatorio()
         Cocinero.setProcesosDeProductosCocinados([])
         Cocinero.setFallosCocinando(0)
         while True:
-            if cocinero.laborParticular(canastaDeProductosCocinar):
+            if cocinero.laborParticular(canastaDeProductosCocinar,texto):
                 break
 
-    def agregarProductosACanasta(self,productos):
+    def agregarProductosACanasta(self,productos,texto):
         productosCanasta = []
         productosFaltantes = {}
         for producto, cantidad in productos.items():
@@ -132,7 +132,7 @@ class Panaderia():
             if cantidadExistente - cantidad < 0:
                 productosFaltantes[producto] = (cantidadExistente - cantidad) * (-2)
         if productosFaltantes:
-            self.cocinar(productosFaltantes)
+            self.cocinar(productosFaltantes,texto)
         for producto, cantidad in productos.items():
             for i in range(cantidad):
                 productosCanasta.append(self._inventario.buscarProductoPorId(producto))
