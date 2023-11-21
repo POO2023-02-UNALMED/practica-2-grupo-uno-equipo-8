@@ -69,7 +69,7 @@ class Domiciliario(Trabajador, ComidaDefault):
         costo *= ComidaDefault.tarifaGanancias
         return costo
 
-    def laborParticular(self, canasta):
+    def laborParticular(self, canasta,texto = None):
         transito = Catastrofe()
         self.setCanasta = canasta
         if transito.paradaTransito(self):
