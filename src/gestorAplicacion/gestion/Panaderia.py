@@ -188,7 +188,7 @@ class Panaderia():
                 for ingrediente, cantidadIngrediente in Producto.obtenerObjetoPorIdP(idKit).getIngredientes().items():
                     for j in range(cantidadIngrediente):
                         kitCanasta.append(self._inventario.buscarIngredientePorId(ingrediente))
-                        Ingrediente.obtenerObjetoPorNombre(ingrediente).setVecesVendido(Ingrediente.obtenerObjetoPorNombreI(ingrediente).getVecesVendido() + 1)
+                        Ingrediente.obtenerObjetoPorNombreI(ingrediente).setVecesVendido(Ingrediente.obtenerObjetoPorNombreI(ingrediente).getVecesVendido() + 1)
                         Ingrediente.organizarTopMasVendidos()
                         self._inventario.restarIngrediente(ingrediente, 1)
                 kitsCanasta.append(kitCanasta)
