@@ -30,15 +30,16 @@ class Recibo:
 
         """
         Recibo.totalFacturas += 1
+        self.domiciliario = domiciliario
         self.cliente = cliente
         self.idRecibo = Recibo.totalFacturas
         self.subtotal = canasta.getCostoTrasDescuentoEnLista()
-        self.total = self.subtotal * (1 - cliente.getTipoDescuento().getValor())
-        self.descuento = cliente.getTipoDescuento().getValor() if cliente.getTipoDescuento() else 0
+        self.total = self.subtotal * (1 - cliente.getTipoDescuento().get_valor())
+        self.descuento = cliente.getTipoDescuento().get_valor() if cliente.getTipoDescuento() else 0
         self.fecha = datetime.datetime.now()
         self.pagado = False
         self.canasta = canasta
-        self.costoDomicilio = domiciliario.getCostoDomicilio()
+        self.costoDomicilio = domiciliario.calcularCostoDomicilio(cliente, canasta)
         self.factura = []
 
 #getters y setters
@@ -119,40 +120,40 @@ class Recibo:
     
 
     #def mostrarCanasta(self, canasta):
-    #    print("_".repeat(55))
+    #    print("_"*(55))
     #    print("")
     #    print(Texto.centrar("PRODUCTOS"))
-    #    print("_".repeat(55))
+    #    print("_"*(55))
     #    print(Texto.alinear("Descripcion", "Cantidad", "Costo"))
-    #    print("_".repeat(55))
+    #    print("_"*(55))
     #    print("")
     #    for producto, cantidad in canasta.getProductosEnLista().items():
-    #        costo = Producto.obtenerObjetoPorId(producto).getCosto() * cantidad
-    #        print(Texto.alinear(Producto.obtenerObjetoPorId(producto).getNombre(), cantidad, costo))
+    #        costo = Producto.obtenerObjetoPorIdP(producto).getCosto() * cantidad
+    #        print(Texto.alinear(Producto.obtenerObjetoPorIdP(producto).getNombre(), cantidad, costo))
 #
-    #    print("_".repeat(55))
+    #    print("_"*(55))
     #    print("")
     #    print(Texto.centrar("INGREDIENTES"))
-    #    print("_".repeat(55))
+    #    print("_"*(55))
     #    print(Texto.alinear("Descripcion", "Cantidad", "Costo"))
-    #    print("_".repeat(55))
+    #    print("_"*(55))
     #    print("")
     #    for ingrediente, cantidad2 in canasta.getIngredientesEnLista().items():
-    #        costo = Ingrediente.obtenerObjetoPorId(ingrediente).getPrecioDeVenta() * cantidad2
-    #        print(Texto.alinear(Ingrediente.obtenerObjetoPorId(ingrediente).getNombre(), cantidad2, costo))
+    #        costo = Ingrediente.obtenerObjetoPorIdI(ingrediente).getPrecioDeVenta() * cantidad2
+    #        print(Texto.alinear(Ingrediente.obtenerObjetoPorIdI(ingrediente).getNombre(), cantidad2, costo))
 #
-    #    print("_".repeat(55))
+    #    print("_"*(55))
     #    print("")
     #    print(Texto.centrar("KITS"))
-    #    print("_".repeat(55))
+    #    print("_"*(55))
     #    print(Texto.alinear("Descripcion", "Cantidad", "Costo"))
-    #    print("_".repeat(55))
+    #    print("_"*(55))
     #    print("")
     #    for kit, cantidad2 in canasta.getKitsEnLista().items():
-    #        costo = Producto.obtenerObjetoPorId(kit).getCosto() * cantidad2
-    #        print(Texto.alinear(Producto.obtenerObjetoPorId(kit).getNombre(), cantidad2, costo))
+    #        costo = Producto.obtenerObjetoPorIdP(kit).getCosto() * cantidad2
+    #        print(Texto.alinear(Producto.obtenerObjetoPorIdP(kit).getNombre(), cantidad2, costo))
 #
-    #    print("_".repeat(55))
+    #    print("_"*(55))
     #    print(" ")
     #    print(Texto.alinear("Descuento efectuado:", " ", str(canasta.getDescuentoEnLista())))
     #    print(Texto.alinear("subtotal", canasta.getCostoTotalEnLista()))
@@ -177,16 +178,16 @@ class Recibo:
     #    self.mostrarCanasta(recibo.getCanasta())
     #    print("")
     #    print("")
-    #    print("_".repeat(55))
+    #    print("_"*(55))
     #    print(Texto.alinear("Domicilio", "", str(recibo.getCostoDomicilio())))
     #    print(Texto.alinear("Descuento", " ", " " + str(recibo.getSubtotal() * recibo.getDescuento())))
     #    print(Texto.alinear("****TOTAL*****", recibo.getTotal()))
     #    print("")
-    #    print("_".repeat(55))
+    #    print("_"*(55))
     #    print(Texto.centrar(Texto.centrar("DETALLE DE IMPUESTOS")))
-    #    print("_".repeat(55))
+    #    print("_"*(55))
     #    print(Texto.alinear("IVA", recibo.getTotal() * 0.19))
-    #    print("_".repeat(55))
+    #    print("_"*(55))
     #    print("")
     #    print(Texto.centrar(Texto.centrar("")))
     #    print(Texto.centrar("EN POO BAKERY SOMOS EXPERTOS EN AHORRO:"))
@@ -200,40 +201,40 @@ class Recibo:
 
     def mostrarCanasta(self, canasta):
         resultado = []
-        resultado.append("_".repeat(55))
+        resultado.append("_"*(55))
         resultado.append("")
         resultado.append(Texto.centrar("PRODUCTOS"))
-        resultado.append("_".repeat(55))
+        resultado.append("_"*(55))
         resultado.append(Texto.alinear("Descripcion", "Cantidad", "Costo"))
-        resultado.append("_".repeat(55))
+        resultado.append("_"*(55))
         resultado.append("")
         for producto, cantidad in canasta.getProductosEnLista().items():
-            costo = Producto.obtenerObjetoPorId(producto).getCosto() * cantidad
-            resultado.append(Texto.alinear(Producto.obtenerObjetoPorId(producto).getNombre(), cantidad, costo))
+            costo = Producto.obtenerObjetoPorIdP(producto).getCosto() * cantidad
+            resultado.append(Texto.alinear(Producto.obtenerObjetoPorIdP(producto).getNombre(), cantidad, costo))
 
-        resultado.append("_".repeat(55))
+        resultado.append("_"*(55))
         resultado.append("")
         resultado.append(Texto.centrar("INGREDIENTES"))
-        resultado.append("_".repeat(55))
+        resultado.append("_"*(55))
         resultado.append(Texto.alinear("Descripcion", "Cantidad", "Costo"))
-        resultado.append("_".repeat(55))
+        resultado.append("_"*(55))
         resultado.append("")
         for ingrediente, cantidad2 in canasta.getIngredientesEnLista().items():
-            costo = Ingrediente.obtenerObjetoPorId(ingrediente).getPrecioDeVenta() * cantidad2
-            resultado.append(Texto.alinear(Ingrediente.obtenerObjetoPorId(ingrediente).getNombre(), cantidad2, costo))
+            costo = Ingrediente.obtenerObjetoPorIdI(ingrediente).getPrecioDeVenta() * cantidad2
+            resultado.append(Texto.alinear(Ingrediente.obtenerObjetoPorIdI(ingrediente).getNombre(), cantidad2, costo))
 
-        resultado.append("_".repeat(55))
+        resultado.append("_"*(55))
         resultado.append("")
         resultado.append(Texto.centrar("KITS"))
-        resultado.append("_".repeat(55))
+        resultado.append("_"*(55))
         resultado.append(Texto.alinear("Descripcion", "Cantidad", "Costo"))
-        resultado.append("_".repeat(55))
+        resultado.append("_"*(55))
         resultado.append("")
         for kit, cantidad2 in canasta.getKitsEnLista().items():
-            costo = Producto.obtenerObjetoPorId(kit).getCosto() * cantidad2
-            resultado.append(Texto.alinear(Producto.obtenerObjetoPorId(kit).getNombre(), cantidad2, costo))
+            costo = Producto.obtenerObjetoPorIdP(kit).getCosto() * cantidad2
+            resultado.append(Texto.alinear(Producto.obtenerObjetoPorIdP(kit).getNombre(), cantidad2, costo))
 
-        resultado.append("_".repeat(55))
+        resultado.append("_"*(55))
         resultado.append(" ")
         resultado.append(Texto.alinear("Descuento efectuado:", " ", str(canasta.getDescuentoEnLista())))
         resultado.append(Texto.alinear("subtotal", canasta.getCostoTotalEnLista()))
@@ -260,16 +261,16 @@ class Recibo:
         resultado.append(self.mostrarCanasta(recibo.getCanasta()))
         resultado.append("")
         resultado.append("")
-        resultado.append("_".repeat(55))
+        resultado.append("_"*(55))
         resultado.append(Texto.alinear("Domicilio", "", str(recibo.getCostoDomicilio())))
         resultado.append(Texto.alinear("Descuento", " ", " " + str(recibo.getSubtotal() * recibo.getDescuento())))
         resultado.append(Texto.alinear("****TOTAL*****", recibo.getTotal()))
         resultado.append("")
-        resultado.append("_".repeat(55))
+        resultado.append("_"*(55))
         resultado.append(Texto.centrar(Texto.centrar("DETALLE DE IMPUESTOS")))
-        resultado.append("_".repeat(55))
+        resultado.append("_"*(55))
         resultado.append(Texto.alinear("IVA", recibo.getTotal() * 0.19))
-        resultado.append("_".repeat(55))
+        resultado.append("_"*(55))
         resultado.append("")
         resultado.append(Texto.centrar(Texto.centrar("")))
         resultado.append(Texto.centrar("EN POO BAKERY SOMOS EXPERTOS EN AHORRO:"))

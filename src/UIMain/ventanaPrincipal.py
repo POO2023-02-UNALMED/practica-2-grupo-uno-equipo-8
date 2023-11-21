@@ -426,6 +426,12 @@ class VentanaPrincipal:
 
 
 
+        self.frameDomicilio = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
+        self.frames.append(self.frameDomicilio)
+        self.tituloDomicilio = Label(self.frameDomicilio, text="DOMICILIO")
+        self.infoDomicilio = Label(self.frameDomicilio, text="", wraplength=380, pady=10)
+
+
 
     # frameComprar
     def cargarFrameCarrito(self):
@@ -593,7 +599,6 @@ class VentanaPrincipal:
         self.cambiarFrame(self.frameCrearPersonalizado)
     
     def cargarProductoPersonalizado2(self):
-        
         self.diccionarioParaProductoPersonalizado = {}
         self.frameCrearPersonalizado = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
         self.frames.append(self.frameCrearPersonalizado)
@@ -601,26 +606,23 @@ class VentanaPrincipal:
         self.infoCrearPersonalizado = Label(self.frameCrearPersonalizado, text="Aquí puede crear un producto personalizado, para hacerlo debe ingresar el nombre del producto, la cantidad de ingredientes que desea que tenga y posteriormente presionar el botón Aceptar.", wraplength=380, pady=10)
         self.tituloCrearPersonalizado.pack()
         self.infoCrearPersonalizado.pack()
-
-        self.frameCocinar2.pack(in_=self.frameCrearPersonalizado)
         
         def botonIngredientes(val):
-            
             if val[0] in self.diccionarioParaProductoPersonalizado:
                 self.diccionarioParaProductoPersonalizado[val[0]] += int(val[1])
             else:
                 self.diccionarioParaProductoPersonalizado[val[0]] = int(val[1])
-            self.textEjecCocinar.config(state=tk.NORMAL)
-            self.textEjecCocinar.delete(1.0, "end")
-            self.textEjecCocinar.insert(1.0, "Ingredientes necesarios para cocinar " + self.ffCrearPersonalizado.getValores()[0] + ":\n")
+            self.textEjecCocinar2.config(state=tk.NORMAL)
+            self.textEjecCocinar2.delete(1.0, "end")
+            self.textEjecCocinar2.insert(1.0, "Ingredientes necesarios para cocinar " + self.ffCrearPersonalizado.getValores()[0] + ":\n")
             
             for elements, cantidad in self.diccionarioParaProductoPersonalizado.items():
-                self.textEjecCocinar.insert(tk.END, "Ingrediente: " + elements + " - Cantidad: " + str(cantidad) + "\n")
+                self.textEjecCocinar2.insert(tk.END, "Ingrediente: " + elements + " - Cantidad: " + str(cantidad) + "\n")
 
-            self.textEjecCocinar.tag_configure("center", justify="center")
+            self.textEjecCocinar2.tag_configure("center", justify="center")
 
             # Aplicar el tag al texto
-            self.textEjecCocinar.tag_add("center", "1.0", "end")
+            self.textEjecCocinar2.tag_add("center", "1.0", "end")
 
         self.ffCrearPersonalizado = FieldFrame("Producto deseado", ["Nombre del producto:", "Cantidad del producto:"], "Ingrese aquí")
         self.ffCrearPersonalizado.defRoot(self.frameCrearPersonalizado)
@@ -630,19 +632,21 @@ class VentanaPrincipal:
         self.ffCrearPersonalizado2.defFunc(botonIngredientes)
 
         def anadirProductoPersonalizado():
-            Cliente.getSesion().getCanastaOrden().recibirOrdenPersonalizada(self.ffCrearPersonalizado.getValores()[0], self.diccionarioParaProductoPersonalizado, self.ffCrearPersonalizado.getValores()[1], self.var2.get())
-            self.textEjecCocinar.config(state=tk.NORMAL)
-            self.textEjecCocinar.delete(1.0, "end")
+            self.textEjecCocinar2.config(state=tk.NORMAL)
+            self.textEjecCocinar2.delete(1.0, "end")
+
+            Producto.crearProductoPersonalizado(self.ffCrearPersonalizado.getValores()[0], self.diccionarioParaProductoPersonalizado)
+            self.diccionarioFuncionalidad4[Producto.obtenerObjetoPorNombreP(self.ffCrearPersonalizado.getValores()[0]).getId()] = int(self.ffCrearPersonalizado.getValores()[1])
 
             for ingredienteNombre, cantidad in self.diccionarioFuncionalidad4.items():
-                    self.textEjecCocinar.insert(tk.END, "Produco: " + Producto.obtenerObjetoPorIdP(ingredienteNombre).getNombre() + " - Cantidad: " + str(cantidad) + "\n")
+                    self.textEjecCocinar2.insert(tk.END, "Produco: " + Producto.obtenerObjetoPorIdP(ingredienteNombre).getNombre() + " - Cantidad: " + str(cantidad) + "\n")
 
             # Tag para centrar texto
-            self.textEjecCocinar.tag_configure("center", justify="center")
+            self.textEjecCocinar2.tag_configure("center", justify="center")
 
             # Aplicar el tag al texto
-            self.textEjecCocinar.tag_add("center", "1.0", "end")
-            self.textEjecCocinar.config(state=tk.DISABLED)
+            self.textEjecCocinar2.tag_add("center", "1.0", "end")
+            self.textEjecCocinar2.config(state=tk.DISABLED)
 
         self.var2 = tk.BooleanVar()
         self.var2.set(False)
@@ -653,6 +657,11 @@ class VentanaPrincipal:
         self.botonIrAtras = Button(self.frameCrearPersonalizado, text = "Volver Atrás", command = lambda: self.cambiarFrame(self.frameCocinar))
         self.botonIrAtras.pack(pady= 5)
 
+        self.frameCocinarPersonalizadot = Frame(self.frameCrearPersonalizado, bd=1, relief=FLAT, padx=1, pady=1)
+        self.textEjecCocinar2 = Text(self.frameCocinarPersonalizadot) 
+        self.frameCocinarPersonalizadot.pack(fill=tk.BOTH, expand=True)
+        self.textEjecCocinar2.pack(fill=tk.BOTH, expand=True)
+        
         # Agregar un Scrollbar
         scrollbar = Scrollbar(self.frameCrearPersonalizado)
         scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
@@ -672,7 +681,10 @@ class VentanaPrincipal:
         #self.chequeoDeEstados()
         #No borrar esas lineas, las comenté para que no te aparezca la alerta
         
+        if Cliente.getSesion().getTipoDescuento() == None:
+            Cliente.getSesion().establecerDescuentoPorTipoValido("NINGUNO")
         #Creacion de la factura
+        Cliente.getSesion().setDomiciliario(Cliente.getSesion().getPanaderia().domiciliarioAleatorio())
         self.facturaTemp = Recibo(Cliente.getSesion(), Cliente.getSesion().getCanastaOrden(), Cliente.getSesion().getDomiciliario())
         
         self.fotoFacturacion = Label(self.frameFacturacion, image = self.fotoRatonFactura)
@@ -713,11 +725,11 @@ class VentanaPrincipal:
         def procesoDeCocina():
             self.menu_procesos.entryconfigure("Func. Cocinar", state="disabled")
             self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="normal")
-            #self.textEjecCocinar1.config(state=tk.NORMAL)
+            self.textEjecCocinar1.config(state=tk.NORMAL)
             messagebox.showinfo("Información", "Parece que faltan ingredientes para cocinar sus productos, se accede a conseguir ingredientes")
             self.cargarFrameIngredientesDesdeClienteNormal(self.frameCocinar1)
             
-            #self.textEjecCocinar1.config(state=tk.DISABLED)
+            self.textEjecCocinar1.config(state=tk.DISABLED)
 
         self.tituloCocinar1.pack(pady = 5)
         self.descipCocinar1.pack(pady = 5)
@@ -725,9 +737,9 @@ class VentanaPrincipal:
         self.botonCocinar1.pack(pady = 5)
         
 
-        #self.textEjecCocinar1 = Text(self.frameCocinar1)
-        #self.textEjecCocinar1.config(state=tk.DISABLED)
-        #self.textEjecCocinar1.pack(fill=tk.BOTH, expand=True)
+        self.textEjecCocinar1 = Text(self.frameCocinar1)
+        self.textEjecCocinar1.config(state=tk.DISABLED)
+        self.textEjecCocinar1.pack(fill=tk.BOTH, expand=True)
 
     def cargarFrameIngredientesDesdeClienteNormal(self,frame):
         self.frameIngredientes1 = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
@@ -735,6 +747,7 @@ class VentanaPrincipal:
         self.cambiarFrame(self.frameIngredientes1)
         self.tituloIngredientes1 = Label(self.frameIngredientes1, text="COMPRAR INGREDIENTES")
         self.descipIngredientes1 = Label(self.frameIngredientes1, text="Se procede a comprar los ingredientes añadidos a su canasta, por favor continue el proceso dandole al botón Comprar Ingredientes")
+
 
         def ejecucionComprarIngredientes():
             self.textEjecIngredientes1.config(state=tk.NORMAL)
@@ -745,6 +758,10 @@ class VentanaPrincipal:
             self.chequeoDeEstados()
             self.cambiarFrame(self.frameCocinar1)
             #GestionCocinar.barraProgresoDeTodos(frame)
+            messagebox.showinfo("Información", "Productos cocinados, se procede a enviarlos a su domicilio")
+            time.sleep(3)
+            self.cambiarFrame(self.frameDomicilio)
+
 
         self.tituloIngredientes1.pack(pady = 5)
         self.descipIngredientes1.pack(pady = 5)
@@ -799,10 +816,12 @@ class VentanaPrincipal:
         #if Cliente.getSesion() == None:
             if guardarComoFrameAnterior == True:
                 self.frameAnterior = self.frameActual
+            if frame == self.frameFacturacion:
+                self.cargarFrameFacturacion()
+            if frame == self.frameComprar:
+                self.cargarFrameCarrito()
 
             for f in self.frames:
-                if frame == self.frameFacturacion:
-                    self.cargarFrameFacturacion()
                 if f == frame:
                     f.pack(padx = 5, pady = 5, fill = "both", expand=True)
                     self.frameActual = frame
@@ -967,34 +986,34 @@ class VentanaPrincipal:
                 canasta=cliente.getCanastaOrden()
                 if canasta.getPagada():
                     #messagebox.showinfo("Info", "Ha comenzado un proceso de compra, continue con el proceso de compra, al finalizar se desbloquearan el resto de opciones")
-                    self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="disabled")
+                    self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="disabled", command= lambda: self.cambiarFrame(self.frameComprar))
                     self.menu_procesos.entryconfigure("Func. Facturar", state="disabled")
                     self.menu_procesos.entryconfigure("Func. Cocinar", state="normal")
                     self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="disabled")
                     self.menu_procesos.entryconfigure("Func. Domicilio", state="disabled")
                 else:
                     if canasta.getPagada() and not canasta.getCocinada():
-                        self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="disabled")
+                        self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="disabled", command= lambda: self.cambiarFrame(self.frameComprar))
                         self.menu_procesos.entryconfigure("Func. Facturar", state="disabled")
                         self.menu_procesos.entryconfigure("Func. Cocinar", state="normal", command=self.cargarFrameCocinarDesdeClienteNormal)
                         self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="disabled")
                         self.menu_procesos.entryconfigure("Func. Domicilio", state="disabled")
 
                     elif canasta.getCocinada() and not canasta.getEntregada():
-                        self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="disabled")
+                        self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="disabled", command= lambda: self.cambiarFrame(self.frameComprar))
                         self.menu_procesos.entryconfigure("Func. Facturar", state="disabled")
                         self.menu_procesos.entryconfigure("Func. Cocinar", state="disabled")
                         self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="disabled")
                         self.menu_procesos.entryconfigure("Func. Domicilio", state="normal")
 
                     elif canasta.getEntregada():
-                        self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="normal")
+                        self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="normal", command= lambda: self.cambiarFrame(self.frameComprar))
                         self.menu_procesos.entryconfigure("Func. Facturar", state="normal")
                         self.menu_procesos.entryconfigure("Func. Cocinar", state="normal")
                         self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="normal")
                         self.menu_procesos.entryconfigure("Func. Domicilio", state="normal")
                     else:
-                        self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="normal")
+                        self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="normal", command= lambda: self.cambiarFrame(self.frameComprar))
                         self.menu_procesos.entryconfigure("Func. Facturar", state="normal")
                         self.menu_procesos.entryconfigure("Func. Cocinar", state="normal")
                         self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="normal")
@@ -1002,34 +1021,34 @@ class VentanaPrincipal:
             else:
                 canasta=cliente.getCanastaOrden()
                 if (canasta is None) or (canasta.getProductosEnLista()=={} and canasta.getIngredientesEnLista()=={} and canasta.getKitsEnLista()=={}):
-                    self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="normal")
+                    self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="normal", command= lambda: self.cambiarFrame(self.frameComprar))
                     self.menu_procesos.entryconfigure("Func. Facturar", state="disabled")
                     self.menu_procesos.entryconfigure("Func. Cocinar", state="disabled")
                     self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="disabled")
                     self.menu_procesos.entryconfigure("Func. Domicilio", state="disabled")
 
                 elif (not canasta.getPagada()) and (not(canasta.getProductosEnLista()=={} and canasta.getIngredientesEnLista()=={} and canasta.getKitsEnLista()=={})):
-                    self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="normal")
+                    self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="normal", command= lambda: self.cambiarFrame(self.frameComprar))
                     self.menu_procesos.entryconfigure("Func. Facturar", state="normal")
                     self.menu_procesos.entryconfigure("Func. Cocinar", state="disabled")
                     self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="disabled")
                     self.menu_procesos.entryconfigure("Func. Domicilio", state="disabled")
 
                 elif canasta.getPagada() and not canasta.getCocinada():
-                    self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="disabled")
+                    self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="disabled", command= lambda: self.cambiarFrame(self.frameComprar))
                     self.menu_procesos.entryconfigure("Func. Facturar", state="disabled")
                     self.menu_procesos.entryconfigure("Func. Cocinar", state="normal", command=self.cargarFrameCocinarDesdeClienteNormal)
                     self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="disabled")
                     self.menu_procesos.entryconfigure("Func. Domicilio", state="disabled")
 
                 elif canasta.getCocinada() and not canasta.getEntregada():
-                    self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="disabled")
+                    self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="disabled", command= lambda: self.cambiarFrame(self.frameComprar))
                     self.menu_procesos.entryconfigure("Func. Facturar", state="disabled")
                     self.menu_procesos.entryconfigure("Func. Cocinar", state="disabled")
                     self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="disabled")
                     self.menu_procesos.entryconfigure("Func. Domicilio", state="normal")
                 elif canasta.getEntregada():
-                    self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="normal")
+                    self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="normal", command= lambda: self.cambiarFrame(self.frameComprar))
                     self.menu_procesos.entryconfigure("Func. Facturar", state="normal")
                     self.menu_procesos.entryconfigure("Func. Cocinar", state="disabled")
                     self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="disabled")
@@ -1038,6 +1057,7 @@ class VentanaPrincipal:
             self.menu_procesos.entryconfigure("Iniciar sesion", state="normal")
             self.menu_procesos.entryconfigure("Registrarse", state="normal")
             self.menu_procesos.entryconfigure("Cerrar sesion", state="disabled")
+            self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="disabled")
             self.menu_procesos.entryconfigure("Func. Facturar", state="disabled")
             self.menu_procesos.entryconfigure("Func. Cocinar", state="disabled")
             self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="disabled")
@@ -1051,18 +1071,7 @@ class VentanaPrincipal:
             if Cliente.crearCuenta(val[0], int(val[1]), val[2]) == "Ya existe una cuenta con ese ID":
                 raise usuarioExistenteError
             messagebox.showinfo("Registro", "Usuario registrado correctamente")
-            self.menu_procesos.entryconfigure("Iniciar sesion", state="disabled")
-            self.menu_procesos.entryconfigure("Registrarse", state="disabled")
-            self.menu_procesos.entryconfigure("Cerrar sesion", state="normal")
-            
-            self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="normal")
-            self.menu_procesos.entryconfigure("Func. Facturar", state="normal")
-            self.menu_procesos.entryconfigure("Func. Cocinar", state="normal")
-            self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="normal")
-            self.menu_procesos.entryconfigure("Func. Domicilio", state="normal")
-
-            self.menu_procesos.entryconfigure("Lo mejor de nuestra panaderia", state="normal")
-            self.menu_procesos.entryconfigure("Modificar datos", state="normal")
+            self.chequeoDeEstados()
             self.cambiarFrame(self.framePrincipal)
         except usuarioExistenteError as e:
             messagebox.showwarning("Error", "El usuario ya existe")
@@ -1167,7 +1176,7 @@ class VentanaPrincipal:
     def ejecucionComprarIngredientes(self):
         Cliente.getSesion().getPanaderia().comprarIngredientes(self.diccionarioFuncionalidad5, self.textEjecComprarIngredientes)
         self.diccionarioFuncionalidad5 = {}
-    
+
     def cambiarDireccion(self, val):
         try:
             if val[0] == "":

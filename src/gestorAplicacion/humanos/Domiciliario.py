@@ -53,9 +53,10 @@ class Domiciliario(Trabajador, ComidaDefault):
             costo *= 0.7
 
         direccion = cliente.getDireccion()
-        if direccion.getDistancia() == "Medio":
+        
+        if direccion.get_distancia() == "Medio":
             costo += 10000
-        if direccion.getDistancia() == "Lejos":
+        if direccion.get_distancia() == "Lejos":
             costo += 20000
 
         costo += ComidaDefault.tarifaDomicilio
