@@ -1,6 +1,9 @@
 import tkinter as tk
 from tkinter import ttk, messagebox, simpledialog
 from time import sleep
+from tkinter import Text
+import tkinter as tk
+import time
 
 class GestionDomicilioClienteApp:
     def __init__(self, root):
@@ -113,6 +116,33 @@ class GestionDomicilioClienteApp:
             tk.messagebox.showinfo("Estado Domicilio", "El domicilio se ha realizado con éxito")
         else:
             tk.messagebox.showinfo("Estado Domicilio", "El domicilio no se ha podido realizar\nYa te enviaremos tu domicilio")
+
+    
+def realizarDomicilio(self, canasta, text=None):
+
+        if text != None:
+            text.delete(1.0,tk.END)
+        elegido = self.domiciliarioAleatorio()
+        if elegido.laborParticular(canasta):
+            
+            if text != None:
+                text.config(state=tk.NORMAL)
+                text.insert(tk.END, "Preparate que el domiciliario ha salido a tu direccion" + "\n")
+                text.config(state=tk.DISABLED)
+                text.tag_configure("center", justify="center")
+                text.tag_add("center", "1.0", "end")
+                
+
+        else:
+
+            if text != None:
+                text.config(state=tk.NORMAL)
+                text.insert(tk.END, "Hubo un problema con el domiciliario, estamos trabajando para solucionarlo" + "\n")
+                text.config(state=tk.DISABLED)
+                text.tag_configure("center", justify="center")
+                text.tag_add("center", "1.0", "end")
+
+
 
 if __name__ == "__main__":
     root = tk.Tk()

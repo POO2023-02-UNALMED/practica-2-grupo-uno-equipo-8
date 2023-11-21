@@ -4,6 +4,8 @@ from ..comida.Producto import Producto
 from ..humanos.Cocinero import Cocinero
 from ..gestion.Inventario import Inventario
 from ..gestion.Canasta import Canasta
+from ..humanos.Catastrofe import Catastrofe
+from ..comida.ProductoFrio import ProductoFrio
 from random import shuffle
 from tkinter import Text
 import tkinter as tk
@@ -285,7 +287,8 @@ class Panaderia():
     
     def comprarIngredientes(self, listIngredientes, text=None):
 
-        text.delete(1.0,tk.END)
+        if text != None:
+            text.delete(1.0,tk.END)
         elegido = self.domiciliarioAleatorio()
         #GestionConseguirIngredientes.lecturaCompra(elegido.isRobado()) #Recordar hacer este lector
         if elegido.isRobado() == True:
@@ -367,6 +370,37 @@ class Panaderia():
                     text.tag_add("center", "1.0", "end")
 
         elegido.setRobado(True)
+
+def enviar_domicilio(self, canasta, cliente):
+    domiciliario = cliente.get_domiciliario()
+
+    cliente.set_domiciliario(domiciliario)
+    productos = canasta.get_productos()
+
+    for producto in productos:
+        if isinstance(producto, ProductoFrio):
+            domiciliario = producto.empaque_congelador(domiciliario)
+
+    malechor = Catastrofe()
+    domiciliario = malechor.pinchar_llanta(domiciliario)
+
+    if not domiciliario.tiene_licencia():
+        self.setDinero(self.getdinero()-10000)
+        domiciliario.set_licencia(True)
+
+    domiciliario.set_canasta(canasta)
+    domiciliario.set_ocupado(True)
+    costo = domiciliario.calcular_costo_domicilio(cliente, canasta)
+    domiciliario.set_costo_domicilio(costo)
+
+    while not domiciliario.labor_particular(canasta):
+        domiciliario.set_habilidad(domiciliario.get_habilidad() + 10)
+        self.setDinero(self.getdinero()-10000)
+        domiciliario.set_licencia(True)
+
+    cliente.set_canasta_en_mano(domiciliario.get_canasta())
+    domiciliario.set_canasta(None)
+
 
     def reviewDomiciliario(self, domiciliario):
 

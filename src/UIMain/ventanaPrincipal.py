@@ -168,7 +168,21 @@ class VentanaPrincipal:
         self.comboBoxDireccion2.pack(pady = 10)
         self.fieldFrameDireccion2 = FieldFrame("Datos", ["Direccion específica:"], "Ingrese aqui")
         self.fieldFrameDireccion2.defRoot(self.frameDireccion2)
-        self.fieldFrameDireccion2.defFunc(self.cambiarDireccion)
+        self.fieldFrameDireccion2.defFunc(self.cambiarDireccion2)
+
+        ## frameDireccion Modificar direccion
+        #self.frameDireccion = Frame(self.frameModificarDatos, bd=1, relief=FLAT, padx=1, pady=1)
+        #self.frameDireccion.grid(row=2, column=1, sticky="nsew")
+        #self.LabelDireccion = Label(self.frameDireccion, text="Cambiar direccion")
+        #self.LabelDireccionDes = Label(self.frameDireccion, text="Descripcion")
+        #self.LabelDireccion.pack(pady=20)
+        #self.LabelDireccionDes.pack(pady=20)
+        #self.comboBoxDireccion = ttk.Combobox(self.frameDireccion, values = ["Medellin", "Bogota", "Envigado","Itagui"])
+        #self.comboBoxDireccion.pack(pady = 10)
+        ##usar fieldframe aqui ...
+        #self.fieldFrameDireccion = FieldFrame("Datos", ["Direccion específica:"], "Ingrese aqui")
+        #self.fieldFrameDireccion.defRoot(self.frameDireccion)
+        #self.fieldFrameDireccion.defFunc(self.cambiarDireccion)
 
         # botones ir a facturar
         self.botonContinuarfpd = Button(self.framePreguntarDomicilio, text = "Ir a pagar", command = lambda: self.cambiarFrame(self.frameFacturacion))
@@ -252,29 +266,38 @@ class VentanaPrincipal:
         # frameFacturacion
         self.frameFacturacion = Frame(self.root, bd = 1, relief = FLAT)
         self.frames.append(self.frameFacturacion)
+        self.fotoRatonFactura = PhotoImage(file="src/resources/ratonFactura.png")
+        self.fotoFacturacion = Label(self.frameFacturacion, image = self.fotoRatonFactura)
+        self.fotoFacturacion.pack(pady = 5)
+        self.LabelFacturacion = Label(self.frameFacturacion, text="Su factura")
+        self.LabelFacturacion.pack(pady=5)
+
+        #Botones
+        self.botonPagar = Button(self.frameFacturacion, text = "Pagar", command = lambda: self.pasarAlPago)
+        self.botonPagar.pack(pady = 10)
+        self.botonFacPasadas = Button(self.frameFacturacion, text = "Ver facturas pasadas", command=lambda: self.cambiarFrame(self.frameFacturasPasadas))
+        self.botonFacPasadas.pack(pady = 10)
+        self.botonAtrasFacturacion = Button(self.frameFacturacion, text = "Volver atras", command = lambda: self.cambiarFrame(self.framePreguntarDomicilio, False))
+        self.botonAtrasFacturacion.pack(pady = 10)
+        
+
+        # Agregar un Scrollbar
+        scrollbar = Scrollbar(self.frameFacturacion)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+
+        # Agregar un widget de Texto
+        self.textoFacturacion = Text(self.frameFacturacion, wrap=tk.WORD, yscrollcommand=scrollbar.set)
+        self.textoFacturacion.pack(fill=tk.BOTH, expand=True, pady=20, padx=20)
         
         # frameHistorial Historial de facturas
         self.frameHistorial = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
         self.LabelHistorial = Label(self.frameHistorial, text="Historial de facturas")
         self.LabelHistorial.pack()
         self.frames.append(self.frameHistorial)
-        
-
-        self.frameModificarDatos = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
-        self.frames.append(self.frameModificarDatos)
-        self.LabelModificarDatos = Label(self.frameModificarDatos, text="Modificar datos")
-        self.LabelModificarDatos.grid(row=0, column=0, columnspan=2)
-        
-        tk.Grid.rowconfigure(self.frameModificarDatos, 0, weight=1)
-        tk.Grid.rowconfigure(self.frameModificarDatos, 1, weight=1)
-        tk.Grid.rowconfigure(self.frameModificarDatos, 2, weight=1)
-        tk.Grid.columnconfigure(self.frameModificarDatos, 0, weight=1)
-        tk.Grid.columnconfigure(self.frameModificarDatos, 1, weight=1)
 
         # frameFacturasPasadas
         self.frameFacturasPasadas = Frame(self.root, padx= 2, pady= 2)
         self.frames.append(self.frameFacturasPasadas)
-        self.fotoRatonFactura = PhotoImage(file="src/resources/ratonFactura.png")
         self.fotoFacturasPasadas = Label(self.frameFacturasPasadas, image = self.fotoRatonFactura)
         self.fotoFacturasPasadas.pack(pady = 10)
         self.labelFPasadas = Label(self.frameFacturasPasadas, text="Sus facturas pasadas")
@@ -291,6 +314,18 @@ class VentanaPrincipal:
         # Agregar un widget de Texto
         self.textoFacturasPasadas = Text(self.frameFacturasPasadas, wrap=tk.WORD, yscrollcommand=scrollbarfp.set)
         self.textoFacturasPasadas.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
+        
+        # frameModificarDatos
+        self.frameModificarDatos = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
+        self.frames.append(self.frameModificarDatos)
+        self.LabelModificarDatos = Label(self.frameModificarDatos, text="Modificar datos")
+        self.LabelModificarDatos.grid(row=0, column=0, columnspan=2)
+        
+        tk.Grid.rowconfigure(self.frameModificarDatos, 0, weight=1)
+        tk.Grid.rowconfigure(self.frameModificarDatos, 1, weight=1)
+        tk.Grid.rowconfigure(self.frameModificarDatos, 2, weight=1)
+        tk.Grid.columnconfigure(self.frameModificarDatos, 0, weight=1)
+        tk.Grid.columnconfigure(self.frameModificarDatos, 1, weight=1)
 
         # frameContrasena cambiar contraseña
         self.frameContrasena = Frame(self.frameModificarDatos, bd=1, relief=FLAT, padx=1, pady=1)
@@ -442,7 +477,7 @@ class VentanaPrincipal:
         self.tituloDomicilio.pack()
         self.infoDomicilio.pack()
         
-        self.botonDomicilio = Button(self.frameDomicilio, text="Aceptar", command=self.ejecucionDomicilio)
+        self.botonDomicilio = Button(self.frameDomicilio, text="Enviar domicilio", command=self.ejecucionDomicilio)
         self.botonDomicilio.pack(pady = 5)
 
         self.textEjecDomicilio = Text(self.frameDomicilio, wrap=tk.WORD)
@@ -450,7 +485,6 @@ class VentanaPrincipal:
 
 
 
-        
         self.frameComprar1 = Frame(self.frameComprar)
         self.frameComprar1.pack()
         self.labelfc1 = Label(self.frameComprar1, text="CREAR CANASTA DE COMPRAS", wraplength=300)
@@ -506,9 +540,25 @@ class VentanaPrincipal:
 
 
 
+        self.frameCocinar1 = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
+        self.frames.append(self.frameCocinar1)
+        self.tituloCocinar1 = Label(self.frameCocinar1, text="COCINAR PRODUCTOS")
+        self.descipCocinar1 = Label(self.frameCocinar1, text="Se procede a cocinar los productos añadidos a su canasta, por favor continue el proceso dandole al botón Cocinar")
+
+        self.tituloCocinar1.pack(pady = 5)
+        self.descipCocinar1.pack(pady = 5)
+        self.botonCocinar1 = Button(self.frameCocinar1, text="Cocinar", command=self.procesoDeCocina)
+        self.botonCocinar1.pack(pady = 5)
+        
+
+        self.textEjecCocinar1 = Text(self.frameCocinar1)
+        self.textEjecCocinar1.config(state=tk.DISABLED)
+        self.textEjecCocinar1.pack(fill=tk.BOTH, expand=True)
+
 
     def ejecucionDomicilio(self):
         self.textEjecDomicilio.delete("1.0", tk.END)
+        Cliente.getSesion().enviarCanastasaADomicilio()
         self.textEjecDomicilio.insert(tk.END, "Domicilio realizado con exito")
 
     # frameComprar
@@ -744,33 +794,16 @@ class VentanaPrincipal:
 
         if Cliente.getSesion().getTipoDescuento() == None:
             Cliente.getSesion().establecerDescuentoPorTipoValido("NINGUNO")
+
+        # Implementacion logica widget de texto
+
         #Creacion de la factura
         Cliente.getSesion().setDomiciliario(Cliente.getSesion().getPanaderia().domiciliarioAleatorio())
         self.facturaTemp = Recibo(Cliente.getSesion(), Cliente.getSesion().getCanastaOrden(), Cliente.getSesion().getDomiciliario())
         
-        self.fotoFacturacion = Label(self.frameFacturacion, image = self.fotoRatonFactura)
-        self.fotoFacturacion.pack(pady = 5)
-        self.LabelFacturacion = Label(self.frameFacturacion, text="Su factura")
-        self.LabelFacturacion.pack(pady=5)
 
-        #Botones
-        self.botonPagar = Button(self.frameFacturacion, text = "Pagar")
-        self.botonPagar.pack(pady = 10)
-        self.botonFacPasadas = Button(self.frameFacturacion, text = "Ver facturas pasadas", command=lambda: self.cambiarFrame(self.frameFacturasPasadas))
-        self.botonFacPasadas.pack(pady = 10)
-        self.botonAtrasFacturacion = Button(self.frameFacturacion, text = "Volver atras", command = lambda: self.cambiarFrame(self.framePreguntarDomicilio, False))
-        self.botonAtrasFacturacion.pack(pady = 10)
-        
 
-        # Agregar un Scrollbar
-        scrollbar = Scrollbar(self.frameFacturacion)
-        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
-
-        # Agregar un widget de Texto
-        self.textoFacturacion = Text(self.frameFacturacion, wrap=tk.WORD, yscrollcommand=scrollbar.set)
-        self.textoFacturacion.pack(fill=tk.BOTH, expand=True, pady=20, padx=20)
-
-        # Implementacion logica widget de texto
+        self.textoFacturacion.config(state="normal")
         self.textoFacturacion.delete(1.0, "end")
         self.varFactura = self.facturaTemp.imprimir_factura()
         self.textoFacturacion.insert(1.0, self.varFactura)
@@ -780,33 +813,19 @@ class VentanaPrincipal:
 
         # Aplicar el tag al texto
         self.textoFacturacion.tag_add("center", "1.0", "end")
+        self.textoFacturacion.config(state="disabled")
 
-    def cargarFrameCocinarDesdeClienteNormal(self):
-        
-        self.frameCocinar1 = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
-        self.frames.append(self.frameCocinar1)
-        self.cambiarFrame(self.frameCocinar1)
-        self.tituloCocinar1 = Label(self.frameCocinar1, text="COCINAR PRODUCTOS")
-        self.descipCocinar1 = Label(self.frameCocinar1, text="Se procede a cocinar los productos añadidos a su canasta, por favor continue el proceso dandole al botón Cocinar")
 
-        def procesoDeCocina():
+
+    def procesoDeCocina(self):
             self.menu_procesos.entryconfigure("Func. Cocinar", state="disabled")
             self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="normal")
             self.textEjecCocinar1.config(state=tk.NORMAL)
             messagebox.showinfo("Información", "Parece que faltan ingredientes para cocinar sus productos, se accede a conseguir ingredientes")
             self.cargarFrameIngredientesDesdeClienteNormal(self.frameCocinar1)
-            
             self.textEjecCocinar1.config(state=tk.DISABLED)
 
-        self.tituloCocinar1.pack(pady = 5)
-        self.descipCocinar1.pack(pady = 5)
-        self.botonCocinar1 = Button(self.frameCocinar1, text="Cocinar", command=procesoDeCocina)
-        self.botonCocinar1.pack(pady = 5)
-        
 
-        self.textEjecCocinar1 = Text(self.frameCocinar1)
-        self.textEjecCocinar1.config(state=tk.DISABLED)
-        self.textEjecCocinar1.pack(fill=tk.BOTH, expand=True)
 
     def cargarFrameIngredientesDesdeClienteNormal(self,frame):
         self.frameIngredientes1 = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
@@ -1066,27 +1085,27 @@ class VentanaPrincipal:
                     if canasta.getPagada() and not canasta.getCocinada():
                         self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="disabled", command= lambda: self.cambiarFrame(self.frameComprar))
                         self.menu_procesos.entryconfigure("Func. Facturar", state="disabled")
-                        self.menu_procesos.entryconfigure("Func. Cocinar", state="normal", command=self.cargarFrameCocinarDesdeClienteNormal)
+                        self.menu_procesos.entryconfigure("Func. Cocinar", state="normal", command= lambda: self.cambiarFrame(self.frameCocinar1))
                         self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="disabled")
                         self.menu_procesos.entryconfigure("Func. Domicilio", state="disabled")
 
                     elif canasta.getCocinada() and not canasta.getEntregada():
                         self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="disabled", command= lambda: self.cambiarFrame(self.frameComprar))
                         self.menu_procesos.entryconfigure("Func. Facturar", state="disabled")
-                        self.menu_procesos.entryconfigure("Func. Cocinar", state="disabled")
+                        self.menu_procesos.entryconfigure("Func. Cocinar", state="disabled", command= lambda: self.cambiarFrame(self.frameCocinar1))
                         self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="disabled")
                         self.menu_procesos.entryconfigure("Func. Domicilio", state="normal")
 
                     elif canasta.getEntregada():
                         self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="normal", command= lambda: self.cambiarFrame(self.frameComprar))
                         self.menu_procesos.entryconfigure("Func. Facturar", state="normal")
-                        self.menu_procesos.entryconfigure("Func. Cocinar", state="normal")
+                        self.menu_procesos.entryconfigure("Func. Cocinar", state="normal", command= lambda: self.cambiarFrame(self.frameCocinar1))
                         self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="normal")
                         self.menu_procesos.entryconfigure("Func. Domicilio", state="normal")
                     else:
                         self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="normal", command= lambda: self.cambiarFrame(self.frameComprar))
                         self.menu_procesos.entryconfigure("Func. Facturar", state="normal")
-                        self.menu_procesos.entryconfigure("Func. Cocinar", state="normal")
+                        self.menu_procesos.entryconfigure("Func. Cocinar", state="normal", command= lambda: self.cambiarFrame(self.frameCocinar))
                         self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="normal")
                         self.menu_procesos.entryconfigure("Func. Domicilio", state="normal")
             else:
@@ -1094,34 +1113,34 @@ class VentanaPrincipal:
                 if (canasta is None) or (canasta.getProductosEnLista()=={} and canasta.getIngredientesEnLista()=={} and canasta.getKitsEnLista()=={}):
                     self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="normal", command= lambda: self.cambiarFrame(self.frameComprar))
                     self.menu_procesos.entryconfigure("Func. Facturar", state="disabled")
-                    self.menu_procesos.entryconfigure("Func. Cocinar", state="disabled")
+                    self.menu_procesos.entryconfigure("Func. Cocinar", state="disabled", command= lambda: self.cambiarFrame(self.frameCocinar1))
                     self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="disabled")
                     self.menu_procesos.entryconfigure("Func. Domicilio", state="disabled")
 
                 elif (not canasta.getPagada()) and (not(canasta.getProductosEnLista()=={} and canasta.getIngredientesEnLista()=={} and canasta.getKitsEnLista()=={})):
                     self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="normal", command= lambda: self.cambiarFrame(self.frameComprar))
                     self.menu_procesos.entryconfigure("Func. Facturar", state="normal")
-                    self.menu_procesos.entryconfigure("Func. Cocinar", state="disabled")
+                    self.menu_procesos.entryconfigure("Func. Cocinar", state="disabled", command= lambda: self.cambiarFrame(self.frameCocinar1))
                     self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="disabled")
                     self.menu_procesos.entryconfigure("Func. Domicilio", state="disabled")
 
                 elif canasta.getPagada() and not canasta.getCocinada():
                     self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="disabled", command= lambda: self.cambiarFrame(self.frameComprar))
                     self.menu_procesos.entryconfigure("Func. Facturar", state="disabled")
-                    self.menu_procesos.entryconfigure("Func. Cocinar", state="normal", command=self.cargarFrameCocinarDesdeClienteNormal)
+                    self.menu_procesos.entryconfigure("Func. Cocinar", state="normal", command= lambda: self.cambiarFrame(self.frameCocinar1))
                     self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="disabled")
                     self.menu_procesos.entryconfigure("Func. Domicilio", state="disabled")
 
                 elif canasta.getCocinada() and not canasta.getEntregada():
                     self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="disabled", command= lambda: self.cambiarFrame(self.frameComprar))
                     self.menu_procesos.entryconfigure("Func. Facturar", state="disabled")
-                    self.menu_procesos.entryconfigure("Func. Cocinar", state="disabled")
+                    self.menu_procesos.entryconfigure("Func. Cocinar", state="disabled", command= lambda: self.cambiarFrame(self.frameCocinar1))
                     self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="disabled")
                     self.menu_procesos.entryconfigure("Func. Domicilio", state="normal")
                 elif canasta.getEntregada():
                     self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="normal", command= lambda: self.cambiarFrame(self.frameComprar))
                     self.menu_procesos.entryconfigure("Func. Facturar", state="normal")
-                    self.menu_procesos.entryconfigure("Func. Cocinar", state="disabled")
+                    self.menu_procesos.entryconfigure("Func. Cocinar", state="disabled", command= lambda: self.cambiarFrame(self.frameCocinar1))
                     self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="disabled")
                     self.menu_procesos.entryconfigure("Func. Domicilio", state="disabled")
         else:
@@ -1252,8 +1271,19 @@ class VentanaPrincipal:
         try:
             if val[0] == "":
                 raise CamposVaciosError([val[0]])
+            elif not Cliente.getSesion().establecerDomicilioValido(val[0],self.comboBoxDireccion2.get()):
+                raise CamposVaciosError([self.comboBoxDireccion2.get()])
+            else:
+                messagebox.showinfo("Cambio de direccion", "Direccion cambiada correctamente")
+        except CamposVaciosError as e:
+            messagebox.showwarning("Error", "Direccion inválida o campo vacio")
+
+    def cambiarDireccion2(self, val):
+        try:
+            if val[0] == "":
+                raise CamposVaciosError([val[0]])
             elif not Cliente.getSesion().establecerDomicilioValido(val[0],self.comboBoxDireccion.get()):
-                raise CamposVaciosError([self.comboBoxDireccion.get()])
+                raise CamposVaciosError([self.comboBoxDireccion2.get()])
             else:
                 messagebox.showinfo("Cambio de direccion", "Direccion cambiada correctamente")
         except CamposVaciosError as e:
@@ -1272,8 +1302,12 @@ class VentanaPrincipal:
         if Cliente.getSesion().getCanastaOrden().getProductosEnLista() == {} and Cliente.getSesion().getCanastaOrden().getIngredientesEnLista() == {} and Cliente.getSesion().getCanastaOrden().getKitsEnLista() == {}:
             messagebox.showwarning("Error", "No hay productos en la canasta")
         else:
-            self.cambiarFrame(self.framePreguntarDomicilio)
+            Cliente.getSesion().setDinero(Cliente.getSesion().getDinero()-self.facturaTemp.getTotal())
+            Cliente.getSesion().getPanaderia().setPresupuesto(self.Cliente.getSesion().getPanaderia().getPresupuesto()+self.facturaTemp.getTotal())
+            Cliente.getSesion().appendRecibos(self.facturaTemp)
+            self.cambiarFrame(self.cambiarFrame(self.frameCocinar1))
 
+    #Esto es para que el scroll funcione con la rueda del mouse
     def on_mousewheel(self, event):
         # Implementa la lógica de desplazamiento vertical
         self.canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")

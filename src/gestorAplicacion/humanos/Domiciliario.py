@@ -73,13 +73,11 @@ class Domiciliario(Trabajador, ComidaDefault):
         transito = Catastrofe()
         if transito.paradaTransito(self):
             x = False
-            GestionDomicilioClienteApp.estado_domicilio(x)
             return x
         else:
             self.canasta = None
             self.ocupado = False
             x = True
-            GestionDomicilioClienteApp.estado_domicilio(x)
             return x
 
     def conseguirIngredientes(self, listIngredientes, text = None):
