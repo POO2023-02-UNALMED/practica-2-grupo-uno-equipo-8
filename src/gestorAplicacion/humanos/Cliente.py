@@ -69,6 +69,9 @@ class Cliente:
     def setRecibos(self, recibos):
         self._recibos = recibos
 
+    def appendRecibos(self, recibo):
+        self._recibos.append(recibo)
+
     def setCanastaOrden(self, canastaOrden):
         self._canastaOrden = canastaOrden
 

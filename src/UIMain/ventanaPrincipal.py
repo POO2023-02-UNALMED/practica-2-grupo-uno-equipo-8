@@ -18,6 +18,10 @@ from gestorAplicacion.comida.Ingrediente import Ingrediente
 from baseDatos.Serializador import Serializador
 #from gestorAplicacion.gestion.Recibo import Recibo
 from UIMain.GestionCocinar import GestionCocinar
+from UIMain.GestionRankings import imprimirCocinerosPorRanking
+from UIMain.GestionRankings import imprimirDomiciliariosPorRanking
+from UIMain.GestionRankings import imprimirIngredientesPorVecesVendidos
+from UIMain.GestionRankings import imprimirProductosPorVecesVendidos
 
 #Esta clase la cree yo (Richard), diganme si van a hacer algun cambio o si tienen alguna sugerencia
 #Los errores los esta manejando samuel
@@ -269,16 +273,20 @@ class VentanaPrincipal:
         self.fotoRatonFactura = PhotoImage(file="src/resources/ratonFactura.png")
         self.fotoFacturacion = Label(self.frameFacturacion, image = self.fotoRatonFactura)
         self.fotoFacturacion.pack(pady = 5)
-        self.LabelFacturacion = Label(self.frameFacturacion, text="Su factura")
-        self.LabelFacturacion.pack(pady=5)
+        self.labelFacturacion = Label(self.frameFacturacion, text="Su factura")
+        self.labelFacturacion.pack(pady=5)
+        self.labelFacturacion2 = Label(self.frameFacturacion, text = "")
+        self.labelFacturacion2.pack()
 
         #Botones
-        self.botonPagar = Button(self.frameFacturacion, text = "Pagar", command = lambda: self.pasarAlPago)
+        self.botonPagar = Button(self.frameFacturacion, text = "Pagar", command = lambda: self.pasarAlPago())
         self.botonPagar.pack(pady = 10)
         self.botonFacPasadas = Button(self.frameFacturacion, text = "Ver facturas pasadas", command=lambda: self.cambiarFrame(self.frameFacturasPasadas))
         self.botonFacPasadas.pack(pady = 10)
         self.botonAtrasFacturacion = Button(self.frameFacturacion, text = "Volver atras", command = lambda: self.cambiarFrame(self.framePreguntarDomicilio, False))
         self.botonAtrasFacturacion.pack(pady = 10)
+        
+
         
 
         # Agregar un Scrollbar
@@ -294,6 +302,21 @@ class VentanaPrincipal:
         self.LabelHistorial = Label(self.frameHistorial, text="Historial de facturas")
         self.LabelHistorial.pack()
         self.frames.append(self.frameHistorial)
+
+        # frameMeterPlata Meter plata a mi cuenta
+        self.frameMeterPlata = Frame(self.root, bd=1, relief="raise", padx=1, pady=1)
+        self.frames.append(self.frameMeterPlata)
+        self.frameMeterPlata.pack()
+        self.imagenPlata = Label(self.frameMeterPlata, image = self.fotoRatonFactura)
+        self.imagenPlata.pack()
+        self.LabelPlata2 = Label(self.frameMeterPlata, text="Meter plata")
+        self.LabelPlataDes2 = Label(self.frameMeterPlata, text="Descripcion")
+        self.LabelPlata2.pack(pady=20)
+        self.LabelPlataDes2.pack(pady=20)
+        #usar fieldframe aqui ...
+        self.fieldFramePlata2 = FieldFrame("Valor", ["Cantidad a ingresar:"], "Ingrese aqui")
+        self.fieldFramePlata2.defRoot(self.frameMeterPlata)
+        self.fieldFramePlata2.defFunc(self.meterPlata)
 
         # frameFacturasPasadas
         self.frameFacturasPasadas = Frame(self.root, padx= 2, pady= 2)
@@ -461,14 +484,19 @@ class VentanaPrincipal:
         self.infoLoMejor = Label(self.frameLoMejor, text="Aquí puede ver los rankings de lo mejor de nuestra panadería, las opciones que puede escoger son, los mejores cocineros, los mejores domiciliarios, los mejores productos y los mejores ingredientes, para verlas escriba, cocineros, domiciliarios, productos o ingredientes respectivamente y posteriormente presione el botón Aceptar.", wraplength=380, pady=10)
         self.tituloLoMejor.pack()
         self.infoLoMejor.pack()
+
+        # Field Frame Lo Mejor 
         self.ffLoMejor = FieldFrame("Rankings", ["Escriba qué ranking desea ver:"], "Ingrese aquí el nombre")
         self.ffLoMejor.defRoot(self.frameLoMejor)
+        self.ffLoMejor.defFunc(self.mostrarRankingCorrespondiente)
+
+        # Frame de ejecucion Lo mejor 
         self.frameLoMejor2 = Frame(self.frameLoMejor, bd=1, relief=FLAT, padx=1, pady=1)
         self.textEjecLoMejor = Text(self.frameLoMejor2)
         self.textEjecLoMejor.pack(fill=tk.BOTH, expand=True)
         self.frameLoMejor2.pack(fill=tk.BOTH, expand=True)
 
-
+        # Frame Domicilio
 
         self.frameDomicilio = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
         self.frames.append(self.frameDomicilio)
@@ -523,7 +551,7 @@ class VentanaPrincipal:
         self.ffCarrito.defRoot(self.frameComprar1)
         self.ffCarrito.defFunc(self.registrarPedidoCanasta)
 
-        self.botonIrPreguntarDomicilio = Button(self.frameComprar1, text = "Continuar con proceso de compra", command = self.pasarAlPago)
+        self.botonIrPreguntarDomicilio = Button(self.frameComprar1, text = "Continuar con proceso de compra", command = lambda: self.cambiarFrame(self.framePreguntarDomicilio))
         self.botonIrPreguntarDomicilio.pack(side="bottom", pady=10)
 
         self.frameComprar2 = Frame(self.frameComprar)
@@ -558,7 +586,7 @@ class VentanaPrincipal:
 
     def ejecucionDomicilio(self):
         self.textEjecDomicilio.delete("1.0", tk.END)
-        Cliente.getSesion().enviarCanastasaADomicilio()
+        Cliente.getSesion().getPanaderia().enviar_domicilio(Cliente.getSesion().getCanastaOrden(), Cliente.getSesion())
         self.textEjecDomicilio.insert(tk.END, "Domicilio realizado con exito")
 
     # frameComprar
@@ -795,6 +823,9 @@ class VentanaPrincipal:
         if Cliente.getSesion().getTipoDescuento() == None:
             Cliente.getSesion().establecerDescuentoPorTipoValido("NINGUNO")
 
+
+        self.labelFacturacion2.config(text = "Su saldo es de "+ str(Cliente.getSesion().getPresupuesto())+"$$$")
+
         # Implementacion logica widget de texto
 
         #Creacion de la factura
@@ -1023,7 +1054,6 @@ class VentanaPrincipal:
 
                 # Aplicar el tag al texto
                 self.texto_widget.tag_add("center", "1.0", "end")
-                Cliente.getSesion().getCanastaOrden().setPagada(True)
                 self.chequeoDeEstados()
 
         except CamposVaciosError as e:
@@ -1172,7 +1202,8 @@ class VentanaPrincipal:
 
     def meterPlata(self, val):
         Cliente.getSesion().setPresupuesto(Cliente.getSesion().getPresupuesto() + int(val[0]))
-        messagebox.showinfo("Meter plata", "Plata ingresada correctamente")
+        messagebox.showinfo("Meter plata", "Plata ingresada correctamente, su nuevo saldo es de "+ str(Cliente.getSesion().getPresupuesto())+"$$$")
+
 
     # Métodos funcionalidad 4
     
@@ -1271,8 +1302,8 @@ class VentanaPrincipal:
         try:
             if val[0] == "":
                 raise CamposVaciosError([val[0]])
-            elif not Cliente.getSesion().establecerDomicilioValido(val[0],self.comboBoxDireccion2.get()):
-                raise CamposVaciosError([self.comboBoxDireccion2.get()])
+            elif not Cliente.getSesion().establecerDomicilioValido(val[0],self.comboBoxDireccion.get()):
+                raise CamposVaciosError([self.comboBoxDireccion.get()])
             else:
                 messagebox.showinfo("Cambio de direccion", "Direccion cambiada correctamente")
         except CamposVaciosError as e:
@@ -1282,7 +1313,7 @@ class VentanaPrincipal:
         try:
             if val[0] == "":
                 raise CamposVaciosError([val[0]])
-            elif not Cliente.getSesion().establecerDomicilioValido(val[0],self.comboBoxDireccion.get()):
+            elif not Cliente.getSesion().establecerDomicilioValido(val[0],self.comboBoxDireccion2.get()):
                 raise CamposVaciosError([self.comboBoxDireccion2.get()])
             else:
                 messagebox.showinfo("Cambio de direccion", "Direccion cambiada correctamente")
@@ -1301,17 +1332,46 @@ class VentanaPrincipal:
     def pasarAlPago(self):
         if Cliente.getSesion().getCanastaOrden().getProductosEnLista() == {} and Cliente.getSesion().getCanastaOrden().getIngredientesEnLista() == {} and Cliente.getSesion().getCanastaOrden().getKitsEnLista() == {}:
             messagebox.showwarning("Error", "No hay productos en la canasta")
+        elif Cliente.getSesion().getPresupuesto()<self.facturaTemp.getTotal():
+            messagebox.showinfo("Información", "No se ha podido pagar su factura, su saldo es de "+str(Cliente.getSesion().getPresupuesto())+"$$$ Lo cual es insuficiente")
+            self.cambiarFrame(self.frameMeterPlata)
         else:
-            Cliente.getSesion().setDinero(Cliente.getSesion().getDinero()-self.facturaTemp.getTotal())
-            Cliente.getSesion().getPanaderia().setPresupuesto(self.Cliente.getSesion().getPanaderia().getPresupuesto()+self.facturaTemp.getTotal())
+            Cliente.getSesion().setPresupuesto(Cliente.getSesion().getPresupuesto()-self.facturaTemp.getTotal())
+            Cliente.getSesion().getPanaderia().setDinero(Cliente.getSesion().getPanaderia().getDinero()+self.facturaTemp.getTotal())
             Cliente.getSesion().appendRecibos(self.facturaTemp)
-            self.cambiarFrame(self.cambiarFrame(self.frameCocinar1))
+            Cliente.getSesion().getCanastaOrden().setPagada(True)
+            self.chequeoDeEstados()
+            messagebox.showinfo("Información", "El pago de su factura ha sido exitoso, su nuevo saldo es de "+str(Cliente.getSesion().getPresupuesto())+"$$$")
+            self.cambiarFrame(self.frameCocinar1)
+
 
     #Esto es para que el scroll funcione con la rueda del mouse
     def on_mousewheel(self, event):
         # Implementa la lógica de desplazamiento vertical
         self.canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
 
+    def mostrarRankingCorrespondiente(self, values):
+        try:
+            
+            if values[0].upper() == "COCINEROS" or values[0].upper() == "DOMICILIARIOS" or values[0].upper() == "PRODUCTOS" or values[0].upper() == "INGREDIENTES":
+                
+                if values[0].upper() == "COCINEROS":
+                    imprimirCocinerosPorRanking(self.textEjecLoMejor, Cliente.getSesion().getPanaderia())
+
+                elif values[0].upper() == "DOMICILIARIOS":
+                    imprimirDomiciliariosPorRanking(self.textEjecLoMejor, Cliente.getSesion().getPanaderia())
+
+                elif values[0].upper() == "PRODUCTOS":
+                    imprimirProductosPorVecesVendidos(self.textEjecLoMejor, Cliente.getSesion().getPanaderia())
+
+                elif values[0].upper() == "INGREDIENTES":
+                    imprimirIngredientesPorVecesVendidos(self.textEjecLoMejor, Cliente.getSesion().getPanaderia())
+            
+            else:
+                raise ProductoNoEncontradoError(values[0].upper)
+            
+        except ProductoNoEncontradoError as e:
+            messagebox.showwarning("Error", "El Ranking ingresado no es válido, por favir ingrese alguna de las opciones indicadas")
 
 # Codigo que produce la ejecucion de la ventana cuando se ejecuta desde este archivo
 def main():
