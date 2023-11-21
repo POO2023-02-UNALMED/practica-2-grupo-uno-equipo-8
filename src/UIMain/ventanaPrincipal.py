@@ -362,6 +362,7 @@ Pasos a seguir:
         self.ComboBoxClonar = ttk.Combobox(self.frameFacturasPasadas, values = self.idsFacturasPasadas)
         self.ComboBoxClonar.pack(pady=5)
         self.BotonClonar = Button(self.frameFacturasPasadas, text="Copiar canasta", command = lambda: self.copiarOrden(self.comboBoxClonar.get()))
+        self.BotonClonar.pack(pady = 5)
         self.botonAtrasFp = Button(self.frameFacturasPasadas, text="Volver a facturacion", command = lambda: self.cambiarFrame(self.frameFacturacion))
         self.botonAtrasFp.pack(pady=15)
         self.botonInicioFp = Button(self.frameFacturasPasadas, text="Volver al inicio", command = lambda: self.cambiarFrame(self.framePrincipal))
@@ -944,7 +945,7 @@ Pasos a seguir:
         for i in Cliente.getSesion().getRecibos(): #imprimir todas las facturas en el historial
             self.textoFacturasPasadas.insert(tk.END,i.imprimir_factura()+"\n")
         
-        self.textoFacturasPasadas.teg_configure("center", justify = "center")
+        self.textoFacturasPasadas.tag_configure("center", justify = "center")
         self.textoFacturasPasadas.tag_add("center", "1.0", "end")
         self.textoFacturasPasadas.config(state = tk.DISABLED)
 
