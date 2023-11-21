@@ -359,8 +359,8 @@ Pasos a seguir:
         self.labelFPasadas = Label(self.frameFacturasPasadas, text="Sus facturas pasadas \n Seleccione el id de la orden para copiar la canasta asociada")
         self.labelFPasadas.pack(pady=10)
         self.idsFacturasPasadas = []
-        self.ComboBoxClonar = ttk.Combobox(self.frameFacturasPasadas, values = self.idsFacturasPasadas)
-        self.ComboBoxClonar.pack(pady=5)
+        self.comboBoxClonar = ttk.Combobox(self.frameFacturasPasadas, values = self.idsFacturasPasadas)
+        self.comboBoxClonar.pack(pady=5)
         self.BotonClonar = Button(self.frameFacturasPasadas, text="Copiar canasta", command = lambda: self.copiarOrden(self.comboBoxClonar.get()))
         self.BotonClonar.pack(pady = 5)
         self.botonAtrasFp = Button(self.frameFacturasPasadas, text="Volver a facturacion", command = lambda: self.cambiarFrame(self.frameFacturacion))
@@ -936,8 +936,11 @@ Pasos a seguir:
     
     # cargarFrameFacturasPasadas
     def cargarFrameFacturasPasadas(self):
+        self.idsFacturasPasadas = []
         for i in Cliente.getSesion().getRecibos():
             self.idsFacturasPasadas.append(str(i.getIdRecibo()))
+        print(self.idsFacturasPasadas)
+        self.comboBoxClonar.config(values=self.idsFacturasPasadas)
 
         self.textoFacturasPasadas.config(state = tk.NORMAL) #permitir edicion del campo de texto
         self.textoFacturasPasadas.delete("1.0", tk.END) #borrar todo lo que tenia el campo de texto antes
@@ -1485,7 +1488,7 @@ Pasos a seguir:
         # Implementa la lógica de desplazamiento vertical
         self.canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
 
-    def clonarOrden(self, id):
+    def copiarOrden(self, id):
         id = int(id)
         for x in Cliente.getSesion().getRecibos():
             if x.getIdRecibo() == id:
