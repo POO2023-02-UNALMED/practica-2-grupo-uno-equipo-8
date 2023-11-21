@@ -9,6 +9,7 @@ from Texto import centrar
 from ErrorAplicacion import CamposVaciosError, CantidadInvalidaError, ProductoNoEncontradoError, UsuarioNoEncontradoError, usuarioExistenteError
 import os
 import sys
+import copy
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 
@@ -360,7 +361,7 @@ Pasos a seguir:
         self.idsFacturasPasadas = []
         self.ComboBoxClonar = ttk.Combobox(self.frameValidarTipo, values = self.idsFacturasPasadas)
         self.ComboBoxClonar.pack(pady=5)
-        self.BotonClonar = Button(self.frameFacturasPasadas, text="Copiar", comand = lambda: self.copiarOrden(int(self.comboBoxClonar.get())))
+        self.BotonClonar = Button(self.frameFacturasPasadas, text="Copiar canasta", comand = lambda: self.copiarOrden(self.comboBoxClonar.get()))
         self.botonAtrasFp = Button(self.frameFacturasPasadas, text="Volver a facturacion", command = lambda: self.cambiarFrame(self.frameFacturacion))
         self.botonAtrasFp.pack(pady=15)
         self.botonInicioFp = Button(self.frameFacturasPasadas, text="Volver al inicio", command = lambda: self.cambiarFrame(self.framePrincipal))
@@ -1474,7 +1475,11 @@ Pasos a seguir:
         # Implementa la lógica de desplazamiento vertical
         self.canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
 
-    def clonarOrden
+    def clonarOrden(self, id):
+        id = int(id)
+        for x in Cliente.getSesion().getRecibos():
+            if x.getIdRecibo() == id:
+                Cliente.getSesion.setCanastaOrden(copy.deepcopy(x)) #se crea una canasta exactamente igual y se asocia a la orden
 
     def mostrarRankingCorrespondiente(self, values):
         try:
