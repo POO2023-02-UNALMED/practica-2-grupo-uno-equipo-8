@@ -656,7 +656,7 @@ Pasos a seguir:
                 raise CamposVaciosError([self.comboBoxCalificar.get()])
             elif not self.esNumero(values[0]):
                 raise ValueError
-            elif values[0] < 1 or 5 < values[0] or values[0]: 
+            elif int(values[0]) < 1 or 5 < int(values[0]): 
                 raise CantidadInvalidaError(values[0])
             else:
                 if self.comboBoxCalificar.get() == "Domiciliario":
