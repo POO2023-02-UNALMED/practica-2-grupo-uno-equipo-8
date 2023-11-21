@@ -1,5 +1,5 @@
 from tkinter import *
-from ErrorAplicacion import CamposVaciosError
+from UIMain.ErrorAplicacion import CamposVaciosError
 from tkinter import messagebox
 class FieldFrame(Frame):
 

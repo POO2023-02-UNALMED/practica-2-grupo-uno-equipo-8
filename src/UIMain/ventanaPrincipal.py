@@ -4,13 +4,12 @@ from tkinter import *
 import tkinter as tk
 from tkinter import messagebox
 from tkinter import ttk
-from FieldFrame import FieldFrame
-from Texto import centrar
-from ErrorAplicacion import CamposVaciosError, CantidadInvalidaError, ProductoNoEncontradoError, UsuarioNoEncontradoError, usuarioExistenteError
-import os
-import sys
+from UIMain.FieldFrame import FieldFrame
+from UIMain.Texto import centrar
+from UIMain.ErrorAplicacion import CamposVaciosError, CantidadInvalidaError, ProductoNoEncontradoError, UsuarioNoEncontradoError, usuarioExistenteError
+
+
 import copy
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 
 from gestorAplicacion.gestion.Canasta import Canasta

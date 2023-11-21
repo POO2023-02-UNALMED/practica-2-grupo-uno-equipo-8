@@ -3,7 +3,9 @@ from tkinter import FLAT, Menu
 from tkinter import StringVar
 from tkinter import PhotoImage
 from tkinter import messagebox
-from ventanaPrincipal import VentanaPrincipal
+from UIMain.ventanaPrincipal import VentanaPrincipal
+
+
 
 class VentanaInicio:
     def __init__(self, master):

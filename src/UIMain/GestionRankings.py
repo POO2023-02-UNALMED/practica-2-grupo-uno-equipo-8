@@ -3,11 +3,11 @@ from gestorAplicacion.comida.Ingrediente import Ingrediente
 from gestorAplicacion.comida.Producto import Producto
 import tkinter as tk
 from tkinter import messagebox
-from ErrorAplicacion import CamposVaciosError
-from ErrorAplicacion import CantidadInvalidaError
-from ErrorAplicacion import ProductoNoEncontradoError
-from ErrorAplicacion import UsuarioNoEncontradoError
-from ErrorAplicacion import usuarioExistenteError
+from UIMain.ErrorAplicacion import CamposVaciosError
+from UIMain.ErrorAplicacion import CantidadInvalidaError
+from UIMain.ErrorAplicacion import ProductoNoEncontradoError
+from UIMain.ErrorAplicacion import UsuarioNoEncontradoError
+from UIMain.ErrorAplicacion import usuarioExistenteError
 
 def ordenarCocinerosPorRanking(panaderia):
     try:
