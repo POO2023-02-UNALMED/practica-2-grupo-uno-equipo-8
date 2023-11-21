@@ -661,12 +661,16 @@ Pasos a seguir:
             else:
                 if self.comboBoxCalificar.get() == "Domiciliario":
                     Cliente.getSesion().calificarDomiciliario(self.facturaTemp.getDomiciliario(), values[0])
+                    messagebox.showinfo("Calificacion", "El domiciliario ha sido calificado con exito")
                 elif self.comboBoxCalificar.get() == "Cocinero":
-                    Cliente.getSesion().notaCocineros(self.facturaTemp.get(),values[0])
+                    Cliente.getSesion().notaCocineros(Cliente.getSesion().getPanaderia().cocineroAleatorio(),values[0])
+                    messagebox.showinfo("Calificacion", "El cocinero ha sido calificado con exito")
                 elif self.comboBoxCalificar.get() == "Producto":
                     Cliente.getSesion().calificarProducto(Producto.obtenerObjetoPorNombreP, values[0])
+                    messagebox.showinfo("Calificacion", "El producto ha sido calificado con exito")
                 elif self.comboBoxCalificar.get() == "Ingredientes":
                     Cliente.getSesion().calificarDomiciliario(Ingrediente.obtenerObjetoPorNombreI, values[0])
+                    messagebox.showinfo("Calificacion", "El ingrediente ha sido calificado con exito")
 
         except CamposVaciosError as e:
             messagebox.showwarning("Error", "Completa los campos vacíos")
