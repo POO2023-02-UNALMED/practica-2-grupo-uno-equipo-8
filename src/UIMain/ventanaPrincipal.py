@@ -662,7 +662,7 @@ Pasos a seguir:
                 if self.comboBoxCalificar.get() == "Domiciliario":
                     Cliente.getSesion().calificarDomiciliario(self.facturaTemp.getDomiciliario(), values[0])
                 elif self.comboBoxCalificar.get() == "Cocinero":
-                    Cliente.getSesion().calificarCocinero(self.facturaTemp.get(),values[0])
+                    Cliente.getSesion().notaCocineros(self.facturaTemp.get(),values[0])
                 elif self.comboBoxCalificar.get() == "Producto":
                     Cliente.getSesion().calificarProducto(Producto.obtenerObjetoPorNombreP, values[0])
                 elif self.comboBoxCalificar.get() == "Ingredientes":

@@ -54,7 +54,7 @@ class GestionCocinar:
         actualizar_progreso(0)
         
     @staticmethod
-    def notaCocina(frameCalificacion):
+    def notaCocina():
         valorSeleccionado = frameCalificacion.comboBoxValor.get()
         return valorSeleccionado
         

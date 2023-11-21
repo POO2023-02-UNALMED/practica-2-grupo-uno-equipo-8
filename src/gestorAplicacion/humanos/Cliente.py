@@ -365,14 +365,14 @@ class Cliente:
                 Cliente._panaderia.reviewCocinero(calificarCocinero)
                 cocinero.setTrabajo(False)
 
-    def notaCocineros(self):
+    def notaCocineros(self,valorSeleccionado):
         """
         Calcula la calificación de los cocineros de la panadería y los califica.
 
         Returns:
             None
         """
-        calificacion = GestionCocinar.notaCocina()
+        calificacion = valorSeleccionado
         for cocinero in Cliente._panaderia.getCocineros():
             if cocinero.isTrabajo():
                 self._calificarCocina(cocinero, calificacion)
@@ -388,7 +388,7 @@ class Cliente:
             None
         """
         Cliente._panaderia.enviarDomicilio(canastas, self)
-        calificacion = GestionDomicilioClienteApp.pedirCalificacion()
+        calificacion = GestionDomicilioClienteApp.notaCocina()
         self.calificarDomiciliario(self._domiciliario, calificacion)
         Cliente._panaderia.reviewDomiciliario(self._domiciliario)
         self.notaCocineros()
