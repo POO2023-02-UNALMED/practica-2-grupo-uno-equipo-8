@@ -74,3 +74,9 @@ class Catastrofe:
         if self.getMaldad > domiciliario.getHabilidad():
             return True
         return False
+
+    def pincharLlanta(self, domiciliario):
+        if self.getMaldad > domiciliario.getHabilidad():
+            domiciliario.setLiciencia(False)
+
+        

@@ -117,6 +117,7 @@ Pasos a seguir:
         self.labelBienvenida3.pack()
 
 
+        self.fotoRatonCalificacion = tk.PhotoImage(file="src/resources/ratonCalificacion.png")
 
         # frameSesion inicio de sesion
         self.fotoInicioSesion = tk.PhotoImage(file="src/resources/ratonInicioSesion.png")
@@ -616,18 +617,18 @@ Pasos a seguir:
 
         # frameCalificar
         self.frameCalificar = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
-
+        self.fotoCalificar = Label(self.frameCalificar, image = self.fotoRatonCalificacion)
         self.frames.append(self.frameCalificar)
         #self.labelFC1 = Label(self.frame, text = "Te invitamos a que califiques nuestros productos y a el personal que atendio tu orden\n puedes elegir entre calificar cocinero, domiciliario, productos, ingredientes")
-        self.frameCalificar2 = Frame(self.root, bd=1, relief = "raise", borderwidth = 2, padx=1, pady=1)
-
+        self.frameCalificar2 = Frame(self.frameCalificar, bd=1, relief = "raise", borderwidth = 2, padx=1, pady=1)
+        self.frameCalificar2.pack()
         self.comboBoxCalificar = ttk.Combobox(self.frameCalificar2, values = ["Domiciliario", "Cocinero","Producto","Ingredientes"], state = "readOnly")
         self.comboBoxCalificar.pack()
         # fieldframe aqui con raiz frameCalificar2...
         
         self.ffCalificar = FieldFrame("Calificaciónes", ["Calificacion:"], "Ingrese Aquí su valor")
         self.ffCalificar.defRoot(self.frameCalificar2)
-        self.ffCalificar.defFunc()
+        self.ffCalificar.defFunc(self.calificar)
         
     def ejecucionDomicilio(self):
         self.textEjecDomicilio.delete("1.0", tk.END)
@@ -667,11 +668,11 @@ Pasos a seguir:
         
         self.texto_widget.delete("1.0", tk.END)
         for elements, cantidad in Cliente.getSesion().getCanastaOrden().getProductosEnLista().items():
-            self.texto_widget.insert(tk.END, "Producto: " + Producto.obtenerObjetoPorIdP(elements).getNombre() + " - Cantidad: " + str(cantidad) + "\n")
+            self.texto_widget.insert(tk.END, "Producto: " + Producto.obtenerObjetoPorNombreP(elements).getNombre() + " - Cantidad: " + str(cantidad) + "\n")
         for elements, cantidad in Cliente.getSesion().getCanastaOrden().getIngredientesEnLista().items():
-            self.texto_widget.insert(tk.END, "Ingrediente: " + Ingrediente.obtenerObjetoPorIdI(elements).getNombre() + " - Cantidad: " + str(cantidad) + "\n")
+            self.texto_widget.insert(tk.END, "Ingrediente: " + Ingrediente.obtenerObjetoPorNombreI(elements).getNombre() + " - Cantidad: " + str(cantidad) + "\n")
         for elements, cantidad in Cliente.getSesion().getCanastaOrden().getKitsEnLista().items():
-            self.texto_widget.insert(tk.END, "Kits: " + Producto.obtenerObjetoPorIdP(elements).getNombre() + " - Cantidad: " + str(cantidad) + "\n")
+            self.texto_widget.insert(tk.END, "Kits: " + Producto.obtenerObjetoPorNombreP(elements).getNombre() + " - Cantidad: " + str(cantidad) + "\n")
 
         # Tag para centrar texto
         self.texto_widget.tag_configure("center", justify="center")
