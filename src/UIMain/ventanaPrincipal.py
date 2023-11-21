@@ -620,6 +620,7 @@ Pasos a seguir:
         # frameCalificar
         self.frameCalificar = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
         self.fotoCalificar = Label(self.frameCalificar, image = self.fotoRatonCalificacion)
+        self.fotoCalificar.pack()
         self.frames.append(self.frameCalificar)
         #self.labelFC1 = Label(self.frame, text = "Te invitamos a que califiques nuestros productos y a el personal que atendio tu orden\n puedes elegir entre calificar cocinero, domiciliario, productos, ingredientes")
         self.frameCalificar2 = Frame(self.frameCalificar, bd=1, relief = "raise", borderwidth = 2, padx=1, pady=1)
