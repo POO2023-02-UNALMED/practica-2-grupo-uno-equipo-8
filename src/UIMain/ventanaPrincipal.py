@@ -355,7 +355,7 @@ Pasos a seguir:
         self.frameFacturasPasadas = Frame(self.root, padx= 2, pady= 2)
         self.frames.append(self.frameFacturasPasadas)
         self.fotoFacturasPasadas = Label(self.frameFacturasPasadas, image = self.fotoRatonFactura)
-        self.fotoFacturasPasadas.pack(pady = 10, side = tk.LEFT)
+        self.fotoFacturasPasadas.pack(pady = 10)
         self.labelFPasadas = Label(self.frameFacturasPasadas, text="Sus facturas pasadas \n Seleccione el id de la orden para copiar la canasta asociada")
         self.labelFPasadas.pack(pady=10)
         self.idsFacturasPasadas = []
@@ -374,7 +374,7 @@ Pasos a seguir:
 
         # Agregar un widget de Texto
         self.textoFacturasPasadas = Text(self.frameFacturasPasadas, wrap=tk.WORD, yscrollcommand=scrollbarfp.set)
-        self.textoFacturasPasadas.pack(fill=tk.BOTH, expand=True, padx=5, pady=5, side = tk.BOTTOM)
+        self.textoFacturasPasadas.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
         
         # frameModificarDatos
         self.frameModificarDatos = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
