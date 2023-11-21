@@ -121,7 +121,8 @@ class Panaderia():
         canastaDeProductosCocinar.setProductosEnLista(productosParaCocinar)
         cocinero = self.cocineroAleatorio()
         Cocinero.setProcesosDeProductosCocinados([])
-        Cocinero.setFallosCocinando(0)
+        Cocinero.setFallosCocinando([])
+        Cocinero.setProductosCocinados([])
         while True:
             if cocinero.laborParticular(canastaDeProductosCocinar,texto):
                 break
