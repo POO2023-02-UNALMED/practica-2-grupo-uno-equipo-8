@@ -72,3 +72,5 @@ class Catastrofe:
 
     def paradaTransito(self, domiciliario):
         if self.getMaldad > domiciliario.getHabilidad():
+            return True
+        return False

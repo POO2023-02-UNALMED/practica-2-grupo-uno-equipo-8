@@ -8,12 +8,11 @@ import time
 import random
 
 class Domiciliario(Trabajador, ComidaDefault):
-    def __init__(self, nombre="", panaderia=None, habilidad=None, calificacion=None, dineroEnMano=0, licencia=None):
+    def __init__(self, nombre="", panaderia=None, calificacion=None, dineroEnMano=0, licencia=None):
         super().__init__(panaderia, nombre, calificacion, dineroEnMano)
         self.licencia = False if licencia is None else licencia
         self.ocupado = False
         self.canasta = None
-        self.habilidad = randint(1,11)
         self.empaqueFrio = False
         self.panaderia = panaderia
         panaderia.getDomiciliarios().append(self)
@@ -47,6 +46,7 @@ class Domiciliario(Trabajador, ComidaDefault):
 
     def setPanaderia(self, panaderia):
         self.panaderia = panaderia
+    
 
     def calcularCostoDomicilio(self, cliente, canasta):
         productos = canasta.getProductos()
@@ -67,7 +67,7 @@ class Domiciliario(Trabajador, ComidaDefault):
 
     def laborParticular(self, canasta):
         transito = Catastrofe()
-        if not transito.paradaTransito(self):
+        if transito.paradaTransito(self):
             x = False
             #GestionDomicilioCliente.estadoDomicilio(x)
             return x

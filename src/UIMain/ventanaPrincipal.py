@@ -189,13 +189,18 @@ class VentanaPrincipal:
 
         # Crear un canvas con un scrollbar
         self.canvas = tk.Canvas(self.frameCatalogo2)
-        scrollbar = tk.Scrollbar(self.frameCatalogo2, orient="vertical", command=self.canvas.yview)
-        self.canvas.configure(yscrollcommand=scrollbar.set)
-
 
         # Crear un frame dentro del canvas para colocar los botones
         self.frameCatalogo3 = tk.Frame(self.canvas)
         self.canvas.create_window((0, 0), window = self.frameCatalogo3, anchor="nw")
+
+        scrollbar = tk.Scrollbar(self.frameCatalogo3, orient="vertical", command=self.canvas.yview)
+        self.canvas.configure(yscrollcommand=scrollbar.set)
+
+
+        ## Crear un frame dentro del canvas para colocar los botones
+        #self.frameCatalogo3 = tk.Frame(self.canvas)
+        #self.canvas.create_window((0, 0), window = self.frameCatalogo3, anchor="nw")
 
         # Crear una variable para contar los botones
         self.contadorCatalogo = tk.IntVar()
@@ -635,6 +640,7 @@ class VentanaPrincipal:
                         self.textEjecCocinar2.config(state=tk.NORMAL)
                         self.textEjecCocinar2.delete(1.0, "end")
                         self.textEjecCocinar2.insert(1.0, "Ingredientes necesarios para cocinar " + self.ffCrearPersonalizado.getValores()[0] + ":\n")
+                        self.textEjecCocinar2.config(state=tk.DISABLED)
             
                     for elements, cantidad in self.diccionarioParaProductoPersonalizado.items():
                         self.textEjecCocinar2.insert(tk.END, "Ingrediente: " + elements + " - Cantidad: " + str(cantidad) + "\n")
@@ -649,9 +655,14 @@ class VentanaPrincipal:
 
         def botonAnadido(values):
             messagebox.showwarning("Añadido exitoso", "Su producto ha sido añadido con éxito")
+            self.textEjecCocinar2.config(state=tk.NORMAL)
+            self.textEjecCocinar2.delete(1.0, "end")
+            self.textEjecCocinar2.insert(1.0, "Creando Producto" + values[0] + "\n")
+            self.textEjecCocinar2.config(state=tk.DISABLED)
 
         self.ffCrearPersonalizado = FieldFrame("Producto deseado", ["Nombre del producto:", "Cantidad del producto:"], "Ingrese aquí")
         self.ffCrearPersonalizado.defRoot(self.frameCrearPersonalizado)
+        self.ffCrearPersonalizado.defFunc(botonAnadido)
         
         self.ffCrearPersonalizado2 = FieldFrame("Ingredientes necesarios", ["Nombre del ingrediente:", "Cantidad del ingrediente:"], "Ingrese aquí")
         self.ffCrearPersonalizado2.defRoot(self.frameCrearPersonalizado)

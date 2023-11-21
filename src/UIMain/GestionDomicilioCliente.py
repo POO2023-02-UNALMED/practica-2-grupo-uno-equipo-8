@@ -56,9 +56,11 @@ class GestionDomicilioClienteApp:
         calificacion = self.pedir_calificacion_dialog()
         print(f"Calificación ingresada: {calificacion}")
 
-    def mostrar_estado_domicilio(self):
-        estado = True  # Puedes cambiar esto según el resultado deseado
-        self.estado_domicilio(estado)
+    def mostrar_estado_domicilio(self, bool):
+        if bool:
+            print("Ha ocurrido un problema, tu domiciliario fue detenido. Ya estamos solucionando")
+        else:
+            print("")
 
     @staticmethod
     def barras_domicilio():
