@@ -1,4 +1,4 @@
-from random import randint
+from random import randint, random
 
 from gestorAplicacion.comida.Ingrediente import Ingrediente
 from gestorAplicacion.comida.Producto import Producto
@@ -11,7 +11,8 @@ from gestorAplicacion.humanos.Catastrofe import Catastrofe
 class Cocinero(Domiciliario):
     nombres = ["Sergio", "Jaime", "David", "Juancho", "Will", "Kevin"]
     _procesosDeProductosCocinados = []
-    _fallosCocinando= 0
+    _productosCocinados = []
+    _fallosCocinando= []
     
     def __init__(self, nombre="", especialidad="", panaderia=None, habilidad=0.0, calificacion=0.0, dineroEnMano=0.):
         """
@@ -89,6 +90,15 @@ class Cocinero(Domiciliario):
     @classmethod
     def setFallosCocinando(cls, fallosCocinando):
         cls._fallosCocinando = fallosCocinando
+        
+    @classmethod
+    def getProductosCocinados(cls):
+        return cls._productosCocinados
+    
+    @classmethod
+    def setProductosCocinados(cls, productosCocinados):
+        cls._productosCocinados = productosCocinados
+        
 
     def ingredientesCocinero(self, ingredientesNecesarios):
         """
@@ -209,13 +219,16 @@ class Cocinero(Domiciliario):
             if cookProducto:
                 # Incrementa la habilidad del cocinero si el proceso falló.
                 chefIdeal.habilidad += 1
-                Cocinero._fallosCocinando +=1
+                numero_random = random.randint(0, 4)
+                mensaje_fallo = f"Perdón su pedido tartará un poco más porque {Catastrofe.fallos_cocina[numero_random]}"
+                Cocinero._fallosCocinando.append(mensaje_fallo)
                 chefIdeal.detenerCoccion2(producto)
                 chefIdeal.repararCoccion(producto,texto)
                 i = -1
             # Establece el cocinero como ocupado.
             chefIdeal.trabajo = True
         Cocinero._procesosDeProductosCocinados.append(procesoCook)
+        Cocinero._productosCocinados.append(producto.getNombre())
 
 
         # Devuelve False si todos los procesos se completaron con éxito.
