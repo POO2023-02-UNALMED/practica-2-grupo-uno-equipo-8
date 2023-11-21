@@ -1056,8 +1056,12 @@ Pasos a seguir:
         pass
 
     def salir(self):
+        from ventanaInicio import VentanaInicio
         Serializador.guardarPanaderia(self.panaderia)
         self.root.destroy()
+        root_inicial = tk.Tk()
+        app_principal = VentanaInicio(root_inicial)
+        self.root.mainloop()
 
     def cambiarFrame(self, frame, guardarComoFrameAnterior = True):
         #if Cliente.getSesion() == None:
