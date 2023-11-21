@@ -38,7 +38,7 @@ def ordenarIngredientesPorVecesVendidos(panderia):
         if Ingrediente.getBaseDatosIngredientes() == []:
             raise ProductoNoEncontradoError(Ingrediente.getBaseDatosIngredientes())
         else:
-            ingredientes_ordenados = sorted(Ingrediente.getBaseDatosIngredientes(), key=attrgetter('vecesVendido'), reverse=True)
+            ingredientes_ordenados = sorted(Ingrediente.getBaseDatosIngredientes(), key=attrgetter('_vecesVendido'), reverse=True)
             return ingredientes_ordenados
         
     except ProductoNoEncontradoError as e:
