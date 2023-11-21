@@ -1,5 +1,6 @@
 from gestorAplicacion.gestion.Canasta import Canasta
 from gestorAplicacion.gestion.Panaderia import Panaderia
+from UIMain.GestionDomicilioCliente import GestionDomicilioClienteApp
 from random import randint as random
 from enum import Enum
 
@@ -384,7 +385,7 @@ class Cliente:
             None
         """
         Cliente._panaderia.enviarDomicilio(canastas, self)
-        calificacion = GestionDomicilioCliente.pedirCalificacion()
+        calificacion = GestionDomicilioClienteApp.pedirCalificacion()
         self.calificarDomiciliario(self._domiciliario, calificacion)
         Cliente._panaderia.reviewDomiciliario(self._domiciliario)
         self.notaCocineros()
@@ -604,6 +605,7 @@ class Cliente:
             Devuelve la distancia asociada a la dirección.
             :return: La distancia asociada a la dirección.
             """
+            
             return self.value
 
     class DescuentoPorTipo(Enum):

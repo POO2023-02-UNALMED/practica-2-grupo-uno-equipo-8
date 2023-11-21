@@ -190,17 +190,16 @@ class VentanaPrincipal:
         # Crear un canvas con un scrollbar
         self.canvas = tk.Canvas(self.frameCatalogo2)
 
-        # Crear un frame dentro del canvas para colocar los botones
-        self.frameCatalogo3 = tk.Frame(self.canvas)
-        self.canvas.create_window((0, 0), window = self.frameCatalogo3, anchor="nw")
-
-        scrollbar = tk.Scrollbar(self.frameCatalogo3, orient="vertical", command=self.canvas.yview)
+        scrollbar = tk.Scrollbar(self.frameCatalogo2, orient="vertical", command=self.canvas.yview)
         self.canvas.configure(yscrollcommand=scrollbar.set)
 
+        # Configura la vinculación del evento de la rueda del mouse al Canvas
+        self.canvas.bind_all("<MouseWheel>", self.on_mousewheel)
 
-        ## Crear un frame dentro del canvas para colocar los botones
-        #self.frameCatalogo3 = tk.Frame(self.canvas)
-        #self.canvas.create_window((0, 0), window = self.frameCatalogo3, anchor="nw")
+
+        # Crear un frame dentro del canvas para colocar los botones
+        self.frameCatalogo3 = tk.Frame(self.canvas)
+        self.canvas.create_window((200, 0), window = self.frameCatalogo3, anchor="center")
 
         # Crear una variable para contar los botones
         self.contadorCatalogo = tk.IntVar()
@@ -349,7 +348,7 @@ class VentanaPrincipal:
         self.frameCocinar = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
         self.frames.append(self.frameCocinar)
         self.tituloCocinar = Label(self.frameCocinar, text="COCINAR PRODUCTOS")
-        self.descipCocinar = Label(self.frameCocinar, text="DESCRIPCION")
+        self.descipCocinar = Label(self.frameCocinar, text="En este apartado podrá enviar a cocinar Productos que se añadirán al inventario de la panadería, lo primero que debe hacer es crear su listado de productos, esto lo podrá hacer con ayuda del menú desplegable en el cuál podrá escoger el ingrediente que desea enviar a comprar, si ingresa un producto que no manejamos se le generará un error, posteriormente debe digitar la cantidad que desea donde se le indica, debe ser una cantidad entera positiva menor que 15 y distinta de 0, luego para agregar el ingrediente con su respectiva cantidad debe presionar el botón Aceptar, podrá visualizar la lista de ingredientes que lleva hasta el momento en la parte inferior de la pantalla, cuando considere que ya ha llenado su lista por completo por favor presione el botón Cocinar para continuar con el proceso, adicionalmente podrá crear productos nuevos presionando el botón Cocinar Producto Personalizado, los productos que cree en este apartado se añadiran a la lista de ingredientes para enviar a cocinar, las instrucciones de ese proceso se mostrará en su respectivo apartado, cada paso del proceso se le irá informando en la parte inferior de la ventana", wraplength=800, pady=10)
         self.tituloCocinar.pack(pady = 5)
         self.descipCocinar.pack(pady = 5)
         self.labelCocinar = Label(self.frameCocinar, text="Elija un producto")
@@ -451,15 +450,7 @@ class VentanaPrincipal:
 
 
 
-
-    def ejecucionDomicilio(self):
-        self.textEjecDomicilio.delete("1.0", tk.END)
-        self.textEjecDomicilio.insert(tk.END, "Domicilio realizado con exito")
-
-    # frameComprar
-    def cargarFrameCarrito(self):
-        if Cliente.getSesion().getCanastaOrden() is None:
-            Cliente.getSesion().crearCanastaNueva()
+        
         self.frameComprar1 = Frame(self.frameComprar)
         self.frameComprar1.pack()
         self.labelfc1 = Label(self.frameComprar1, text="CREAR CANASTA DE COMPRAS", wraplength=300)
@@ -487,7 +478,7 @@ class VentanaPrincipal:
         
         self.comboboxfc1 = ttk.Combobox(self.frameComprar1, values = self.opcionesCompra)
         self.comboboxfc1.pack(pady = 5)
-        
+
         #checkbox
         self.var = tk.BooleanVar()
         self.var.set(False)
@@ -512,6 +503,20 @@ class VentanaPrincipal:
         # Agregar un widget de Texto
         self.texto_widget = Text(self.frameComprar2, wrap=tk.WORD, yscrollcommand=scrollbar.set)
         self.texto_widget.pack(fill=tk.BOTH, expand=True)
+
+
+
+
+    def ejecucionDomicilio(self):
+        self.textEjecDomicilio.delete("1.0", tk.END)
+        self.textEjecDomicilio.insert(tk.END, "Domicilio realizado con exito")
+
+    # frameComprar
+    def cargarFrameCarrito(self):
+        if Cliente.getSesion().getCanastaOrden() is None:
+            Cliente.getSesion().crearCanastaNueva()
+        
+        self.texto_widget.delete("1.0", tk.END)
         for elements, cantidad in Cliente.getSesion().getCanastaOrden().getProductosEnLista().items():
             self.texto_widget.insert(tk.END, "Producto: " + Producto.obtenerObjetoPorIdP(elements).getNombre() + " - Cantidad: " + str(cantidad) + "\n")
         for elements, cantidad in Cliente.getSesion().getCanastaOrden().getIngredientesEnLista().items():
@@ -543,7 +548,7 @@ class VentanaPrincipal:
         self.infoCrearPersonalizado = Label(self.frameCrearPersonalizado, text="Aquí puede crear un producto personalizado, para hacerlo debe ingresar el nombre del producto, la cantidad de ingredientes que desea que tenga y posteriormente presionar el botón Aceptar.", wraplength=380, pady=10)
         self.tituloCrearPersonalizado.pack()
         self.infoCrearPersonalizado.pack()
-        self.botonIrAtras = Button(self.frameCrearPersonalizado, text = "Volver Atrás", command = lambda: self.cambiarFrame(self.frameCanasta))
+        self.botonIrAtras = Button(self.frameCrearPersonalizado, text = "Volver Atrás", command = lambda: self.cambiarFrame(self.frameCompra))
         self.botonIrAtras.pack(pady=10)
         
         def botonIngredientes(val):
@@ -624,17 +629,21 @@ class VentanaPrincipal:
         self.frameCrearPersonalizado = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
         self.frames.append(self.frameCrearPersonalizado)
         self.tituloCrearPersonalizado = Label(self.frameCrearPersonalizado, text="AGREGAR PRODUCTO PERSONALIZADO", pady=10)
-        self.infoCrearPersonalizado = Label(self.frameCrearPersonalizado, text="Aquí puede mandar a cocinar un producto personalizado, para hacerlo debe ingresar el nombre del producto y la cantidad que desea en el primer apartado (FieldFrame), posteriormente dele click al primer botón de Aceptar, luego añada el nombre del ingrediente que usa y la cantidad en el segundo apartado (FieldFrame), luego persione el segundo botón Aceptar, podrá agregar cuántos ingredientes desee, solo haga el mismo proceso en el segundo apartado las veces necesarias, cuando ingrese el primer ingrediente en el apartado inferior se le irá mostrando la lista de ingredientes que ha añadido a la receta hasta el momento, cuando considere que ha terminado su receta por favor presione Agregar Producto, este se añadira a la lista de productos a cocinar, finalmente para mandar a cocinar toda la lista dele al bóton Cocinar, si desea seguir agregando productos para enviar a cocinar presione el botón Volver Atrás, la lista de productos para cocinar no se reiniciará hasta que se envíen a Cocinar.", wraplength=380, pady=10)
+        self.infoCrearPersonalizado = Label(self.frameCrearPersonalizado, text="Aquí puede mandar a cocinar un producto personalizado, para hacerlo debe ingresar el nombre del producto y la cantidad que desea en el primer apartado (FieldFrame), posteriormente dele click al primer botón de Aceptar, luego añada el nombre del ingrediente que usa y la cantidad en el segundo apartado (FieldFrame), luego persione el segundo botón Aceptar, podrá agregar cuántos ingredientes desee, solo haga el mismo proceso en el segundo apartado las veces necesarias, cuando ingrese el primer ingrediente en el apartado inferior se le irá mostrando la lista de ingredientes que ha añadido a la receta hasta el momento, cuando considere que ha terminado su receta por favor presione Agregar Producto, este se añadira a la lista de productos a cocinar, finalmente para mandar a cocinar toda la lista dele al bóton Cocinar, si desea seguir agregando productos para enviar a cocinar presione el botón Volver Atrás, la lista de productos para cocinar no se reiniciará hasta que se envíen a Cocinar.", wraplength=800, pady=10)
         self.tituloCrearPersonalizado.pack()
         self.infoCrearPersonalizado.pack()
         
         def botonIngredientes(val):
             try:
-                if self.ffCrearPersonalizado.getValores() == None or self.ffCrearPersonalizado.getValores()[0] == None or self.ffCrearPersonalizado.getValores()[0] == "" or self.ffCrearPersonalizado.getValores()[1] == None or self.ffCrearPersonalizado.getValores()[1] == "":
+                if self.ffCrearPersonalizado.getValores() == [] or self.ffCrearPersonalizado.getValores()[0] == None or self.ffCrearPersonalizado.getValores()[0] == "" or self.ffCrearPersonalizado.getValores()[1] == None or self.ffCrearPersonalizado.getValores()[1] == "":
                     raise CamposVaciosError(self.ffCrearPersonalizado.getValores()[0])
                 else:
                     if val[0] in self.diccionarioParaProductoPersonalizado:
                         self.diccionarioParaProductoPersonalizado[val[0]] += int(val[1])
+                        self.textEjecCocinar2.config(state=tk.NORMAL)
+                        self.textEjecCocinar2.delete(1.0, "end")
+                        self.textEjecCocinar2.insert(1.0, "Ingredientes necesarios para cocinar " + self.ffCrearPersonalizado.getValores()[0] + ":\n")
+                        self.textEjecCocinar2.config(state=tk.DISABLED)
                     else:
                         self.diccionarioParaProductoPersonalizado[val[0]] = int(val[1])
                         self.textEjecCocinar2.config(state=tk.NORMAL)
@@ -643,21 +652,25 @@ class VentanaPrincipal:
                         self.textEjecCocinar2.config(state=tk.DISABLED)
             
                     for elements, cantidad in self.diccionarioParaProductoPersonalizado.items():
+                        self.textEjecCocinar2.config(state=tk.NORMAL)
                         self.textEjecCocinar2.insert(tk.END, "Ingrediente: " + elements + " - Cantidad: " + str(cantidad) + "\n")
+                        self.textEjecCocinar2.config(state=tk.DISABLED)
 
                     self.textEjecCocinar2.tag_configure("center", justify="center")
 
                     # Aplicar el tag al texto
                     self.textEjecCocinar2.tag_add("center", "1.0", "end")
-             
+            
             except CamposVaciosError as e:
                 messagebox.showwarning("Error", "Completa primero el nombre y la cantidad del producto")
 
         def botonAnadido(values):
-            messagebox.showwarning("Añadido exitoso", "Su producto ha sido añadido con éxito")
+            messagebox.showinfo("Añadido exitoso", "Su producto ha sido añadido con éxito")
             self.textEjecCocinar2.config(state=tk.NORMAL)
             self.textEjecCocinar2.delete(1.0, "end")
-            self.textEjecCocinar2.insert(1.0, "Creando Producto" + values[0] + "\n")
+            self.textEjecCocinar2.insert(1.0, "Creando Producto" + " " + values[0] + "\n")
+            self.textEjecCocinar2.tag_configure("center", justify="center")
+            self.textEjecCocinar2.tag_add("center", "1.0", "end")
             self.textEjecCocinar2.config(state=tk.DISABLED)
 
         self.ffCrearPersonalizado = FieldFrame("Producto deseado", ["Nombre del producto:", "Cantidad del producto:"], "Ingrese aquí")
@@ -686,7 +699,7 @@ class VentanaPrincipal:
             self.textEjecCocinar2.config(state=tk.DISABLED)
 
         def ejecucionCocinarProductos2():
-            Cliente.getSesion().getPanaderia().cocinar(self.diccionarioFuncionalidad4, self.textEjecCocinar2)
+            Cliente.getSesion().getPanaderia().cocinar(self.diccionarioFuncionalidad4)
             self.diccionarioFuncionalidad4 = {}
 
         self.var2 = tk.BooleanVar()
@@ -728,7 +741,7 @@ class VentanaPrincipal:
         #Cliente.getSesion().getCanastaOrden().setPagada(True)
         #self.chequeoDeEstados()
         #No borrar esas lineas, las comenté para que no te aparezca la alerta
-        
+
         if Cliente.getSesion().getTipoDescuento() == None:
             Cliente.getSesion().establecerDescuentoPorTipoValido("NINGUNO")
         #Creacion de la factura
@@ -817,6 +830,7 @@ class VentanaPrincipal:
             self.cambiarFrame(self.frameDomicilio)
             Cliente.getSesion().getCanastaOrden().setCocinada(True)
             self.chequeoDeEstados()
+            self.cambiarFrame(self.frameDomicilio)
 
         self.tituloIngredientes1.pack(pady = 5)
         self.descipIngredientes1.pack(pady = 5)
@@ -874,7 +888,7 @@ class VentanaPrincipal:
             if frame == self.frameFacturacion:
                 self.cargarFrameFacturacion()
             if frame == self.frameComprar:
-                self.cargarFrameCarrito()
+                self.cargarFrameCarrito() 
 
             for f in self.frames:
                 if f == frame:
@@ -941,12 +955,15 @@ class VentanaPrincipal:
             "| Hierro               | 6% del valor diario            |\n"
             "|_______________________________________________________|\n"
         )
+        self.textoDescripcion.config(state = "normal")
+        self.textoDescripcion.delete("1.0", "end")
         self.textoDescripcion.insert(tk.END, nutrientes)
         # Configurar el tag para centrar el texto
         self.textoDescripcion.tag_configure("center", justify="center")
 
         # Aplicar el tag al texto
         self.textoDescripcion.tag_add("center", "1.0", "end")
+        self.textoDescripcion.config(state = "disabled")
 
     @staticmethod
     def esNumero(valor):
@@ -988,7 +1005,6 @@ class VentanaPrincipal:
                 # Aplicar el tag al texto
                 self.texto_widget.tag_add("center", "1.0", "end")
                 Cliente.getSesion().getCanastaOrden().setPagada(True)
-                #self.chequeoDeEstados()
                 self.chequeoDeEstados()
 
         except CamposVaciosError as e:
@@ -1018,7 +1034,6 @@ class VentanaPrincipal:
                 self.chequeoDeEstados()
                 messagebox.showinfo("Inicio de sesion", "Inicio de sesion exitoso")
                 self.cambiarFrame(self.framePrincipal)
-                self.cargarFrameCarrito()
                 break  # Sale del bucle si el inicio de sesión fue exitoso
 
             except UsuarioNoEncontradoError as e:
@@ -1184,7 +1199,7 @@ class VentanaPrincipal:
 
     def ejecucionCocinarProductos(self):
         
-        Cliente.getSesion().getPanaderia().cocinar(self.diccionarioFuncionalidad4, self.textEjecCocinar)
+        Cliente.getSesion().getPanaderia().cocinar(self.diccionarioFuncionalidad4)
         self.diccionarioFuncionalidad4 = {}
 
     # Métodos para la funcionalidad 5
@@ -1258,6 +1273,11 @@ class VentanaPrincipal:
             messagebox.showwarning("Error", "No hay productos en la canasta")
         else:
             self.cambiarFrame(self.framePreguntarDomicilio)
+
+    def on_mousewheel(self, event):
+        # Implementa la lógica de desplazamiento vertical
+        self.canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+
 
 # Codigo que produce la ejecucion de la ventana cuando se ejecuta desde este archivo
 def main():

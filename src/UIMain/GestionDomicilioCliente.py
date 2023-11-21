@@ -52,15 +52,16 @@ class GestionDomicilioClienteApp:
         else:
             print("Operación cancelada")
 
-    def pedir_calificacion(self):
+    def pedirCalificacion(self):
         calificacion = self.pedir_calificacion_dialog()
         print(f"Calificación ingresada: {calificacion}")
 
-    def mostrar_estado_domicilio(self, bool):
+    @staticmethod
+    def mostrar_estado_domicilio(bool):
         if bool:
             print("Ha ocurrido un problema, tu domiciliario fue detenido. Ya estamos solucionando")
         else:
-            print("")
+            print("preparate que tu domicilio está en camino")
 
     @staticmethod
     def barras_domicilio():
