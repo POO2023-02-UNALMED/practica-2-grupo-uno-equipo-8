@@ -1263,7 +1263,7 @@ Pasos a seguir:
                 canasta=cliente.getCanastaOrden()
                 if (canasta is None) or (canasta.getProductosEnLista()=={} and canasta.getIngredientesEnLista()=={} and canasta.getKitsEnLista()=={}):
                     self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="normal", command= lambda: self.cambiarFrame(self.frameComprar))
-                    self.menu_procesos.entryconfigure("Func. Facturar", state="disabled")
+                    self.menu_procesos.entryconfigure("Func. Facturar", state="normal")
                     self.menu_procesos.entryconfigure("Func. Cocinar", state="disabled", command= lambda: self.cambiarFrame(self.frameCocinar1))
                     self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="disabled", command = lambda: self.cambiarFrame(self.frameIngredientes1))
                     self.menu_procesos.entryconfigure("Func. Domicilio", state="disabled")
