@@ -239,7 +239,9 @@ class Recibo:
         resultado.append(" ")
         resultado.append(Texto.alinear("Descuento efectuado:", " ", str(canasta.getDescuentoEnLista())))
         resultado.append(Texto.alinear("subtotal", canasta.getCostoTotalEnLista()))
-
+        for i in range(len(resultado)):
+            if resultado[i] == None:
+                resultado[i] = ""
         return "\n".join(resultado)
 
     def imprimir_factura(self):
@@ -283,8 +285,6 @@ class Recibo:
         resultado.append(Texto.centrar("No se permiten devoluciones"))
         for i in range(len(resultado)):
             if resultado[i] == None:
-                print(resultado[i-1])
-                print("blasfemiaaaa")
-                print(resultado[i+1])
+                resultado[i] = ""
 
         return "\n".join(resultado)

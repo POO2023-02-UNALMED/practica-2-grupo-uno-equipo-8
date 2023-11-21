@@ -5,6 +5,7 @@ from gestorAplicacion.comida.ComidaDefault import ComidaDefault
 from tkinter import Text
 import tkinter as tk
 import time
+import random
 
 class Domiciliario(Trabajador, ComidaDefault):
     def __init__(self, nombre="", panaderia=None, habilidad=None, calificacion=None, dineroEnMano=0, licencia=None):
@@ -12,6 +13,7 @@ class Domiciliario(Trabajador, ComidaDefault):
         self.licencia = False if licencia is None else licencia
         self.ocupado = False
         self.canasta = None
+        self.habilidad = randint(1,11)
         self.empaqueFrio = False
         self.panaderia = panaderia
         panaderia.getDomiciliarios().append(self)

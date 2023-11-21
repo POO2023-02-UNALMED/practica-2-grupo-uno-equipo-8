@@ -9,7 +9,7 @@ def alinear(a1="", a2="", a3=""):
         else:
             s += textos[i] + " "
     
-    return
+    return s
 
 def centrar(a1):
     s = ""

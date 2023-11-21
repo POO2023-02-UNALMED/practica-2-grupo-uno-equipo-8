@@ -69,3 +69,6 @@ class Catastrofe:
             rival.setRobado(True)
         
         return rival
+
+    def paradaTransito(self, domiciliario):
+        if self.getMaldad > domiciliario.getHabilidad():
