@@ -131,7 +131,7 @@ Pasos a seguir:
         self.labelTituloInicioSesion = Label(self.frameSesion2, text="INICIO DE SESION")
         self.labelTituloInicioSesion.pack(pady=20)
         
-        self.descripTituloInicioSesion = Label(self.frameSesion2, text="Descripcion")
+        self.descripTituloInicioSesion = Label(self.frameSesion2, text="Aquí podrá iniciar sesión, por favor ingrese su id y contraseña en los campos correspondientes, posteriormente presione Aceptar")
         self.descripTituloInicioSesion.pack(pady=20)
 
         self.fieldFrameInicioSesion = FieldFrame("Datos Pedidos", ["Id:", "Contraseña:"], "Ingreselos Aquí")
@@ -154,7 +154,7 @@ Pasos a seguir:
         self.labelTituloRegistro = Label(self.frameRegistro2, text="REGISTRO")
         self.labelTituloRegistro.pack(pady=20)
         
-        self.descripRegistro = Label(self.frameRegistro2, text="Descripcion")
+        self.descripRegistro = Label(self.frameRegistro2, text="En este apartado podrá registarse como cliente, por favor ingrese su nombre, id y contraseña en los campos correspondientes, posteriormente presione Aceptar")
         self.descripRegistro.pack(pady=20)
 
         self.fieldRegistro = FieldFrame("Datos Pedidos", ["Nombre:", "Id:", "Contraseña:"], "Ingreselos Aquí")
