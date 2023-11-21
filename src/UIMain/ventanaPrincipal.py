@@ -117,7 +117,7 @@ Pasos a seguir:
         self.labelBienvenida3.pack()
 
 
-        self.fotoRatonCalificacion = tk.PhotoImage(file="src/resources/ratonCalificacion.png")
+        self.fotoRatonCalificacion = tk.PhotoImage(file="src/resources/ratonCalificacionP.png")
 
         # frameSesion inicio de sesion
         self.fotoInicioSesion = tk.PhotoImage(file="src/resources/ratonInicioSesion.png")
