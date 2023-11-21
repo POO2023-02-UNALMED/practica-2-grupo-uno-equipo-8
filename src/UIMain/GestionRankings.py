@@ -71,8 +71,8 @@ def imprimirCocinerosPorRanking(text, panaderia):
         text.config(state=tk.DISABLED)
         for cocinero in cocineros_ordenados:
             text.config(state=tk.NORMAL)
-            #text.insert(tk.END, cocinero.getNombre() + " " + "- Calificación:" + " " + "☆"*int(cocinero.getCalificacion()) +"\n")
-            text.insert(tk.END, cocinero.getNombre() + " " + "- Calificación:" + " " + str(cocinero.getCalificacion()) +"\n")
+            text.insert(tk.END, cocinero.getNombre() + " " + "- Calificación:" + " " + "☆"*int(cocinero.getCalificacion()) +"\n")
+            #text.insert(tk.END, cocinero.getNombre() + " " + "- Calificación:" + " " + str(cocinero.getCalificacion()) +"\n")
             text.config(state=tk.DISABLED)
             text.tag_configure("center", justify="center")
             text.tag_add("center", "1.0", "end")
@@ -91,8 +91,8 @@ def imprimirDomiciliariosPorRanking(text, panaderia):
         text.config(state=tk.DISABLED)
         for domiciliario in domiciliarios_ordenados:
             text.config(state=tk.NORMAL)
-            #text.insert(tk.END, domiciliario.getNombre() + " " + "- Calificación:" + " " + "☆"*int(domiciliario.getCalificacion()) +"\n")
-            text.insert(tk.END, domiciliario.getNombre() + " " + "- Calificación:" + " " + str(domiciliario.getCalificacion()) +"\n")
+            text.insert(tk.END, domiciliario.getNombre() + " " + "- Calificación:" + " " + "☆"*int(domiciliario.getCalificacion()) +"\n")
+            #text.insert(tk.END, domiciliario.getNombre() + " " + "- Calificación:" + " " + str(domiciliario.getCalificacion()) +"\n")
             text.config(state=tk.DISABLED)
             text.tag_configure("center", justify="center")
             text.tag_add("center", "1.0", "end")
@@ -111,8 +111,8 @@ def imprimirIngredientesPorVecesVendidos(text, panaderia):
         text.config(state=tk.DISABLED)
         for ingrediente in ingredientes_ordenados:
             text.config(state=tk.NORMAL)
-            #text.insert(tk.END, ingrediente.getNombre() + " " + "- Calificación:" + " " + "☆"*int(ingrediente.getCalificacion()) +"\n")
-            text.insert(tk.END, ingrediente.getNombre() + " " + "- Calificación:" + " " + str(ingrediente.getCalificacion()) +"\n")
+            text.insert(tk.END, ingrediente.getNombre() + " " + "- Veces Vendido:" + " " + "☆"*int(ingrediente.getVecesVendido()) +"\n")
+            #text.insert(tk.END, ingrediente.getNombre() + " " + "- Calificación:" + " " + str(ingrediente.getVecesVendido()) +"\n")
             text.config(state=tk.DISABLED)
             text.tag_configure("center", justify="center")
             text.tag_add("center", "1.0", "end")   
@@ -131,8 +131,8 @@ def imprimirProductosPorVecesVendidos(text, panaderia):
         text.config(state=tk.DISABLED)
         for producto in productos_ordenados:
             text.config(state=tk.NORMAL)
-            #text.insert(tk.END, producto.getNombre() + " " + "- Calificación:" + " " + "☆"*int(producto.getCalificacion()) +"\n")
-            text.insert(tk.END, producto.getNombre() + " " + "- Calificación:" + " " + str(producto.getCalificacion()) +"\n")
+            text.insert(tk.END, producto.getNombre() + " " + "- Veces Vendido:" + " " + "☆"*int(producto.getVecesVendido()) +"\n")
+            #text.insert(tk.END, producto.getNombre() + " " + "- Calificación:" + " " + str(producto.getVecesVendido()) +"\n")
             text.config(state=tk.DISABLED)
             text.tag_configure("center", justify="center")
             text.tag_add("center", "1.0", "end")
