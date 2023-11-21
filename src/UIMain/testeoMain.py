@@ -16,7 +16,7 @@ class SerializationTest:
     def main(self, args):
         print("Test de funcionamiento")
         panaderia = Panaderia()
-        panaderia = Serializador.cargarPanaderia()
+        #panaderia = Serializador.cargarPanaderia()
         Cliente.setPanaderia(panaderia)
         print("panaderia cargada")
         
@@ -92,6 +92,8 @@ class SerializationTest:
         cliente1 = Cliente()
         cliente1.crearCuenta("Sahely", 1123433775, "123")
         cliente1.crearCuenta("Richard", 202, "qwerty")
+        cliente1.crearCuenta("Stefy", 123, "123")
+        cliente1.crearCuenta("Manzana", 1234, "123")
         Cliente.getSesion().setPresupuesto(30000)
         
         domiciliario1 = Domiciliario("Nico", panaderia)
@@ -128,6 +130,7 @@ class SerializationTest:
         print("Cliente en sesion: " + Cliente.getSesion().getNombre())
         print("clientes creados")
 
+        cliente1.crearCanastaNueva()
         a=Cliente.getSesion().getCanastaOrden()
         
         print(a.recibir_orden("13", "3",False))
@@ -172,7 +175,32 @@ class SerializationTest:
         for i in panaderia.getInventario()._invProductos:
             print(i.getNombre())
 
-        #Serializador.guardarPanaderia(panaderia)
+        cliente2=Cliente.inicioSesionId(123)
+        Cliente.inicioSesionContrasena(cliente2,"123")
+        print("Cliente en sesion: " + Cliente.getSesion().getNombre())
+
+        b=cliente2.crearCanastaNueva()
+        b.recibir_orden("13", "3",False)
+        b.recibir_orden("14", "2",False)
+        b.recibir_orden("15", "1",True)
+
+
+        cliente3=Cliente.inicioSesionId(1234)
+        Cliente.inicioSesionContrasena(cliente3,"123")
+        print("Cliente en sesion: " + Cliente.getSesion().getNombre())
+
+        c=cliente3.crearCanastaNueva()
+        c.recibir_orden("13", "3",False)
+        c.recibir_orden("14", "2",False)
+        c.recibir_orden("15", "1",True)
+
+        c.enviarOrdenCanasta()
+        c.setPagada(True)
+        c.setCocinada(True)
+
+
+
+        Serializador.guardarPanaderia(panaderia)
         print("panaderia guardada")
 
 if __name__ == "__main__":

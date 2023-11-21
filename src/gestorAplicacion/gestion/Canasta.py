@@ -456,7 +456,7 @@ class Canasta:
         else:
             return False
 
-    def enviarOrdenCanasta(self,texto):
+    def enviarOrdenCanasta(self,texto=None):
         """
         Envía una orden de canasta, agregando los productos, ingredientes y kits a la canasta del cliente.
 
