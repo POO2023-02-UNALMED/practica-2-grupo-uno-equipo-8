@@ -430,8 +430,19 @@ class VentanaPrincipal:
         self.frames.append(self.frameDomicilio)
         self.tituloDomicilio = Label(self.frameDomicilio, text="DOMICILIO")
         self.infoDomicilio = Label(self.frameDomicilio, text="", wraplength=380, pady=10)
+        self.tituloDomicilio.pack()
+        self.infoDomicilio.pack()
+        
+        self.botonDomicilio = Button(self.frameDomicilio, text="Aceptar", command=self.ejecucionDomicilio)
+        self.botonDomicilio.pack(pady = 5)
+
+        self.textEjecDomicilio = Text(self.frameDomicilio)
 
 
+
+
+    def ejecucionDomicilio(self):
+        pass
 
     # frameComprar
     def cargarFrameCarrito(self):
@@ -648,16 +659,23 @@ class VentanaPrincipal:
             self.textEjecCocinar2.tag_add("center", "1.0", "end")
             self.textEjecCocinar2.config(state=tk.DISABLED)
 
+        def ejecucionCocinarProductos2():
+            Cliente.getSesion().getPanaderia().cocinar(self.diccionarioFuncionalidad4, self.textEjecCocinar2)
+            self.diccionarioFuncionalidad4 = {}
+
         self.var2 = tk.BooleanVar()
         self.var2.set(False)
         
         self.botonCrearPersonalizado = Button(self.frameCrearPersonalizado, text="Agregar Producto", command=anadirProductoPersonalizado)
         self.botonCrearPersonalizado.pack(pady = 5)
 
+        self.botonCocinar = Button(self.frameCrearPersonalizado, text="Cocinar", command= ejecucionCocinarProductos2)
+        self.botonCocinar.pack(pady = 5)
+
         self.botonIrAtras = Button(self.frameCrearPersonalizado, text = "Volver Atrás", command = lambda: self.cambiarFrame(self.frameCocinar))
         self.botonIrAtras.pack(pady= 5)
 
-        self.frameCocinarPersonalizadot = Frame(self.frameCrearPersonalizado, bd=1, relief=FLAT, padx=1, pady=1)
+        self.frameCocinarPersonalizadot = Frame(self.frameCrearPersonalizado, bd=1, relief=FLAT, padx=1, pady=5)
         self.textEjecCocinar2 = Text(self.frameCocinarPersonalizadot) 
         self.frameCocinarPersonalizadot.pack(fill=tk.BOTH, expand=True)
         self.textEjecCocinar2.pack(fill=tk.BOTH, expand=True)

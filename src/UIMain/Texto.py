@@ -1,4 +1,4 @@
-def alinear(a1, a2, a3):
+def alinear(a1="", a2="", a3=""):
     textos = [str(a1), str(a2), str(a3)]
     espaciados = [35, 10, 10]
     s = ""

@@ -1,7 +1,8 @@
 from UIMain import Texto
 import datetime
 
-from gestorAplicacion.comida import Ingrediente, Producto
+from gestorAplicacion.comida.Producto import Producto
+from gestorAplicacion.comida.Ingrediente import Ingrediente
 
 class Recibo:
     totalFacturas = 0
@@ -280,5 +281,10 @@ class Recibo:
         resultado.append(Texto.centrar("solo calidad"))
         resultado.append(Texto.centrar("Gracias por tu compra"))
         resultado.append(Texto.centrar("No se permiten devoluciones"))
+        for i in range(len(resultado)):
+            if resultado[i] == None:
+                print(resultado[i-1])
+                print("blasfemiaaaa")
+                print(resultado[i+1])
 
         return "\n".join(resultado)
