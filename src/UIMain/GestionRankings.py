@@ -60,15 +60,18 @@ def ordenarProductosPorVecesVendidos(panaderia):
 def imprimirCocinerosPorRanking(text, panaderia):
     cocineros_ordenados = ordenarCocinerosPorRanking(panaderia)
     
-    text.delete(1.0, "end")
-
     if cocineros_ordenados == []:
+        text.config(state=tk.NORMAL)
         text.delete(1.0, "end")
+        text.config(state=tk.DISABLED)
 
     else:
+        text.config(state=tk.NORMAL)
         text.delete(1.0, "end")
+        text.config(state=tk.DISABLED)
         for cocinero in cocineros_ordenados:
             text.config(state=tk.NORMAL)
+            #text.insert(tk.END, cocinero.getNombre() + " " + "- Calificación:" + " " + "☆"*int(cocinero.getCalificacion()) +"\n")
             text.insert(tk.END, cocinero.getNombre() + " " + "- Calificación:" + " " + str(cocinero.getCalificacion()) +"\n")
             text.config(state=tk.DISABLED)
             text.tag_configure("center", justify="center")
@@ -77,15 +80,18 @@ def imprimirCocinerosPorRanking(text, panaderia):
 def imprimirDomiciliariosPorRanking(text, panaderia):
     domiciliarios_ordenados = ordenarDomiciliariosPorRanking(panaderia)
 
-    text.delete(1.0, "end")
-
     if domiciliarios_ordenados == []:
+        text.config(state=tk.NORMAL)
         text.delete(1.0, "end")
+        text.config(state=tk.DISABLED)
 
     else:
+        text.config(state=tk.NORMAL)
         text.delete(1.0, "end")
+        text.config(state=tk.DISABLED)
         for domiciliario in domiciliarios_ordenados:
             text.config(state=tk.NORMAL)
+            #text.insert(tk.END, domiciliario.getNombre() + " " + "- Calificación:" + " " + "☆"*int(domiciliario.getCalificacion()) +"\n")
             text.insert(tk.END, domiciliario.getNombre() + " " + "- Calificación:" + " " + str(domiciliario.getCalificacion()) +"\n")
             text.config(state=tk.DISABLED)
             text.tag_configure("center", justify="center")
@@ -94,15 +100,18 @@ def imprimirDomiciliariosPorRanking(text, panaderia):
 def imprimirIngredientesPorVecesVendidos(text, panaderia):
     ingredientes_ordenados = ordenarIngredientesPorVecesVendidos(panaderia)
 
-    text.delete(1.0, "end")
-
     if ingredientes_ordenados == []:
+        text.config(state=tk.NORMAL)
         text.delete(1.0, "end")
+        text.config(state=tk.DISABLED)
     
     else:
+        text.config(state=tk.NORMAL)
         text.delete(1.0, "end")
+        text.config(state=tk.DISABLED)
         for ingrediente in ingredientes_ordenados:
             text.config(state=tk.NORMAL)
+            #text.insert(tk.END, ingrediente.getNombre() + " " + "- Calificación:" + " " + "☆"*int(ingrediente.getCalificacion()) +"\n")
             text.insert(tk.END, ingrediente.getNombre() + " " + "- Calificación:" + " " + str(ingrediente.getCalificacion()) +"\n")
             text.config(state=tk.DISABLED)
             text.tag_configure("center", justify="center")
@@ -111,15 +120,18 @@ def imprimirIngredientesPorVecesVendidos(text, panaderia):
 def imprimirProductosPorVecesVendidos(text, panaderia):
     productos_ordenados = ordenarProductosPorVecesVendidos(panaderia)
 
-    text.delete(1.0, "end")
-
     if productos_ordenados == []:
+        text.config(state=tk.NORMAL)
         text.delete(1.0, "end")
+        text.config(state=tk.DISABLED)
 
     else:
+        text.config(state=tk.NORMAL)
         text.delete(1.0, "end")
+        text.config(state=tk.DISABLED)
         for producto in productos_ordenados:
             text.config(state=tk.NORMAL)
+            #text.insert(tk.END, producto.getNombre() + " " + "- Calificación:" + " " + "☆"*int(producto.getCalificacion()) +"\n")
             text.insert(tk.END, producto.getNombre() + " " + "- Calificación:" + " " + str(producto.getCalificacion()) +"\n")
             text.config(state=tk.DISABLED)
             text.tag_configure("center", justify="center")

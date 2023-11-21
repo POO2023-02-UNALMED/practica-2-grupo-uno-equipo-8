@@ -614,14 +614,52 @@ Pasos a seguir:
         self.textEjecCocinar1.config(state=tk.DISABLED)
         self.textEjecCocinar1.pack(fill=tk.BOTH, expand=True)
 
+        # frameCalificar
+        self.frameCalificar = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
 
+        self.frames.append(self.frameCalificar)
+        #self.labelFC1 = Label(self.frame, text = "Te invitamos a que califiques nuestros productos y a el personal que atendio tu orden\n puedes elegir entre calificar cocinero, domiciliario, productos, ingredientes")
+        self.frameCalificar2 = Frame(self.root, bd=1, relief = "raise", borderwidth = 2, padx=1, pady=1)
 
-
+        self.comboBoxCalificar = ttk.Combobox(self.frameCalificar2, values = ["Domiciliario", "Cocinero","Producto","Ingredientes"], state = "readOnly")
+        self.comboBoxCalificar.pack()
+        # fieldframe aqui con raiz frameCalificar2...
+        
+        self.ffCalificar = FieldFrame("Calificaciónes", ["Calificacion:"], "Ingrese Aquí su valor")
+        self.ffCalificar.defRoot(self.frameCalificar2)
+        self.ffCalificar.defFunc()
+        
     def ejecucionDomicilio(self):
         self.textEjecDomicilio.delete("1.0", tk.END)
-        Cliente.getSesion().getPanaderia().enviar_domicilio(Cliente.getSesion().getCanastaOrden(), Cliente.getSesion())
+        Cliente.getSesion().getPanaderia().enviar_domicilio(Cliente.getSesion().getCanastaOrden(), Cliente.getSesion(),self.textEjecDomicilio)
         self.textEjecDomicilio.insert(tk.END, "Domicilio realizado con exito")
 
+    # funcion calificar
+    def calificar(self, values):
+        #self.comboBoxCalificar.get() #este es el valor del combobox
+        try:
+            if self.comboBoxCalificar.get() == None or self.comboBoxCalificar.get() == "":
+                raise CamposVaciosError([self.comboBoxCalificar.get()])
+            elif not self.esNumero(values[0]):
+                raise ValueError
+            elif values[0] < 1 or 5 < values[0] or values[0]: 
+                raise CantidadInvalidaError(values[0])
+            else:
+                if self.comboBoxCalificar.get() == "Domiciliario":
+                    Cliente.getSesion().calificarDomiciliario(self.facturaTemp.getDomiciliario(), values[0])
+                elif self.comboBoxCalificar.get() == "Cocinero":
+                    Cliente.getSesion().calificarCocinero(self.facturaTemp.get(),values[0])
+                elif self.comboBoxCalificar.get() == "Producto":
+                    Cliente.getSesion().calificarProducto(Producto.obtenerObjetoPorNombreP, values[0])
+                elif self.comboBoxCalificar.get() == "Ingredientes":
+                    Cliente.getSesion().calificarDomiciliario(Ingrediente.obtenerObjetoPorNombreI, values[0])
+
+        except CamposVaciosError as e:
+            messagebox.showwarning("Error", "Completa los campos vacíos")
+        except ValueError:
+            messagebox.showwarning("Error", "La cantidad debe ser un entero")
+        except CantidadInvalidaError as e:
+            messagebox.showwarning("Error", "Debes ingresar una cantidad menor a 5 y mayor a 1")
     # frameComprar
     def cargarFrameCarrito(self):
         if Cliente.getSesion().getCanastaOrden() is None:
@@ -734,7 +772,9 @@ Pasos a seguir:
         self.texto_widget2.tag_add("center", "1.0", "end")
         
         self.cambiarFrame(self.frameCrearPersonalizado)
-    
+
+
+
     def cargarProductoPersonalizado2(self):
         self.diccionarioParaProductoPersonalizado = {}
         self.frameCrearPersonalizado = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
@@ -899,8 +939,6 @@ Pasos a seguir:
         self.tituloIngredientes1 = Label(self.frameIngredientes1, text="COMPRAR INGREDIENTES")
         self.descipIngredientes1 = Label(self.frameIngredientes1, text="Se procede a comprar los ingredientes añadidos a su canasta, por favor continue el proceso dandole al botón Comprar Ingredientes")
 
-
-
         def ejecucionComprarIngredientes():
             from gestorAplicacion.humanos.Cocinero import Cocinero
             self.textEjecIngredientes1.config(state=tk.NORMAL)
@@ -920,11 +958,14 @@ Pasos a seguir:
                     else:
                         self.textEjecCocinar1.insert(tk.END,"Se ha completado el proceso de " + element + "\n")
                 self.textEjecCocinar1.insert(tk.END,"Se ha cocinado el producto " + Cocinero._productosCocinados[i] + "\n")
+                
+            self.textEjecCocinar1.tag_configure("center", justify="center")
+            self.textEjecCocinar1.tag_add("center", "1.0", "end")
             self.textEjecCocinar1.config(state=tk.DISABLED)
             Cocinero._procesosDeProductosCocinados = []
             Cocinero._productosCocinados = []
             Cocinero._fallosCocinando= []
-            self.textEjecCocinar1.tag_add("center", "1.0", "end")
+            
             self.textEjecCocinar1.config(state=tk.DISABLED)
             
             messagebox.showinfo("Información", "Productos cocinados, se procede a enviarlos a su domicilio")
@@ -1031,7 +1072,7 @@ Pasos a seguir:
         self.LabelDescripcion3.config(text = descripcion)
         self.textoDescripcion.delete(1.0, tk.END)
         nutrientes = (
-            " _______________________________________________________\n"
+            "_______________________________________________________\n"
             f"|"+centrar("Producto: "+nombre)+"|\n"
             "| Porcion: 30 g                                         |\n"
             "|_______________________________________________________|\n"

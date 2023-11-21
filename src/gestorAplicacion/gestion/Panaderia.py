@@ -153,7 +153,7 @@ class Panaderia():
         if ingredientesFaltantes:
             for ingrediente, cantidad in ingredientesFaltantes.items():
                 ingredientesFaltantesCopia[Ingrediente.obtenerObjetoPorIdI(ingrediente).getNombre()] = cantidad
-            self.comprarIngredientes(ingredientesFaltantes)
+            self.comprarIngredientes(ingredientesFaltantesCopia)
         for ingrediente, cantidad in ingredientes.items():
             for i in range(cantidad):
                 ingredientesCanasta.append(self._inventario.buscarIngredientePorId(ingrediente))
@@ -372,35 +372,35 @@ class Panaderia():
 
         elegido.setRobado(True)
 
-    def enviar_domicilio(self, canasta, cliente):
-        domiciliario = cliente.get_domiciliario()
+    def enviar_domicilio(self, canasta, cliente, texto):
+        domiciliario = cliente.getDomiciliario()
 
-        cliente.set_domiciliario(domiciliario)
-        productos = canasta.get_productos()
+        cliente.setDomiciliario(domiciliario)
+        productos = canasta.getProductos()
 
         for producto in productos:
             if isinstance(producto, ProductoFrio):
-                domiciliario = producto.empaque_congelador(domiciliario)
+                domiciliario = producto.empaqueCongelador(domiciliario)
 
         malechor = Catastrofe()
-        domiciliario = malechor.pinchar_llanta(domiciliario)
+        domiciliario = malechor.pincharLlanta(domiciliario)
 
         if not domiciliario.tiene_licencia():
             self.setDinero(self.getdinero()-10000)
             domiciliario.set_licencia(True)
 
-        domiciliario.set_canasta(canasta)
-        domiciliario.set_ocupado(True)
-        costo = domiciliario.calcular_costo_domicilio(cliente, canasta)
-        domiciliario.set_costo_domicilio(costo)
+        domiciliario.setCanasta(canasta)
+        domiciliario.setOcupado(True)
+        costo = domiciliario.calcularCostoDomicilio(cliente, canasta)
+        domiciliario.setCostoDomicilio(costo)
 
-        while not domiciliario.labor_particular(canasta):
-            domiciliario.set_habilidad(domiciliario.get_habilidad() + 10)
+        while not domiciliario.laborParticular(canasta):
+            domiciliario.setHabilidad(domiciliario.getHabilidad() + 10)
             self.setDinero(self.getdinero()-10000)
-            domiciliario.set_licencia(True)
+            domiciliario.setLicencia(True)
 
-        cliente.set_canasta_en_mano(domiciliario.get_canasta())
-        domiciliario.set_canasta(None)
+        cliente.setCanastaEnMano(domiciliario.get_canasta())
+        domiciliario.setCanasta(None)
 
 
     def reviewDomiciliario(self, domiciliario):
