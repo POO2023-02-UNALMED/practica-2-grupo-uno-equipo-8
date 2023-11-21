@@ -61,7 +61,7 @@ class VentanaPrincipal:
         self.menu_procesos.add_command(label = "Func. Facturar", state="disabled", command=lambda: self.cambiarFrame(self.frameFacturacion))
         self.menu_procesos.add_command(label = "Func. Cocinar",command=lambda:self.cambiarFrame(self.frameCocinar), state="disabled")
         self.menu_procesos.add_command(label = "Func. Ingredientes e inventario", command=lambda:self.cambiarFrame(self.frameComprarIngredientes), state="disabled")
-        self.menu_procesos.add_command(label = "Func. Domicilio", state="disabled")
+        self.menu_procesos.add_command(label = "Func. Domicilio", state="disabled", command=lambda:self.cambiarFrame(self.frameDomicilio))
         self.menu_procesos.add_command(label = "Lo mejor de nuestra panaderia", state="disabled",command = lambda: self.cambiarFrame(self.frameLoMejor))
 
         self.menu_procesos.add_command(label = "Modificar datos", state="disabled",command = lambda: self.cambiarFrame(self.frameModificarDatos))
@@ -512,6 +512,8 @@ Pasos a seguir:
         # frameLoMejor (Frames lo mejor de nuestra Panaderia) 
         self.frameLoMejor = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
         self.frames.append(self.frameLoMejor)
+        self.imagenLoMejor = Label(self.frameLoMejor, image = self.fotoRatonCalificacion)
+        self.imagenLoMejor.pack()
         self.tituloLoMejor = Label(self.frameLoMejor, text="LO MEJOR DE NUESTRA PANADERIA", pady=10)
         self.infoLoMejor = Label(self.frameLoMejor, text="Aquí puede ver los rankings de lo mejor de nuestra panadería, las opciones que puede escoger son, los mejores cocineros, los mejores domiciliarios, los mejores productos y los mejores ingredientes, para verlas escriba, cocineros, domiciliarios, productos o ingredientes respectivamente y posteriormente presione el botón Aceptar.", wraplength=380, pady=10)
         self.tituloLoMejor.pack()
@@ -633,7 +635,9 @@ Pasos a seguir:
     def ejecucionDomicilio(self):
         self.textEjecDomicilio.delete("1.0", tk.END)
         Cliente.getSesion().getPanaderia().enviar_domicilio(Cliente.getSesion().getCanastaOrden(), Cliente.getSesion(),self.textEjecDomicilio)
-        self.textEjecDomicilio.insert(tk.END, "Domicilio realizado con exito")
+        Cliente.getSesion().crearCanastaNueva()
+        self.chequeoDeEstados()
+        self.cambiarFrame(self.frameCalificar)
 
     # funcion calificar
     def calificar(self, values):
@@ -668,11 +672,12 @@ Pasos a seguir:
         
         self.texto_widget.delete("1.0", tk.END)
         for elements, cantidad in Cliente.getSesion().getCanastaOrden().getProductosEnLista().items():
-            self.texto_widget.insert(tk.END, "Producto: " + Producto.obtenerObjetoPorNombreP(elements).getNombre() + " - Cantidad: " + str(cantidad) + "\n")
+
+            self.texto_widget.insert(tk.END, "Producto: " + Producto.obtenerObjetoPorIdP(elements).getNombre() + " - Cantidad: " + str(cantidad) + "\n")
         for elements, cantidad in Cliente.getSesion().getCanastaOrden().getIngredientesEnLista().items():
-            self.texto_widget.insert(tk.END, "Ingrediente: " + Ingrediente.obtenerObjetoPorNombreI(elements).getNombre() + " - Cantidad: " + str(cantidad) + "\n")
+            self.texto_widget.insert(tk.END, "Ingrediente: " + Ingrediente.obtenerObjetoPorIdI(elements).getNombre() + " - Cantidad: " + str(cantidad) + "\n")
         for elements, cantidad in Cliente.getSesion().getCanastaOrden().getKitsEnLista().items():
-            self.texto_widget.insert(tk.END, "Kits: " + Producto.obtenerObjetoPorNombreP(elements).getNombre() + " - Cantidad: " + str(cantidad) + "\n")
+            self.texto_widget.insert(tk.END, "Kits: " + Producto.obtenerObjetoPorIdP(elements).getNombre() + " - Cantidad: " + str(cantidad) + "\n")
 
         # Tag para centrar texto
         self.texto_widget.tag_configure("center", justify="center")
@@ -1124,7 +1129,6 @@ Pasos a seguir:
             if val[0] == "":
                 raise CamposVaciosError([val[0]])
             elif not(Ingrediente.verificacionExistenciaPorNombreI(self.comboboxfc1.get()) or Producto.verificarExistenciaPorNombreP(self.comboboxfc1.get())):
-                print(self.comboboxfc1.get())
                 raise ProductoNoEncontradoError(self.comboboxfc1.get())
             elif not self.esNumero(val[0]):
                 raise ValueError()
@@ -1200,74 +1204,67 @@ Pasos a seguir:
             cliente=Cliente.getSesion()
             if Cliente.getSesion().getId()==202:
                 canasta=cliente.getCanastaOrden()
-                if canasta.getPagada():
+                if canasta.getPagada() and not canasta.getCocinada():
                     #messagebox.showinfo("Info", "Ha comenzado un proceso de compra, continue con el proceso de compra, al finalizar se desbloquearan el resto de opciones")
                     self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="disabled", command= lambda: self.cambiarFrame(self.frameComprar))
                     self.menu_procesos.entryconfigure("Func. Facturar", state="disabled")
-                    self.menu_procesos.entryconfigure("Func. Cocinar", state="normal")
-                    self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="disabled")
+                    self.menu_procesos.entryconfigure("Func. Cocinar", state="normal", command= lambda: self.cambiarFrame(self.frameCocinar1))
+                    self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="disabled", command = lambda: self.cambiarFrame(self.frameIngredientes1))
                     self.menu_procesos.entryconfigure("Func. Domicilio", state="disabled")
+    
+                elif canasta.getCocinada() and not canasta.getEntregada():
+                    self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="disabled", command= lambda: self.cambiarFrame(self.frameComprar))
+                    self.menu_procesos.entryconfigure("Func. Facturar", state="disabled")
+                    self.menu_procesos.entryconfigure("Func. Cocinar", state="disabled", command= lambda: self.cambiarFrame(self.frameCocinar1))
+                    self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="disabled", command = lambda: self.cambiarFrame(self.frameIngredientes1))
+                    self.menu_procesos.entryconfigure("Func. Domicilio", state="normal")
+
+                elif canasta.getEntregada():
+                    self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="normal", command= lambda: self.cambiarFrame(self.frameComprar))
+                    self.menu_procesos.entryconfigure("Func. Facturar", state="normal")
+                    self.menu_procesos.entryconfigure("Func. Cocinar", state="normal", command= lambda: self.cambiarFrame(self.frameCocinar1))
+                    self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="normal", command = lambda: self.cambiarFrame(self.frameIngredientes1))
+                    self.menu_procesos.entryconfigure("Func. Domicilio", state="normal")
                 else:
-                    if canasta.getPagada() and not canasta.getCocinada():
-                        self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="disabled", command= lambda: self.cambiarFrame(self.frameComprar))
-                        self.menu_procesos.entryconfigure("Func. Facturar", state="disabled")
-                        self.menu_procesos.entryconfigure("Func. Cocinar", state="normal", command= lambda: self.cambiarFrame(self.frameCocinar1))
-                        self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="disabled")
-                        self.menu_procesos.entryconfigure("Func. Domicilio", state="disabled")
-
-                    elif canasta.getCocinada() and not canasta.getEntregada():
-                        self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="disabled", command= lambda: self.cambiarFrame(self.frameComprar))
-                        self.menu_procesos.entryconfigure("Func. Facturar", state="disabled")
-                        self.menu_procesos.entryconfigure("Func. Cocinar", state="disabled", command= lambda: self.cambiarFrame(self.frameCocinar1))
-                        self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="disabled")
-                        self.menu_procesos.entryconfigure("Func. Domicilio", state="normal")
-
-                    elif canasta.getEntregada():
-                        self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="normal", command= lambda: self.cambiarFrame(self.frameComprar))
-                        self.menu_procesos.entryconfigure("Func. Facturar", state="normal")
-                        self.menu_procesos.entryconfigure("Func. Cocinar", state="normal", command= lambda: self.cambiarFrame(self.frameCocinar1))
-                        self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="normal")
-                        self.menu_procesos.entryconfigure("Func. Domicilio", state="normal")
-                    else:
-                        self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="normal", command= lambda: self.cambiarFrame(self.frameComprar))
-                        self.menu_procesos.entryconfigure("Func. Facturar", state="normal")
-                        self.menu_procesos.entryconfigure("Func. Cocinar", state="normal", command= lambda: self.cambiarFrame(self.frameCocinar))
-                        self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="normal")
-                        self.menu_procesos.entryconfigure("Func. Domicilio", state="normal")
+                    self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="normal", command= lambda: self.cambiarFrame(self.frameComprar))
+                    self.menu_procesos.entryconfigure("Func. Facturar", state="normal")
+                    self.menu_procesos.entryconfigure("Func. Cocinar", state="normal", command= lambda: self.cambiarFrame(self.frameCocinar))
+                    self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="normal", command = lambda: self.cambiarFrame(self.frameComprarIngredientes))
+                    self.menu_procesos.entryconfigure("Func. Domicilio", state="disabled", command= lambda: self.cambiarFrame(self.frameDomicilio))
             else:
                 canasta=cliente.getCanastaOrden()
                 if (canasta is None) or (canasta.getProductosEnLista()=={} and canasta.getIngredientesEnLista()=={} and canasta.getKitsEnLista()=={}):
                     self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="normal", command= lambda: self.cambiarFrame(self.frameComprar))
                     self.menu_procesos.entryconfigure("Func. Facturar", state="disabled")
                     self.menu_procesos.entryconfigure("Func. Cocinar", state="disabled", command= lambda: self.cambiarFrame(self.frameCocinar1))
-                    self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="disabled")
+                    self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="disabled", command = lambda: self.cambiarFrame(self.frameIngredientes1))
                     self.menu_procesos.entryconfigure("Func. Domicilio", state="disabled")
 
                 elif (not canasta.getPagada()) and (not(canasta.getProductosEnLista()=={} and canasta.getIngredientesEnLista()=={} and canasta.getKitsEnLista()=={})):
                     self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="normal", command= lambda: self.cambiarFrame(self.frameComprar))
                     self.menu_procesos.entryconfigure("Func. Facturar", state="normal")
                     self.menu_procesos.entryconfigure("Func. Cocinar", state="disabled", command= lambda: self.cambiarFrame(self.frameCocinar1))
-                    self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="disabled")
+                    self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="disabled", command = lambda: self.cambiarFrame(self.frameIngredientes1))
                     self.menu_procesos.entryconfigure("Func. Domicilio", state="disabled")
 
                 elif canasta.getPagada() and not canasta.getCocinada():
                     self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="disabled", command= lambda: self.cambiarFrame(self.frameComprar))
                     self.menu_procesos.entryconfigure("Func. Facturar", state="disabled")
                     self.menu_procesos.entryconfigure("Func. Cocinar", state="normal", command= lambda: self.cambiarFrame(self.frameCocinar1))
-                    self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="disabled")
+                    self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="disabled", command = lambda: self.cambiarFrame(self.frameIngredientes1))
                     self.menu_procesos.entryconfigure("Func. Domicilio", state="disabled")
 
                 elif canasta.getCocinada() and not canasta.getEntregada():
                     self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="disabled", command= lambda: self.cambiarFrame(self.frameComprar))
                     self.menu_procesos.entryconfigure("Func. Facturar", state="disabled")
                     self.menu_procesos.entryconfigure("Func. Cocinar", state="disabled", command= lambda: self.cambiarFrame(self.frameCocinar1))
-                    self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="disabled")
+                    self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="disabled", command = lambda: self.cambiarFrame(self.frameIngredientes1))
                     self.menu_procesos.entryconfigure("Func. Domicilio", state="normal")
                 elif canasta.getEntregada():
                     self.menu_procesos.entryconfigure("Func. Crear Canasta de Compras", state="normal", command= lambda: self.cambiarFrame(self.frameComprar))
                     self.menu_procesos.entryconfigure("Func. Facturar", state="normal")
                     self.menu_procesos.entryconfigure("Func. Cocinar", state="disabled", command= lambda: self.cambiarFrame(self.frameCocinar1))
-                    self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="disabled")
+                    self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="disabled", command = lambda: self.cambiarFrame(self.frameIngredientes1))
                     self.menu_procesos.entryconfigure("Func. Domicilio", state="disabled")
         else:
             self.menu_procesos.entryconfigure("Iniciar sesion", state="normal")
@@ -1344,8 +1341,25 @@ Pasos a seguir:
             messagebox.showwarning("Error", "Debes ingresar una cantidad no negativa, menor o igual a 15 y diferente de 0")
 
     def ejecucionCocinarProductos(self):
-        
+        from gestorAplicacion.humanos.Cocinero import Cocinero
         Cliente.getSesion().getPanaderia().cocinar(self.diccionarioFuncionalidad4)
+        self.textEjecCocinar.config(state=tk.NORMAL)
+        self.textEjecCocinar.delete(1.0, "end")
+        for i in range(len(Cocinero._procesosDeProductosCocinados)-1):
+            for element in Cocinero._procesosDeProductosCocinados[i]:
+                num = random.randint(0, 10)
+                if num<=3:
+                    self.textEjecCocinar.insert(tk.END, Cocinero._fallosCocinando[random.randint(0, len(Cocinero._fallosCocinando))-1] + "\n")
+                else:
+                    self.textEjecCocinar.insert(tk.END,"Se ha completado el proceso de " + element + "\n")
+            self.textEjecCocinar.insert(tk.END,"Se ha cocinado el producto " + Cocinero._productosCocinados[i] + "\n")
+            
+        self.textEjecCocinar.tag_configure("center", justify="center")
+        self.textEjecCocinar.tag_add("center", "1.0", "end")
+        self.textEjecCocinar.config(state=tk.DISABLED)
+        Cocinero._procesosDeProductosCocinados = []
+        Cocinero._productosCocinados = []
+        Cocinero._fallosCocinando= []
         self.diccionarioFuncionalidad4 = {}
 
     # Métodos para la funcionalidad 5

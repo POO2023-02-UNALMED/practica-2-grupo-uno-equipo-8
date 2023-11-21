@@ -372,7 +372,7 @@ class Panaderia():
 
         elegido.setRobado(True)
 
-    def enviar_domicilio(self, canasta, cliente, texto):
+    def enviar_domicilio(self, canasta, cliente, text=None):
         domiciliario = cliente.getDomiciliario()
 
         cliente.setDomiciliario(domiciliario)
@@ -385,22 +385,55 @@ class Panaderia():
         malechor = Catastrofe()
         domiciliario = malechor.pincharLlanta(domiciliario)
 
-        if not domiciliario.tiene_licencia():
-            self.setDinero(self.getdinero()-10000)
-            domiciliario.set_licencia(True)
+        if not domiciliario.isLicencia():
+            self.setDinero(self.getDinero()-10000)
+            domiciliario.setLicencia(True)
 
         domiciliario.setCanasta(canasta)
         domiciliario.setOcupado(True)
-        costo = domiciliario.calcularCostoDomicilio(cliente, canasta)
-        domiciliario.setCostoDomicilio(costo)
 
         while not domiciliario.laborParticular(canasta):
             domiciliario.setHabilidad(domiciliario.getHabilidad() + 10)
-            self.setDinero(self.getdinero()-10000)
+            self.setDinero(self.getDinero()-10000)
             domiciliario.setLicencia(True)
+            if text != None:
+                text.config(state=tk.NORMAL)
+                text.insert(tk.END, "Hubo un problema con el domiciliario, estamos trabajando para solucionarlo" + "\n")
+                text.config(state=tk.DISABLED)
+                text.tag_configure("center", justify="center")
+                text.tag_add("center", "1.0", "end")
+        
+        if text != None:
+                text.config(state=tk.NORMAL)
+                text.insert(tk.END, "Preparate que el domiciliario ha salido a tu direccion" + "\n")
+                text.config(state=tk.DISABLED)
+                text.tag_configure("center", justify="center")
+                text.tag_add("center", "1.0", "end")
+            
+                for i in range(20):  # Ajusta el número de iteraciones según sea necesario
+                    time.sleep(0.1)  # Simula algún tiempo de espera entre actualizaciones
+                    text.config(state=tk.NORMAL)
+                    text.insert(tk.END, "#"*i + "\n")
+                    text.config(state=tk.DISABLED)
+                    text.tag_configure("center", justify="center")
+                    text.tag_add("center", "1.0", "end")
+            
+                text.config(state=tk.NORMAL)
+                text.insert(tk.END, "Tu domicilio ha llegado, que lo disfrutes" + "\n")
+                text.insert(tk.END, "Se entregó" + "\n")
 
-        cliente.setCanastaEnMano(domiciliario.get_canasta())
-        domiciliario.setCanasta(None)
+                for elements in canasta.getProductos():
+                    text.insert(tk.END, "Producto: " + elements.getNombre() + "\n")
+                for elements in canasta.getIngredientes():
+                    text.insert(tk.END, "Ingrediente: "  + elements.getNombre() + "\n")
+                for elements in canasta.getKits():
+                    text.insert(tk.END, "Kits: "  + elements.getNombre() + "\n")
+
+                text.config(state=tk.DISABLED)
+                text.tag_configure("center", justify="center")
+                text.tag_add("center", "1.0", "end")
+
+        cliente.setCanastaEnMano(domiciliario.getCanasta())
 
 
     def reviewDomiciliario(self, domiciliario):
@@ -418,3 +451,55 @@ class Panaderia():
             cocinero.setSalario(cocinero.getSalario() * 0.9)
         elif calificacion == 5:
             cocinero.setSalario(cocinero.getSalario() * 1.1)
+
+
+"""¡Oh, código mágico de bytes y lógica,
+En el vasto reino de la programación,
+Te conjuro con poder y sintaxis armoniosa,
+Que mi proyecto escape de la evaluación!
+
+Con bytes de buena fortuna y algoritmos sagrados,
+Que la magia del código fluya en cada línea,
+Que los errores se disuelvan como niebla matutina,
+Y que la ejecución sea impecable, divina.
+
+Que los bucles sean infinitos de éxito,
+Y que las variables guarden la esencia de la perfección,
+Que el hechizo de la eficiencia teja su red,
+Y que el compilador cante la canción de la aprobación.
+
+En el reino de los píxeles y los bits,
+Donde el tiempo se mide en ciclos y milisegundos,
+Que mi código sea un faro de luz brillante,
+Guiando a los profesores por senderos fecundos.
+
+Oh, compilador, acepta este conjuro,
+Que mi código sea como un poema bien rimado,
+Que los comentarios sean versos de sabiduría,
+Y que la indentación sea un mapa bien trazado.
+
+Que el flujo de datos sea un río tranquilo,
+Navegando por los módulos con gracia y sin error,
+Que las excepciones sean tan raras como estrellas fugaces,
+Y que la memoria sea un jardín de flores en flor.
+
+Que las pruebas sean como oráculos confiables,
+Revelando la verdad de cada función y método,
+Que la cobertura sea un manto protector,
+Guardando mi proyecto de cualquier tormento.
+
+Que el tiempo de ejecución sea breve como un suspiro,
+Y que la complejidad sea simple como un eco,
+Que el debugger sea un aliado leal,
+En la danza de bits y bytes, un compañero.
+
+Con este conjuro, mi proyecto te encomiendo,
+A las manos justas y sabias de los profesores,
+Que encuentren deleite en la lectura de documentos,
+Y que la magia del código les cause asombro.
+
+¡Así sea este conjuro de programación,
+Que mi proyecto florezca y prospere con devoción,
+Que la suerte me acompañe en este trance,
+Y que la programación sea mi eterna danza!
+"""

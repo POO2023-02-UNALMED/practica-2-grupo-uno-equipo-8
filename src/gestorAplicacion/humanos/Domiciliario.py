@@ -71,6 +71,7 @@ class Domiciliario(Trabajador, ComidaDefault):
 
     def laborParticular(self, canasta):
         transito = Catastrofe()
+        self.setCanasta = canasta
         if transito.paradaTransito(self):
             x = False
             return x

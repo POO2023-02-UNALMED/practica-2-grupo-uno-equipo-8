@@ -71,12 +71,14 @@ class Catastrofe:
         return rival
 
     def paradaTransito(self, domiciliario):
-        if self.getMaldad > domiciliario.getHabilidad():
+        if self.getMaldad() > domiciliario.getHabilidad():
             return True
         return False
 
     def pincharLlanta(self, domiciliario):
-        if self.getMaldad > domiciliario.getHabilidad():
+        if self.getMaldad() > domiciliario.getHabilidad():
             domiciliario.setLiciencia(False)
+            return domiciliario
+        return domiciliario
 
         
