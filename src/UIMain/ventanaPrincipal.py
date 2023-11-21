@@ -536,7 +536,7 @@ Pasos a seguir:
         self.textEjecLoMejor.pack(fill=tk.BOTH, expand=True)
         self.frameLoMejor2.pack(fill=tk.BOTH, expand=True)
 
-        # Frame Domicilio
+        # frameDomicilio
 
         self.frameDomicilio = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
         self.frames.append(self.frameDomicilio)
@@ -552,7 +552,7 @@ Pasos a seguir:
         self.textEjecDomicilio.pack(fill=tk.BOTH, expand=True)
 
 
-
+        # frameComprar
         self.frameComprar1 = Frame(self.frameComprar)
         self.frameComprar1.pack()
         self.labelfc1 = Label(self.frameComprar1, text="CREAR CANASTA DE COMPRAS", wraplength=300)
@@ -642,7 +642,7 @@ Pasos a seguir:
     def ejecucionDomicilio(self):
         self.textEjecDomicilio.delete("1.0", tk.END)
         Cliente.getSesion().getPanaderia().enviar_domicilio(Cliente.getSesion().getCanastaOrden(), Cliente.getSesion(),self.textEjecDomicilio)
-        messagebox.showinfo("Domicilio", "Su domicilio ha sido realizado")
+        messagebox.showinfo("Domicilio", "Su domicilio ha sido realizado con exito")
         time.sleep(2)
         Cliente.getSesion().crearCanastaNueva()
         self.chequeoDeEstados()
