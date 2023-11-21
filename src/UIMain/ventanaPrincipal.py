@@ -1,3 +1,4 @@
+import random
 import time
 from tkinter import *
 import tkinter as tk
@@ -100,9 +101,11 @@ class VentanaPrincipal:
 
 
         # frameSesion inicio de sesion
+        self.fotoInicioSesion = tk.PhotoImage(file="src/resources/ratonDomicilio.png")
         self.frameSesion = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1) 
         self.frames.append(self.frameSesion) #agregando a la lista de frames, necesaria para cambiar entre frames metodo cambiarFrame
-
+        self.labelFotoInicioSesion = Label(self.frameSesion, photo = self.fotoInicioSesion)
+        self.labelFotoInicioSesion.pack()
         self.labelTituloInicioSesion = Label(self.frameSesion, text="INICIO DE SESION")
         self.labelTituloInicioSesion.pack(pady=20)
         
@@ -121,7 +124,10 @@ class VentanaPrincipal:
         self.frameRegistro = Frame( #Esto esta pendiente de ser adaptado con fieldFrames
         self.root, bd=1, relief=FLAT, padx=1, pady=1)
         self.frames.append(self.frameRegistro)
+        
 
+        self.labelFotoRegistro = Label(self.frameRegistro, photo = self.fotoInicioSesion)
+        self.labelFotoRegistro.pack()
         self.labelTituloRegistro = Label(self.frameRegistro, text="REGISTRO")
         self.labelTituloRegistro.pack(pady=20)
         
@@ -304,18 +310,22 @@ class VentanaPrincipal:
         self.frames.append(self.frameHistorial)
 
         # frameMeterPlata Meter plata a mi cuenta
-        self.frameMeterPlata = Frame(self.root, bd=1, relief="raise", padx=1, pady=1)
+        self.frameMeterPlata = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1)
         self.frames.append(self.frameMeterPlata)
         self.imagenPlata = Label(self.frameMeterPlata, image = self.fotoRatonFactura)
         self.imagenPlata.pack()
-        self.LabelPlata2 = Label(self.frameMeterPlata, text="Meter plata")
-        self.LabelPlataDes2 = Label(self.frameMeterPlata, text="Descripcion")
+        self.frameMeterPlata_2 = Frame(self.frameMeterPlata, bd=1, relief=RAISED, borderwidth=2, padx=1, pady=1)
+        self.frameMeterPlata_2.pack()
+        self.LabelPlata2 = Label(self.frameMeterPlata_2, text="Meter plata")
+        self.LabelPlataDes2 = Label(self.frameMeterPlata_2, text="Descripcion")
         self.LabelPlata2.pack(pady=20)
         self.LabelPlataDes2.pack(pady=20)
         #usar fieldframe aqui ...
         self.fieldFramePlata2 = FieldFrame("Valor", ["Cantidad a ingresar:"], "Ingrese aqui")
-        self.fieldFramePlata2.defRoot(self.frameMeterPlata)
+        self.fieldFramePlata2.defRoot(self.frameMeterPlata_2)
         self.fieldFramePlata2.defFunc(self.meterPlata)
+        self.botonAtrasmp = Button(self.frameMeterPlata, text = "Volver atras", command = self.volverAtras)
+        self.botonAtrasmp.pack(pady = 15)
 
         # frameFacturasPasadas
         self.frameFacturasPasadas = Frame(self.root, padx= 2, pady= 2)
@@ -851,6 +861,7 @@ class VentanaPrincipal:
             self.menu_procesos.entryconfigure("Func. Cocinar", state="disabled")
             self.menu_procesos.entryconfigure("Func. Ingredientes e inventario", state="normal")
             self.textEjecCocinar1.config(state=tk.NORMAL)
+            self.textEjecCocinar1.delete(1.0, "end")
             messagebox.showinfo("Información", "Parece que faltan ingredientes para cocinar sus productos, se accede a conseguir ingredientes")
             self.cargarFrameIngredientesDesdeClienteNormal(self.frameCocinar1)
             self.textEjecCocinar1.config(state=tk.DISABLED)
@@ -866,6 +877,7 @@ class VentanaPrincipal:
 
 
         def ejecucionComprarIngredientes():
+            from gestorAplicacion.humanos.Cocinero import Cocinero
             self.textEjecIngredientes1.config(state=tk.NORMAL)
             Cliente.getSesion().getCanastaOrden().enviarOrdenCanasta(self.textEjecIngredientes1)
             self.textEjecIngredientes1.config(state=tk.DISABLED)
@@ -873,6 +885,20 @@ class VentanaPrincipal:
             messagebox.showinfo("Información", "Ingredientes comprados, se procede a cocinar")
             self.chequeoDeEstados()
             self.cambiarFrame(self.frameCocinar1)
+            self.textEjecCocinar1.config(state=tk.NORMAL)
+            self.textEjecCocinar1.delete(1.0, "end")
+            for i in range(len(Cocinero._procesosDeProductosCocinados)-1):
+                for element in Cocinero._procesosDeProductosCocinados[i]:
+                    num = random.randint(0, 10)
+                    if num<=3:
+                        self.textEjecCocinar1.insert(tk.END, Cocinero._fallosCocinando[random.randint(0, len(Cocinero._fallosCocinando))-1] + "\n")
+                    else:
+                        self.textEjecCocinar1.insert(tk.END,"Se ha completado el proceso de " + element + "\n")
+                self.textEjecCocinar1.insert(tk.END,"Se ha cocinado el producto " + Cocinero._productosCocinados[i] + "\n")
+            self.textEjecCocinar1.config(state=tk.DISABLED)
+            Cocinero._procesosDeProductosCocinados = []
+            Cocinero._productosCocinados = []
+            Cocinero._fallosCocinando= []
             #GestionCocinar.barraProgresoDeTodos(frame)
             messagebox.showinfo("Información", "Productos cocinados, se procede a enviarlos a su domicilio")
             time.sleep(3)

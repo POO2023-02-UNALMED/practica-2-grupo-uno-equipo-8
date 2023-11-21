@@ -288,7 +288,6 @@ class Panaderia():
         return elegido
     
     def comprarIngredientes(self, listIngredientes, text=None):
-
         if text != None:
             text.delete(1.0,tk.END)
         elegido = self.domiciliarioAleatorio()

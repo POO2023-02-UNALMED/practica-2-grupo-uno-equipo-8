@@ -219,7 +219,7 @@ class Cocinero(Domiciliario):
             if cookProducto:
                 # Incrementa la habilidad del cocinero si el proceso falló.
                 chefIdeal.habilidad += 1
-                numero_random = random.randint(0, 4)
+                numero_random = randint(0, 4)
                 mensaje_fallo = f"Perdón su pedido tartará un poco más porque {Catastrofe.fallos_cocina[numero_random]} cuando estaba en el proceso de {procesoCook[i]}"
                 Cocinero._fallosCocinando.append(mensaje_fallo)
                 chefIdeal.detenerCoccion2(producto)
@@ -305,7 +305,9 @@ class Cocinero(Domiciliario):
         ingrFaltantes = self.ingredientesCocinero(listaIngredientesTotales)
 
         if ingrFaltantes:
-            Cocinero._fallosCocinando +=1
+            numero_random = randint(0, 4)
+            mensaje_fallo = f"Perdón su pedido tartará un poco más porque {Catastrofe.fallos_cocina[numero_random]}"
+            Cocinero._fallosCocinando.append(mensaje_fallo)
             self._panaderia.comprarIngredientes(ingrFaltantes,texto)
             ingrFaltantes.clear()
             return False
