@@ -355,12 +355,16 @@ Pasos a seguir:
         self.frames.append(self.frameFacturasPasadas)
         self.fotoFacturasPasadas = Label(self.frameFacturasPasadas, image = self.fotoRatonFactura)
         self.fotoFacturasPasadas.pack(pady = 10)
-        self.labelFPasadas = Label(self.frameFacturasPasadas, text="Sus facturas pasadas")
+        self.labelFPasadas = Label(self.frameFacturasPasadas, text="Sus facturas pasadas \n Seleccione el id de la orden para copiar la canasta asociada")
         self.labelFPasadas.pack(pady=10)
+        self.idsFacturasPasadas = []
+        self.ComboBoxClonar = ttk.Combobox(self.frameValidarTipo, values = self.idsFacturasPasadas)
+        self.ComboBoxClonar.pack(pady=5)
+        self.BotonClonar = Button(self.frameFacturasPasadas, text="Copiar", comand = lambda: self.copiarOrden(int(self.comboBoxClonar.get())))
         self.botonAtrasFp = Button(self.frameFacturasPasadas, text="Volver a facturacion", command = lambda: self.cambiarFrame(self.frameFacturacion))
-        self.botonAtrasFp.pack(pady=10)
+        self.botonAtrasFp.pack(pady=15)
         self.botonInicioFp = Button(self.frameFacturasPasadas, text="Volver al inicio", command = lambda: self.cambiarFrame(self.framePrincipal))
-        self.botonInicioFp.pack(pady=10)
+        self.botonInicioFp.pack(pady=15)
 
         # Agregar un Scrollbar
         scrollbarfp = Scrollbar(self.frameFacturasPasadas)
@@ -626,7 +630,7 @@ Pasos a seguir:
         self.frameCalificar2 = Frame(self.frameCalificar, bd=1, relief = "raise", borderwidth = 2, padx=1, pady=1)
         self.frameCalificar2.pack()
         self.comboBoxCalificar = ttk.Combobox(self.frameCalificar2, values = ["Domiciliario", "Cocinero","Producto","Ingredientes"], state = "readOnly")
-        self.comboBoxCalificar.pack()
+        self.comboBoxCalificar.pack(pady=10)
         # fieldframe aqui con raiz frameCalificar2...
         
         self.ffCalificar = FieldFrame("Calificaciónes", ["Calificacion:"], "Ingrese Aquí su valor")
@@ -927,6 +931,10 @@ Pasos a seguir:
         # Aplicar el tag al texto
         self.textoFacturacion.tag_add("center", "1.0", "end")
         self.textoFacturacion.config(state="disabled")
+    
+    def cargarFrameFacturasPasadas(self):
+        for i in Cliente.getSesion().getRecibos():
+            self.idsFacturasPasadas.append(str(i.getIdRecibo()))
 
 
 
@@ -1042,6 +1050,8 @@ Pasos a seguir:
                 self.frameAnterior = self.frameActual
             if frame == self.frameFacturacion:
                 self.cargarFrameFacturacion()
+            if frame == self.frameFacturasPasadas:
+                self.cargarFrameFacturasPasadas()
             if frame == self.frameComprar:
                 self.cargarFrameCarrito() 
 
@@ -1463,6 +1473,8 @@ Pasos a seguir:
     def on_mousewheel(self, event):
         # Implementa la lógica de desplazamiento vertical
         self.canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+
+    def clonarOrden
 
     def mostrarRankingCorrespondiente(self, values):
         try:

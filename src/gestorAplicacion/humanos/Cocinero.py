@@ -272,7 +272,7 @@ class Cocinero(Domiciliario):
 
         return nuevoMapa
 
-    def laborParticular(self, canastaTrabajar,texto):
+    def laborParticular(self, canastaTrabajar,texto = ""):
         """
         Realiza la labor particular del cocinero con una canasta de trabajo.
 
