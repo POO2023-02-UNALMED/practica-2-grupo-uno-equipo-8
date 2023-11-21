@@ -195,7 +195,7 @@ Pasos a seguir:
         self.frameDireccion2 = Frame(self.framePreguntarDomicilio, bd=1, relief="raise", borderwidth=2, padx=1, pady=1)
         self.frameDireccion2.pack()
         self.LabelDireccion2 = Label(self.frameDireccion2, text="Cambiar direccion")
-        self.LabelDireccionDes2.pack(pady=20)
+        self.LabelDireccion2.pack(pady=20, padx = 20)
         self.comboBoxDireccion2 = ttk.Combobox(self.frameDireccion2, values = ["Medellin", "Bogota", "Envigado","Itagui"])
         self.comboBoxDireccion2.pack(pady = 10)
         self.fieldFrameDireccion2 = FieldFrame("Datos", ["Direccion específica:"], "Ingrese aqui")
