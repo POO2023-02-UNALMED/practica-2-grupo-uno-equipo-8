@@ -95,7 +95,25 @@ class VentanaPrincipal:
         #self.imagen_2tk = tk.PhotoImage(file='src/resources/ratonInicio.png')
         #self.labelBienvenida2 = Label(self.framePrincipal, image = self.imagen_2tk)
         #self.labelBienvenida2.pack()
-        self.labelBienvenida3 = Label(self.framePrincipal, text="Bienvenido a nuestra aplicacion, en el menu de procesos y consultas podras iniciar tu compra, elije crear canasta de compras y haz tu pedido ya!")
+        self.labelBienvenida3 = Label(self.framePrincipal, text="""
+¡Bienvenido a nuestra aplicación!
+
+En el menú de "Procesos y Consultas", podrás iniciar tu compra. Elige "Crear canasta de compras" y haz tu pedido ya.
+
+Pasos a seguir:
+1. 🖱️ Selecciona en el menú el apartado "Procesos y Consultas".
+2. 🚪 Inicia sesión o regístrate en caso de no tener cuenta.
+3. 🔁 Después de iniciar sesión, vuelve al apartado de procesos y consultas y selecciona "Función: crear canasta de compras".
+4. 🛒 Aquí puedes ver el catálogo, elegir productos, determinar la cantidad y añadirlos a la canasta.
+5. 📝 Continúa con el proceso de compra y luego llena un formulario para realizar el domicilio.
+6. 💳 Procede a "Ir a pagar". Puedes visualizar tu factura actual y, si lo deseas, las pasadas.
+7. 🔥 Después de pagar, comenzará el proceso de cocinar.
+8. 🛒 Si faltan ingredientes, puedes mandar a comprarlos.
+9. 🚚 Una vez cocinados, los productos se enviarán a tu domicilio.
+10. ⭐ Al finalizar el proceso, puedes dar calificaciones.
+
+¡Disfruta tu experiencia de compra!
+""")
         self.labelBienvenida3.pack()
 
 
@@ -106,14 +124,17 @@ class VentanaPrincipal:
         self.frames.append(self.frameSesion) #agregando a la lista de frames, necesaria para cambiar entre frames metodo cambiarFrame
         self.labelFotoInicioSesion = Label(self.frameSesion, photo = self.fotoInicioSesion)
         self.labelFotoInicioSesion.pack()
-        self.labelTituloInicioSesion = Label(self.frameSesion, text="INICIO DE SESION")
+
+        self.frameSesion2 = Frame(self.frameSesion, bd=1, relief=RAISED, borderwidth=2, padx=1, pady=1)
+        self.frameSesion2.pack()
+        self.labelTituloInicioSesion = Label(self.frameSesion2, text="INICIO DE SESION")
         self.labelTituloInicioSesion.pack(pady=20)
         
-        self.descripTituloInicioSesion = Label(self.frameSesion, text="Descripcion")
+        self.descripTituloInicioSesion = Label(self.frameSesion2, text="Descripcion")
         self.descripTituloInicioSesion.pack(pady=20)
 
         self.fieldFrameInicioSesion = FieldFrame("Datos Pedidos", ["Id:", "Contraseña:"], "Ingreselos Aquí")
-        self.fieldFrameInicioSesion.defRoot(self.frameSesion)
+        self.fieldFrameInicioSesion.defRoot(self.frameSesion2)
         self.fieldFrameInicioSesion.defFunc(self.iniciarSesion)
 
         #frameActual = self.frameSesion
@@ -124,18 +145,19 @@ class VentanaPrincipal:
         self.frameRegistro = Frame( #Esto esta pendiente de ser adaptado con fieldFrames
         self.root, bd=1, relief=FLAT, padx=1, pady=1)
         self.frames.append(self.frameRegistro)
-        
 
-        self.labelFotoRegistro = Label(self.frameRegistro, photo = self.fotoInicioSesion)
+        self.frameRegistro2 = Frame(self.frameRegistro, bd=1, relief=RAISED, borderwidth=2, padx=1, pady=1)
+        self.frameRegistro2.pack()
+        self.labelFotoRegistro = Label(self.frameRegistro2, photo = self.fotoInicioSesion)
         self.labelFotoRegistro.pack()
-        self.labelTituloRegistro = Label(self.frameRegistro, text="REGISTRO")
+        self.labelTituloRegistro = Label(self.frameRegistro2, text="REGISTRO")
         self.labelTituloRegistro.pack(pady=20)
         
-        self.descripRegistro = Label(self.frameRegistro, text="Descripcion")
+        self.descripRegistro = Label(self.frameRegistro2, text="Descripcion")
         self.descripRegistro.pack(pady=20)
 
         self.fieldRegistro = FieldFrame("Datos Pedidos", ["Nombre:", "Id:", "Contraseña:"], "Ingreselos Aquí")
-        self.fieldRegistro.defRoot(self.frameRegistro)
+        self.fieldRegistro.defRoot(self.frameRegistro2)
         self.fieldRegistro.defFunc(self.registrarUsuario)
 
         #frameActual = self.frameRegistro
@@ -899,7 +921,9 @@ class VentanaPrincipal:
             Cocinero._procesosDeProductosCocinados = []
             Cocinero._productosCocinados = []
             Cocinero._fallosCocinando= []
-            #GestionCocinar.barraProgresoDeTodos(frame)
+            self.textEjecCocinar1.tag_add("center", "1.0", "end")
+            self.textEjecCocinar1.config(state=tk.DISABLED)
+            
             messagebox.showinfo("Información", "Productos cocinados, se procede a enviarlos a su domicilio")
             time.sleep(3)
             self.cambiarFrame(self.frameDomicilio)
@@ -1396,7 +1420,7 @@ class VentanaPrincipal:
                 raise ProductoNoEncontradoError(values[0].upper)
             
         except ProductoNoEncontradoError as e:
-            messagebox.showwarning("Error", "El Ranking ingresado no es válido, por favir ingrese alguna de las opciones indicadas")
+            messagebox.showwarning("Error", "El Ranking ingresado no es válido, por favor ingrese alguna de las opciones indicadas")
 
 # Codigo que produce la ejecucion de la ventana cuando se ejecuta desde este archivo
 def main():
