@@ -1207,7 +1207,8 @@ Pasos a seguir:
 
                 if Cliente.inicioSesionContrasena(cliente1, val[1]) == "Contraseña incorrecta":
                     raise UsuarioNoEncontradoError(int(val[0]))
-                
+                if cliente1.getCanastaOrden() is None:
+                    cliente1.crearCanastaNueva()
                 self.chequeoDeEstados()
                 messagebox.showinfo("Inicio de sesion", "Inicio de sesion exitoso")
                 self.cambiarFrame(self.framePrincipal)
