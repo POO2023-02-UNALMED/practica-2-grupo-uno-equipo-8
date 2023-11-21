@@ -1492,7 +1492,7 @@ Pasos a seguir:
         id = int(id)
         for x in Cliente.getSesion().getRecibos():
             if x.getIdRecibo() == id:
-                Cliente.getSesion.setCanastaOrden(copy.deepcopy(x)) #se crea una canasta exactamente igual y se asocia a la orden
+                Cliente.getSesion().setCanastaOrden(copy.deepcopy(x)) #se crea una canasta exactamente igual y se asocia a la orden
 
     def mostrarRankingCorrespondiente(self, values):
         try:
