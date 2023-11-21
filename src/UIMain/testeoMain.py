@@ -195,6 +195,7 @@ class SerializationTest:
         c.recibir_orden("15", "1",True)
 
         c.enviarOrdenCanasta()
+        Cliente.getSesion().setDomiciliario(Cliente.getSesion().getPanaderia().domiciliarioAleatorio())
         c.setPagada(True)
         c.setCocinada(True)
 
