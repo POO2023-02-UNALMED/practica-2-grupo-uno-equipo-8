@@ -9,7 +9,7 @@ import time
 import random
 
 class Domiciliario(Trabajador, ComidaDefault):
-    def __init__(self, nombre="", panaderia=None, calificacion=None, dineroEnMano=0, licencia=None):
+    def __init__(self, nombre="", panaderia=None, calificacion=0, dineroEnMano=0, licencia=None):
         super().__init__(panaderia, nombre, calificacion, dineroEnMano)
         self.licencia = False if licencia is None else licencia
         self.ocupado = False

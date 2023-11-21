@@ -113,16 +113,16 @@ Pasos a seguir:
 10. ⭐ Al finalizar el proceso, puedes dar calificaciones.
 
 ¡Disfruta tu experiencia de compra!
-""")
+""", font=("Arial", 10))  # Cambiar la fuente a Arial y el tamaño a 12 puntos
         self.labelBienvenida3.pack()
 
 
 
         # frameSesion inicio de sesion
-        self.fotoInicioSesion = tk.PhotoImage(file="src/resources/ratonDomicilio.png")
+        self.fotoInicioSesion = tk.PhotoImage(file="src/resources/ratonInicioSesion.png")
         self.frameSesion = Frame(self.root, bd=1, relief=FLAT, padx=1, pady=1) 
         self.frames.append(self.frameSesion) #agregando a la lista de frames, necesaria para cambiar entre frames metodo cambiarFrame
-        self.labelFotoInicioSesion = Label(self.frameSesion, photo = self.fotoInicioSesion)
+        self.labelFotoInicioSesion = Label(self.frameSesion, image = self.fotoInicioSesion)
         self.labelFotoInicioSesion.pack()
 
         self.frameSesion2 = Frame(self.frameSesion, bd=1, relief=RAISED, borderwidth=2, padx=1, pady=1)
@@ -148,7 +148,7 @@ Pasos a seguir:
 
         self.frameRegistro2 = Frame(self.frameRegistro, bd=1, relief=RAISED, borderwidth=2, padx=1, pady=1)
         self.frameRegistro2.pack()
-        self.labelFotoRegistro = Label(self.frameRegistro2, photo = self.fotoInicioSesion)
+        self.labelFotoRegistro = Label(self.frameRegistro2, image = self.fotoInicioSesion)
         self.labelFotoRegistro.pack()
         self.labelTituloRegistro = Label(self.frameRegistro2, text="REGISTRO")
         self.labelTituloRegistro.pack(pady=20)
@@ -615,6 +615,8 @@ Pasos a seguir:
         self.textEjecCocinar1.pack(fill=tk.BOTH, expand=True)
 
 
+
+
     def ejecucionDomicilio(self):
         self.textEjecDomicilio.delete("1.0", tk.END)
         Cliente.getSesion().getPanaderia().enviar_domicilio(Cliente.getSesion().getCanastaOrden(), Cliente.getSesion())
@@ -898,6 +900,7 @@ Pasos a seguir:
         self.descipIngredientes1 = Label(self.frameIngredientes1, text="Se procede a comprar los ingredientes añadidos a su canasta, por favor continue el proceso dandole al botón Comprar Ingredientes")
 
 
+
         def ejecucionComprarIngredientes():
             from gestorAplicacion.humanos.Cocinero import Cocinero
             self.textEjecIngredientes1.config(state=tk.NORMAL)
@@ -939,6 +942,8 @@ Pasos a seguir:
         self.textEjecIngredientes1 = Text(self.frameIngredientes1)
         self.textEjecIngredientes1.config(state=tk.DISABLED)
         self.textEjecIngredientes1.pack(fill=tk.BOTH, expand=True)
+
+
 
     #Metodos necesiarios para la interfaz de usuario
     def verificar_campos_llenos(self, campos):  # Asegúrate de pasar 'self' como primer argumento
