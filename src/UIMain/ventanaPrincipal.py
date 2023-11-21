@@ -938,7 +938,7 @@ Pasos a seguir:
     def cargarFrameFacturasPasadas(self):
         for i in Cliente.getSesion().getRecibos():
             self.idsFacturasPasadas.append(str(i.getIdRecibo()))
-        
+
         self.textoFacturasPasadas.config(state = tk.NORMAL) #permitir edicion del campo de texto
         self.textoFacturasPasadas.delete("1.0", tk.END) #borrar todo lo que tenia el campo de texto antes
 
