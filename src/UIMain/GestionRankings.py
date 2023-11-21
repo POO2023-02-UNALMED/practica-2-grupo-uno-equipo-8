@@ -12,16 +12,17 @@ def ordenarDomiciliariosPorRanking(panaderia):
     return domiciliarios_ordenados
 
 def ordenarIngredientesPorVecesVendidos(panderia):
-    ingredientes_ordenados = sorted(panderia.getListaIngredientes(), key=attrgetter('vecesVendido'), reverse=True)
+    ingredientes_ordenados = sorted(panderia.getInventario.getInvIngredientes(), key=attrgetter('vecesVendido'), reverse=True)
     return ingredientes_ordenados
 
 def ordenarProductosPorVecesVendidos(panaderia):
-    productos_ordenados = sorted(panaderia.getListaProductos(), key=attrgetter('vecesVendido'), reverse=True)
+    productos_ordenados = sorted(panaderia.getInventario.getInvProductos(), key=attrgetter('vecesVendido'), reverse=True)
     return productos_ordenados
 
 def imprimirCocinerosPorRanking(text, panaderia):
     cocineros_ordenados = ordenarCocinerosPorRanking(panaderia)
-        
+    
+    text.delete(1.0, tk.END)
     for cocinero in cocineros_ordenados:
         text.config(state=tk.NORMAL)
         text.insert(tk.END, cocinero.getNombre() + " " + "- Calificación:" + " " + str(cocinero.getCalificacion()) +"\n")
@@ -32,6 +33,7 @@ def imprimirCocinerosPorRanking(text, panaderia):
 def imprimirDomiciliariosPorRanking(text, panaderia):
     domiciliarios_ordenados = ordenarDomiciliariosPorRanking(panaderia)
 
+    text.delete(1.0, tk.END)
     for domiciliario in domiciliarios_ordenados:
         text.config(state=tk.NORMAL)
         text.insert(tk.END, domiciliario.getNombre() + " " + "- Calificación:" + " " + str(domiciliario.getCalificacion()) +"\n")
@@ -42,6 +44,7 @@ def imprimirDomiciliariosPorRanking(text, panaderia):
 def imprimirIngredientesPorVecesVendidos(text, panaderia):
     ingredientes_ordenados = ordenarIngredientesPorVecesVendidos(panaderia)
     
+    text.delete(1.0, tk.END)
     for ingrediente in ingredientes_ordenados:
         text.config(state=tk.NORMAL)
         text.insert(tk.END, ingrediente.getNombre() + " " + "- Calificación:" + " " + str(ingrediente.getCalificacion()) +"\n")
@@ -52,6 +55,7 @@ def imprimirIngredientesPorVecesVendidos(text, panaderia):
 def imprimirProductosPorVecesVendidos(text, panaderia):
     productos_ordenados = ordenarProductosPorVecesVendidos(panaderia)
 
+    text.delete(1.0, tk.END)
     for producto in productos_ordenados:
         text.config(state=tk.NORMAL)
         text.insert(tk.END, producto.getNombre() + " " + "- Calificación:" + " " + str(producto.getCalificacion()) +"\n")

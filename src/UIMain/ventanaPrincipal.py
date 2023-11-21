@@ -306,7 +306,6 @@ class VentanaPrincipal:
         # frameMeterPlata Meter plata a mi cuenta
         self.frameMeterPlata = Frame(self.root, bd=1, relief="raise", padx=1, pady=1)
         self.frames.append(self.frameMeterPlata)
-        self.frameMeterPlata.pack()
         self.imagenPlata = Label(self.frameMeterPlata, image = self.fotoRatonFactura)
         self.imagenPlata.pack()
         self.LabelPlata2 = Label(self.frameMeterPlata, text="Meter plata")
