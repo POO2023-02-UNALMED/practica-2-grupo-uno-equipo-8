@@ -1493,6 +1493,8 @@ Pasos a seguir:
         for x in Cliente.getSesion().getRecibos():
             if x.getIdRecibo() == id:
                 Cliente.getSesion().setCanastaOrden(copy.deepcopy(x.getCanasta())) #se crea una canasta exactamente igual y se asocia a la orden
+                messagebox.showinfo("Informacion", "La canasta ha sido copiada con exito")
+        
 
     def mostrarRankingCorrespondiente(self, values):
         try:
