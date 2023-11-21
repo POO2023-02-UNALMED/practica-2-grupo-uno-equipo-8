@@ -34,15 +34,11 @@ def ordenarDomiciliariosPorRanking(panaderia):
         return []
 
 def ordenarIngredientesPorVecesVendidos(panderia):
-
-    opcionesCompra = [] 
-    for ingrediente in Ingrediente.getBaseDatosIngredientes():
-        opcionesCompra.append(ingrediente.getNombre())
     try:
-        if opcionesCompra == []:
-            raise ProductoNoEncontradoError(panderia.getInventario().getInvIngredientes())
+        if Ingrediente.getBaseDatosIngredientes() == []:
+            raise ProductoNoEncontradoError(Ingrediente.getBaseDatosIngredientes())
         else:
-            ingredientes_ordenados = sorted(opcionesCompra, key=attrgetter('vecesVendido'), reverse=True)
+            ingredientes_ordenados = sorted(Ingrediente.getBaseDatosIngredientes(), key=attrgetter('vecesVendido'), reverse=True)
             return ingredientes_ordenados
         
     except ProductoNoEncontradoError as e:
@@ -50,15 +46,11 @@ def ordenarIngredientesPorVecesVendidos(panderia):
         return []
 
 def ordenarProductosPorVecesVendidos(panaderia):
-
-    opcionesCompra = []
-    for producto in Producto.baseDatosProductos:
-        opcionesCompra.append(producto.getNombre())
     try:
-        if opcionesCompra == []:
-            raise ProductoNoEncontradoError(opcionesCompra)
+        if Producto.baseDatosProductos == []:
+            raise ProductoNoEncontradoError(Producto.baseDatosProductos)
         else:
-            productos_ordenados = sorted(opcionesCompra, key=attrgetter('vecesVendido'), reverse=True)
+            productos_ordenados = sorted(Producto.baseDatosProductos, key=attrgetter('vecesVendido'), reverse=True)
             return productos_ordenados
     
     except ProductoNoEncontradoError as e:
