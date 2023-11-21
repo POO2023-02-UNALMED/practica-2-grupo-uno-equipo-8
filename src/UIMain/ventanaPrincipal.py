@@ -186,7 +186,7 @@ Pasos a seguir:
         self.imagenfpd = tk.PhotoImage(file="src/resources/ratonDomicilio.png")
         self.imagenPreguntarDomicilio = Label(self.framePreguntarDomicilio, image = self.imagenfpd)
         self.imagenPreguntarDomicilio.pack(pady=5)
-        self.labelPreguntarDomicilio = Label(self.framePreguntarDomicilio, text="Desea que le entreguemos su pedido a domicilio? Haga click abajo si asi lo desea ",wraplength=800
+        self.labelPreguntarDomicilio = Label(self.framePreguntarDomicilio, text="Desea que le entreguemos su pedido a domicilio? Haga click abajo si asi lo desea ",wraplength=800)
         self.labelPreguntarDomicilio.pack(pady=5)
         self.checkButtonFramePreguntarDomicilio = ttk.Checkbutton(self.framePreguntarDomicilio, text="Pedido a domicilio") # Logica Domicilio que cuando el checkButton este activado se envie a domicilio
         self.checkButtonFramePreguntarDomicilio.pack(pady=5)
