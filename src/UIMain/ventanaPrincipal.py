@@ -937,14 +937,16 @@ Pasos a seguir:
     def cargarFrameFacturasPasadas(self):
         for i in Cliente.getSesion().getRecibos():
             self.idsFacturasPasadas.append(str(i.getIdRecibo()))
-    
-        self.textoFacturasPasadas.config(state = tk.DISABLED)
+
+        self.textoFacturasPasadas.config(state = tk.NORMAL) #permitir edicion del campo de texto
+        self.textoFacturasPasadas.delete("1.0", tk.END) #borrar todo lo que tenia el campo de texto antes
+
+        for i in Cliente.getSesion().getRecibos(): #imprimir todas las facturas en el historial
+            self.textoFacturasPasadas.insert(tk.END,i.imprimir_factura()+"\n")
         
-        self.textoFacturasPasadas.config(state = tk.NORMAL)
-    
-
-
-
+        self.textoFacturasPasadas.teg_configure("center", justify = "center")
+        self.textoFacturasPasadas.tag_add("center", "1.0", "end")
+        self.textoFacturasPasadas.config(state = tk.DISABLED)
 
     def procesoDeCocina(self):
             self.menu_procesos.entryconfigure("Func. Cocinar", state="disabled")
