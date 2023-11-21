@@ -635,6 +635,8 @@ Pasos a seguir:
     def ejecucionDomicilio(self):
         self.textEjecDomicilio.delete("1.0", tk.END)
         Cliente.getSesion().getPanaderia().enviar_domicilio(Cliente.getSesion().getCanastaOrden(), Cliente.getSesion(),self.textEjecDomicilio)
+        messagebox.showinfo("Domicilio", "Su domicilio ha sido realizado")
+        time.sleep(2)
         Cliente.getSesion().crearCanastaNueva()
         self.chequeoDeEstados()
         self.cambiarFrame(self.frameCalificar)
@@ -1030,6 +1032,7 @@ Pasos a seguir:
         pass
 
     def salir(self):
+        Serializador.guardarPanaderia(self.panaderia)
         self.root.destroy()
 
     def cambiarFrame(self, frame, guardarComoFrameAnterior = True):

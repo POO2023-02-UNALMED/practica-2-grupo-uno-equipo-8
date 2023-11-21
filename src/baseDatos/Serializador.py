@@ -18,7 +18,6 @@ class Serializador:
                 pickle.dump(panaderia, file)
                 Serializador.guardarValoresEstaticos(file)
 
-            print("La información de la panadería se ha guardado en panaderia.pickle")
         except IOError as e:
             print(f"Error al guardar la información de la panadería: {e}")
 
@@ -30,7 +29,6 @@ class Serializador:
                 panaderia = pickle.load(file)
                 Serializador.cargarValoresEstaticos(file)
 
-            print("La información de la panadería se ha cargado desde panaderia.pickle")
         except IOError as e:
             print(f"Error al cargar la información de la panadería: {e}")
 

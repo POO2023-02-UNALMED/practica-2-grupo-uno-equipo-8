@@ -421,14 +421,14 @@ class Panaderia():
                 text.config(state=tk.NORMAL)
                 text.insert(tk.END, "Tu domicilio ha llegado, que lo disfrutes" + "\n")
                 text.insert(tk.END, "Se entregó" + "\n")
-
+                """
                 for elements in canasta.getProductos():
                     text.insert(tk.END, "Producto: " + elements.getNombre() + "\n")
                 for elements in canasta.getIngredientes():
                     text.insert(tk.END, "Ingrediente: "  + elements.getNombre() + "\n")
                 for elements in canasta.getKits():
                     text.insert(tk.END, "Kits: "  + elements.getNombre() + "\n")
-
+                """
                 text.config(state=tk.DISABLED)
                 text.tag_configure("center", justify="center")
                 text.tag_add("center", "1.0", "end")
